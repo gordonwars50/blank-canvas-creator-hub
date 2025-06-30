@@ -162,7 +162,8 @@ const ExpandableMenuItem = ({ item }: { item: SidebarItem }) => {
   
   const isActive = (href?: string) => {
     if (!href) return false;
-    return location.pathname === href || location.pathname.startsWith(href + '/');
+    // Use exact match for routes to prevent Dashboard from being active on other pages
+    return location.pathname === href;
   };
 
   const hasActiveChild = item.children?.some(child => isActive(child.href));
