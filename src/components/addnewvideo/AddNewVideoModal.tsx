@@ -1,23 +1,30 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { X } from 'lucide-react';
 import PlanningShootingPage from './PlanningShootingPage';
 import SchedulePage from './SchedulePage';
 import ProjectOverview from './ProjectOverview';
 import PersistentBottomBar from './PersistentBottomBar';
 import ValidationDialog from '@/components/ui/validation-dialog';
+import { useProjectManagement } from '@/hooks/useProjectManagement';
+import { useToast } from '@/components/ui/use-toast';
 
 interface AddNewVideoModalProps {
   isOpen: boolean;
   onClose: () => void;
+  projectId?: string; // Optional project ID for editing existing projects
 }
 
-const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose }) => {
+const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose, projectId }) => {
   const [currentStep, setCurrentStep] = useState<'plan' | 'schedule' | 'overview'>('plan');
   const [showValidationDialog, setShowValidationDialog] = useState(false);
   const [missingFields, setMissingFields] = useState<string[]>([]);
+  const [currentProjectId, setCurrentProjectId] = useState<string | null>(projectId || null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const metadataSectionRef = useRef<HTMLDivElement>(null);
   const scheduleSectionRef = useRef<HTMLDivElement>(null);
+  
+  const { saveProject, getProject } = useProjectManagement();
+  const { toast } = useToast();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -56,6 +63,66 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose }) 
 
   const [isFormValid, setIsFormValid] = useState(false);
 
+  // Load existing project data if editing
+  useEffect(() => {
+    if (projectId && isOpen) {
+      const existingProject = getProject(projectId);
+      if (existingProject) {
+        setFormData({
+          title: existingProject.title,
+          ideas: existingProject.ideas,
+          script: existingProject.script,
+          storyboardFiles: existingProject.storyboardFiles,
+          scenes: existingProject.scenes,
+          teamAssignments: existingProject.teamAssignments,
+          scheduledDate: existingProject.scheduledDate ? new Date(existingProject.scheduledDate) : null,
+          scheduledTime: existingProject.scheduledTime || '',
+          uploadNow: existingProject.uploadNow || false,
+          selectedMode: existingProject.selectedMode || 'schedule',
+          metadata: existingProject.metadata
+        });
+        setCurrentProjectId(existingProject.id);
+      }
+    }
+  }, [projectId, isOpen, getProject]);
+
+  // Reset form when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setCurrentStep('plan');
+      setCurrentProjectId(projectId || null);
+      if (!projectId) {
+        // Only reset form data if not editing an existing project
+        setFormData({
+          title: '',
+          ideas: '',
+          script: '',
+          storyboardFiles: [],
+          scenes: [],
+          teamAssignments: {
+            scriptwriter: [],
+            storyboardArtist: [],
+            researcher: [],
+            director: [],
+            videoEditor: [],
+            thumbnailDesigner: [],
+            videographer: [],
+            insightsLead: []
+          },
+          scheduledDate: null,
+          scheduledTime: '',
+          uploadNow: false,
+          selectedMode: 'schedule',
+          metadata: {
+            title: '',
+            description: '',
+            tags: []
+          }
+        });
+      }
+    }
+  }, [isOpen, projectId]);
+
   const scrollToTop = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({
@@ -68,17 +135,14 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose }) 
   const validateSchedulePage = () => {
     const missing: string[] = [];
     
-    // Check if title is filled
     if (!formData.metadata.title || formData.metadata.title.trim() === '') {
       missing.push('title');
     }
     
-    // Check if description is filled
     if (!formData.metadata.description || formData.metadata.description.trim() === '') {
       missing.push('description');
     }
     
-    // Check if either scheduled date/time is set OR upload now is selected
     const hasSchedule = formData.scheduledDate && formData.scheduledTime;
     const hasUploadNow = formData.uploadNow;
     
@@ -90,7 +154,6 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose }) 
   };
 
   const scrollToMissingSection = (missingFields: string[]) => {
-    // If title or description is missing, scroll to metadata section
     if (missingFields.includes('title') || missingFields.includes('description')) {
       if (metadataSectionRef.current) {
         metadataSectionRef.current.scrollIntoView({
@@ -99,7 +162,6 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose }) 
         });
       }
     } else if (missingFields.includes('schedule')) {
-      // If only schedule is missing, scroll to schedule section
       if (scheduleSectionRef.current) {
         scheduleSectionRef.current.scrollIntoView({
           behavior: 'smooth',
@@ -129,8 +191,40 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose }) 
   };
 
   const handleSave = () => {
-    console.log('Saving project:', formData);
-    // TODO: Implement save logic
+    try {
+      const projectData = {
+        id: currentProjectId,
+        title: formData.title,
+        ideas: formData.ideas,
+        script: formData.script,
+        storyboardFiles: formData.storyboardFiles,
+        scenes: formData.scenes,
+        teamAssignments: formData.teamAssignments,
+        scheduledDate: formData.scheduledDate?.toISOString(),
+        scheduledTime: formData.scheduledTime,
+        uploadNow: formData.uploadNow,
+        selectedMode: formData.selectedMode,
+        metadata: formData.metadata,
+        state: 'Planning' as const
+      };
+
+      const savedProject = saveProject(projectData);
+      setCurrentProjectId(savedProject.id);
+      
+      toast({
+        title: "Project Saved",
+        description: "Your project has been saved successfully.",
+      });
+      
+      console.log('Project saved:', savedProject);
+    } catch (error) {
+      console.error('Error saving project:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save project. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleNext = () => {
@@ -148,8 +242,40 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose }) 
       setCurrentStep('overview');
       scrollToTop();
     } else {
-      // Close from overview page
-      onClose();
+      // Finish from overview page - save completed project
+      try {
+        const completedProjectData = {
+          id: currentProjectId,
+          title: formData.title,
+          ideas: formData.ideas,
+          script: formData.script,
+          storyboardFiles: formData.storyboardFiles,
+          scenes: formData.scenes,
+          teamAssignments: formData.teamAssignments,
+          scheduledDate: formData.scheduledDate?.toISOString(),
+          scheduledTime: formData.scheduledTime,
+          uploadNow: formData.uploadNow,
+          selectedMode: formData.selectedMode,
+          metadata: formData.metadata,
+          state: formData.selectedMode === 'schedule' ? 'Scheduled' : 'Production'
+        };
+
+        saveProject(completedProjectData);
+        
+        toast({
+          title: "Project Completed",
+          description: "Your project has been completed and saved.",
+        });
+        
+        onClose();
+      } catch (error) {
+        console.error('Error completing project:', error);
+        toast({
+          title: "Error",
+          description: "Failed to complete project. Please try again.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -166,7 +292,6 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose }) 
   };
 
   const handleEdit = () => {
-    // Navigate back to planning page from overview
     setCurrentStep('plan');
     scrollToTop();
   };
@@ -182,7 +307,7 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose }) 
 
   // Convert formData to project format for overview
   const projectForOverview = {
-    id: 'new',
+    id: currentProjectId || 'new',
     title: formData.title || 'Untitled Project',
     state: 'Planning' as const,
     description: formData.metadata.description,
@@ -203,7 +328,6 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose }) 
   return (
     <>
       <div className="fixed inset-0 z-[9999] bg-black">
-        {/* Close button */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-[10000] text-gray-400 hover:text-white transition-colors"
@@ -211,7 +335,6 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose }) 
           <X className="w-6 h-6" />
         </button>
 
-        {/* Main content */}
         <div className="flex flex-col h-full">
           <div 
             ref={scrollContainerRef}
@@ -250,7 +373,6 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose }) 
         </div>
       </div>
 
-      {/* Custom Validation Dialog */}
       <ValidationDialog
         isOpen={showValidationDialog}
         onClose={() => setShowValidationDialog(false)}

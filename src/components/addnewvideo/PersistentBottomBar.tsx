@@ -37,26 +37,24 @@ const PersistentBottomBar: React.FC<PersistentBottomBarProps> = ({
         </GlowButton>
 
         <div className="flex items-center gap-3">
-          {currentStep !== 'schedule' && (
-            <GlowButton
-              glowColor="red"
-              onClick={onSave}
-              disabled={!isFormValid}
-              className={`rounded-lg px-6 h-10 ${
-                isFormValid 
-                  ? 'bg-red-600 hover:bg-red-700' 
-                  : 'bg-gray-600 cursor-not-allowed opacity-50'
-              }`}
-            >
-              Save Project
-            </GlowButton>
-          )}
+          <GlowButton
+            glowColor="red"
+            onClick={onSave}
+            disabled={!isFormValid}
+            className={`rounded-lg px-6 h-10 ${
+              isFormValid 
+                ? 'bg-red-600 hover:bg-red-700' 
+                : 'bg-gray-600 cursor-not-allowed opacity-50'
+            }`}
+          >
+            Save Project
+          </GlowButton>
 
           {onNext && (
             <div className="flex items-center gap-3">
               {currentStep === 'schedule' && (
                 <p className="text-sm text-gray-400">
-                  All data will be saved when you click finish
+                  Project will be completed when you click finish
                 </p>
               )}
               <GlowButton
