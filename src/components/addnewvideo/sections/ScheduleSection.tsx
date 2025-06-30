@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Upload } from 'lucide-react';
 import { GlowCard } from '@/components/ui/spotlight-card';
@@ -159,20 +160,20 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
                           caption: "flex justify-center pt-1 relative items-center text-white",
                           caption_label: "text-sm font-medium text-white",
                           nav: "space-x-1 flex items-center",
-                          nav_button: "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 text-white hover:bg-gray-700 rounded-md",
+                          nav_button: "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 text-white hover:bg-gray-700 rounded-md transition-colors",
                           nav_button_previous: "absolute left-1",
                           nav_button_next: "absolute right-1",
                           table: "w-full border-collapse space-y-1",
                           head_row: "flex",
                           head_cell: "text-gray-400 rounded-md w-9 font-normal text-[0.8rem]",
                           row: "flex w-full mt-2",
-                          cell: "h-9 w-9 text-center text-sm p-0 relative text-white hover:bg-gray-700 rounded-md",
-                          day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100 text-white hover:bg-gray-700 rounded-md",
+                          cell: "h-9 w-9 text-center text-sm p-0 relative",
+                          day: "h-9 w-9 p-0 font-normal text-white hover:bg-gray-600 rounded-md transition-colors cursor-pointer",
                           day_range_end: "day-range-end",
-                          day_selected: "bg-red-500 text-white hover:bg-red-600 focus:bg-red-500 rounded-md",
-                          day_today: "bg-gray-700 text-white rounded-md",
-                          day_outside: "text-gray-600 opacity-50",
-                          day_disabled: "text-gray-600 opacity-50",
+                          day_selected: "bg-red-500 text-white hover:bg-red-600 focus:bg-red-500 rounded-md font-semibold",
+                          day_today: "bg-blue-600 text-white rounded-md font-medium ring-2 ring-blue-400 ring-opacity-50",
+                          day_outside: "text-gray-600 opacity-40 hover:bg-transparent cursor-default",
+                          day_disabled: "text-gray-700 opacity-30 bg-gray-900/50 cursor-not-allowed hover:bg-gray-900/50 line-through",
                           day_range_middle: "aria-selected:bg-gray-700 aria-selected:text-white",
                           day_hidden: "invisible",
                         }}
