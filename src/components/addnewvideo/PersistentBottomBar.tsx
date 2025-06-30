@@ -25,7 +25,7 @@ const PersistentBottomBar: React.FC<PersistentBottomBarProps> = ({
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-t border-gray-800 p-4 z-50">
+    <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-t border-gray-800 p-4 z-[55]">
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         <GlowButton
           glowColor="red"
