@@ -108,17 +108,17 @@ const ScheduleCalendar: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Calendar */}
-          <div className="space-y-4">
+        <div className="flex flex-col xl:flex-row gap-6">
+          {/* Calendar - Full width on smaller screens, flex on larger */}
+          <div className="flex-1">
             <Calendar
               mode="single"
               selected={selectedDate}
               onSelect={setSelectedDate}
-              className="rounded-md border border-gray-800 bg-gray-900/50"
+              className="rounded-md border border-gray-800 bg-gray-900/50 w-full pointer-events-auto"
               classNames={{
-                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-                month: "space-y-4",
+                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 w-full",
+                month: "space-y-4 w-full",
                 caption: "flex justify-center pt-1 relative items-center text-white",
                 caption_label: "text-sm font-medium text-white",
                 nav: "space-x-1 flex items-center",
@@ -126,11 +126,11 @@ const ScheduleCalendar: React.FC = () => {
                 nav_button_previous: "absolute left-1",
                 nav_button_next: "absolute right-1",
                 table: "w-full border-collapse space-y-1",
-                head_row: "flex",
-                head_cell: "text-gray-400 rounded-md w-9 font-normal text-[0.8rem]",
+                head_row: "flex w-full",
+                head_cell: "text-gray-400 rounded-md flex-1 font-normal text-[0.8rem] text-center",
                 row: "flex w-full mt-2",
-                cell: "h-9 w-9 text-center text-sm p-0 relative text-white hover:bg-gray-800 rounded-md",
-                day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100 text-white hover:bg-gray-800 rounded-md",
+                cell: "flex-1 h-9 text-center text-sm p-0 relative text-white hover:bg-gray-800 rounded-md",
+                day: "h-9 w-full p-0 font-normal aria-selected:opacity-100 text-white hover:bg-gray-800 rounded-md",
                 day_range_end: "day-range-end",
                 day_selected: "bg-red-500 text-white hover:bg-red-600 focus:bg-red-500 rounded-md",
                 day_today: "bg-gray-800 text-white rounded-md",
@@ -149,7 +149,7 @@ const ScheduleCalendar: React.FC = () => {
           </div>
 
           {/* Events for Selected Date */}
-          <div className="space-y-4">
+          <div className="flex-1 xl:max-w-md space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-medium text-gray-400">
                 {selectedDate ? format(selectedDate, 'MMMM d, yyyy') : 'Select a date'}
