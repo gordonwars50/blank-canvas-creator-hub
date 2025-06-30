@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Settings, Minus, Download } from 'lucide-react';
+import { X, Settings, Minus } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 
 interface TeleprompterModeProps {
@@ -35,54 +35,6 @@ const TeleprompterMode: React.FC<TeleprompterModeProps> = ({ script, onClose }) 
 
   const toggleScrolling = () => {
     setIsScrolling(!isScrolling);
-  };
-
-  const exportToPDF = () => {
-    // Create a new window for PDF export
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) return;
-
-    // Clean script content for PDF (remove HTML tags for plain text)
-    const cleanScript = script.replace(/<[^>]*>/g, '');
-    
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Teleprompter Script</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              font-size: 16px;
-              line-height: 1.6;
-              margin: 40px;
-              color: #000;
-            }
-            h1 {
-              color: #333;
-              border-bottom: 2px solid #333;
-              padding-bottom: 10px;
-            }
-            .script-content {
-              margin-top: 30px;
-              white-space: pre-wrap;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>Teleprompter Script</h1>
-          <div class="script-content">${cleanScript}</div>
-        </body>
-      </html>
-    `);
-    
-    printWindow.document.close();
-    printWindow.focus();
-    
-    // Trigger print dialog
-    setTimeout(() => {
-      printWindow.print();
-    }, 250);
   };
 
   // Process HTML content (simplified without color customization)
@@ -127,15 +79,6 @@ const TeleprompterMode: React.FC<TeleprompterModeProps> = ({ script, onClose }) 
                 }`}
               >
                 {isScrolling ? 'Pause' : 'Start'}
-              </button>
-
-              {/* Export PDF Button */}
-              <button
-                onClick={exportToPDF}
-                className="px-4 py-2 rounded-lg font-medium bg-blue-600 hover:bg-blue-700 text-white transition-colors flex items-center gap-2"
-              >
-                <Download className="w-4 h-4" />
-                Export PDF
               </button>
             </div>
 

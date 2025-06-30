@@ -36,6 +36,54 @@ const WorkspaceSection: React.FC<WorkspaceSectionProps> = ({
     onStoryboardFilesChange(newFiles);
   };
 
+  const exportToPDF = () => {
+    // Create a new window for PDF export
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    // Clean script content for PDF (remove HTML tags for plain text)
+    const cleanScript = script.replace(/<[^>]*>/g, '');
+    
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Script Export</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              font-size: 16px;
+              line-height: 1.6;
+              margin: 40px;
+              color: #000;
+            }
+            h1 {
+              color: #333;
+              border-bottom: 2px solid #333;
+              padding-bottom: 10px;
+            }
+            .script-content {
+              margin-top: 30px;
+              white-space: pre-wrap;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>Video Script</h1>
+          <div class="script-content">${cleanScript}</div>
+        </body>
+      </html>
+    `);
+    
+    printWindow.document.close();
+    printWindow.focus();
+    
+    // Trigger print dialog
+    setTimeout(() => {
+      printWindow.print();
+    }, 250);
+  };
+
   return (
     <>
       <div className="space-y-8 mb-8">
@@ -109,6 +157,7 @@ const WorkspaceSection: React.FC<WorkspaceSectionProps> = ({
                 <GlowButton
                   glowColor="purple"
                   leftIcon={<FileText className="w-4 h-4" />}
+                  onClick={exportToPDF}
                   className="bg-purple-600 hover:bg-purple-700 rounded-lg px-4 py-2"
                 >
                   Export PDF
