@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Home, 
@@ -25,6 +26,7 @@ interface SidebarItem {
   icon: React.ComponentType<any>;
   href?: string;
   children?: SidebarItem[];
+  comingSoon?: boolean;
 }
 
 const sidebarItems: SidebarItem[] = [
@@ -33,17 +35,6 @@ const sidebarItems: SidebarItem[] = [
     label: 'Dashboard',
     icon: Home,
     href: '/dashboard'
-  },
-  {
-    id: 'analytics',
-    label: 'Analytics',
-    icon: BarChart3,
-    children: [
-      { id: 'overview', label: 'Overview', icon: BarChart3, href: '/dashboard/analytics/overview' },
-      { id: 'growth', label: 'Growth Trends', icon: BarChart3, href: '/dashboard/analytics/growth' },
-      { id: 'engagement', label: 'Engagement', icon: BarChart3, href: '/dashboard/analytics/engagement' },
-      { id: 'revenue', label: 'Revenue', icon: BarChart3, href: '/dashboard/analytics/revenue' }
-    ]
   },
   {
     id: 'plan-schedule',
@@ -64,16 +55,22 @@ const sidebarItems: SidebarItem[] = [
     href: '/dashboard/community'
   },
   {
-    id: 'monetization',
-    label: 'Monetization',
-    icon: DollarSign,
-    href: '/dashboard/monetization'
-  },
-  {
     id: 'team',
     label: 'Team',
     icon: TeamIcon,
     href: '/dashboard/team'
+  },
+  {
+    id: 'analytics',
+    label: 'Analytics',
+    icon: BarChart3,
+    comingSoon: true
+  },
+  {
+    id: 'monetization',
+    label: 'Monetization',
+    icon: DollarSign,
+    comingSoon: true
   }
 ];
 
@@ -129,6 +126,27 @@ const ExpandableMenuItem = ({ item }: { item: SidebarItem }) => {
   };
 
   const hasActiveChild = item.children?.some(child => isActive(child.href));
+
+  if (item.comingSoon) {
+    return (
+      <div className={cn(
+        "flex items-center px-3 py-2 rounded-lg text-gray-500 cursor-not-allowed",
+        open ? "justify-start" : "justify-center"
+      )}>
+        <item.icon className="w-4 h-4 flex-shrink-0" />
+        <motion.div
+          animate={{
+            opacity: open ? 1 : 0,
+            display: open ? "flex" : "none"
+          }}
+          className="ml-2 flex items-center gap-2"
+        >
+          <span className="text-sm">{item.label}</span>
+          <span className="text-xs bg-gray-800 px-2 py-1 rounded-full">Coming Soon</span>
+        </motion.div>
+      </div>
+    );
+  }
 
   if (item.href) {
     return (

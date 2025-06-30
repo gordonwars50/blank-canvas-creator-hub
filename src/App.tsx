@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -14,11 +15,9 @@ import SupportArticlePage from "./pages/SupportArticlePage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import NotFound from "./pages/NotFound";
 import DashboardPage from "./pages/DashboardPage";
-import AnalyticsPage from "./pages/AnalyticsPage";
 import PlanSchedulePage from "./pages/PlanSchedulePage";
 import CalendarPage from "./pages/CalendarPage";
 import CommunityPage from "./pages/CommunityPage";
-import MonetizationPage from "./pages/MonetizationPage";
 import TeamPage from "./pages/TeamPage";
 import ProjectOverviewPage from "./pages/ProjectOverviewPage";
 
@@ -118,16 +117,6 @@ const AppContent: React.FC = () => {
                 <DashboardPage />
               </motion.div>
             } />
-            <Route path="/dashboard/analytics/*" element={
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <AnalyticsPage />
-              </motion.div>
-            } />
             <Route path="/dashboard/plan-schedule" element={
               <motion.div
                 initial={{ opacity: 0 }}
@@ -166,16 +155,6 @@ const AppContent: React.FC = () => {
                 transition={{ duration: 0.3 }}
               >
                 <CommunityPage />
-              </motion.div>
-            } />
-            <Route path="/dashboard/monetization" element={
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <MonetizationPage />
               </motion.div>
             } />
             <Route path="/dashboard/team" element={
