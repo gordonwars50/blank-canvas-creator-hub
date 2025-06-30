@@ -331,15 +331,20 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose, pr
 
   return (
     <>
-      <div className="fixed inset-0 z-50 bg-black overflow-hidden">
+      <div className="fixed inset-0 z-50 overflow-hidden relative">
+        {/* Fullscreen Background Overlay */}
+        <div className="absolute inset-0 bg-black z-10" />
+        
+        {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-[60] text-gray-400 hover:text-white transition-colors"
+          className="absolute top-4 right-4 z-30 text-gray-400 hover:text-white transition-colors"
         >
           <X className="w-6 h-6" />
         </button>
 
-        <div className="flex flex-col h-full w-full">
+        {/* Modal Content */}
+        <div className="relative z-20 flex flex-col h-full w-full">
           <div 
             ref={scrollContainerRef}
             className="flex-1 overflow-y-auto pb-20 scrollbar-hide w-full"
