@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -18,6 +19,7 @@ import PlanSchedulePage from "./pages/PlanSchedulePage";
 import CommunityPage from "./pages/CommunityPage";
 import TeamPage from "./pages/TeamPage";
 import ProjectOverviewPage from "./pages/ProjectOverviewPage";
+import AccountSettingsPage from "./pages/AccountSettingsPage";
 
 const queryClient = new QueryClient();
 
@@ -153,6 +155,16 @@ const AppContent: React.FC = () => {
                 transition={{ duration: 0.3 }}
               >
                 <TeamPage />
+              </motion.div>
+            } />
+            <Route path="/dashboard/account-settings" element={
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <AccountSettingsPage />
               </motion.div>
             } />
             
