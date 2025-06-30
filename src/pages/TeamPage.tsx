@@ -41,8 +41,15 @@ const TeamPage: React.FC = () => {
   }
 
   return (
-    <DashboardLayout title="Team Management - Manage your team members, roles, and project assignments" hideTopBarActions={true}>
+    <DashboardLayout title="Team Management" hideTopBarActions={true}>
       <div className="space-y-6">
+        {/* Description Section */}
+        <div className="border-b border-gray-800 pb-4">
+          <p className="text-gray-400 text-lg">
+            Manage your team members, roles, and project assignments
+          </p>
+        </div>
+
         {/* Header Section with Add Button */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           {canManageTeam() && (
