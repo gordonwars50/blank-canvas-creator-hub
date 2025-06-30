@@ -4,6 +4,7 @@ import { Eye, ThumbsUp, MessageCircle, Calendar, TrendingUp, Award, Plus } from 
 import { Link } from 'react-router-dom';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { GlowButton } from '@/components/ui/glow-button';
+import { AvatarGroupWithTooltips } from '@/components/ui/avatar-group-with-tooltip';
 import { useProjectManagement } from '@/hooks/useProjectManagement';
 
 interface Video {
@@ -16,10 +17,33 @@ interface Video {
   publishDate: string;
   status: 'published' | 'scheduled' | 'draft';
   engagementRate?: number;
+  teamMembers?: Array<{
+    name: string;
+    initials: string;
+    avatar?: string;
+  }>;
 }
 
 const RecentVideos: React.FC = () => {
   const { projects, loading } = useProjectManagement();
+
+  // Generate mock team members for each project
+  const generateTeamMembers = (projectId: string) => {
+    const teamPool = [
+      { name: "John Doe", initials: "JD", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
+      { name: "Sarah Smith", initials: "SS", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
+      { name: "Alex Wong", initials: "AW", avatar: "https://randomuser.me/api/portraits/men/91.jpg" },
+      { name: "Emma Johnson", initials: "EJ", avatar: "https://randomuser.me/api/portraits/women/17.jpg" },
+      { name: "Mike Chen", initials: "MC", avatar: "https://randomuser.me/api/portraits/men/15.jpg" },
+      { name: "Lisa Park", initials: "LP", avatar: "https://randomuser.me/api/portraits/women/25.jpg" },
+    ];
+    
+    // Use project ID to deterministically select team members
+    const hash = projectId.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+    const memberCount = 2 + (hash % 4); // 2-5 members
+    const shuffled = [...teamPool].sort(() => hash % 2 - 0.5);
+    return shuffled.slice(0, memberCount);
+  };
 
   // Transform project data to video data format
   const videos: Video[] = projects.map(project => ({
@@ -33,7 +57,8 @@ const RecentVideos: React.FC = () => {
     status: project.state === 'Uploaded' ? 'published' : 
              project.state === 'Scheduled' ? 'scheduled' : 'draft',
     engagementRate: project.state === 'Uploaded' ? 
-      Math.random() * 2 + 1 : 0
+      Math.random() * 2 + 1 : 0,
+    teamMembers: generateTeamMembers(project.id)
   }));
 
   const getStatusColor = (status: Video['status']) => {
@@ -178,26 +203,42 @@ const RecentVideos: React.FC = () => {
                   {topPerformer.title}
                 </h3>
                 
-                <div className="flex items-center space-x-6 text-sm text-gray-300">
-                  <div className="flex items-center space-x-2">
-                    <Eye className="w-4 h-4" />
-                    <span className="font-medium">{formatNumber(topPerformer.views)}</span>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-6 text-sm text-gray-300">
+                    <div className="flex items-center space-x-2">
+                      <Eye className="w-4 h-4" />
+                      <span className="font-medium">{formatNumber(topPerformer.views)}</span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <ThumbsUp className="w-4 h-4" />
+                      <span>{formatNumber(topPerformer.likes)}</span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <MessageCircle className="w-4 h-4" />
+                      <span>{formatNumber(topPerformer.comments)}</span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <Calendar className="w-4 h-4" />
+                      <span>{topPerformer.publishDate}</span>
+                    </div>
                   </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <ThumbsUp className="w-4 h-4" />
-                    <span>{formatNumber(topPerformer.likes)}</span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <MessageCircle className="w-4 h-4" />
-                    <span>{formatNumber(topPerformer.comments)}</span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="w-4 h-4" />
-                    <span>{topPerformer.publishDate}</span>
-                  </div>
+                </div>
+
+                {/* Team Members for Top Performer */}
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-gray-400">Team:</span>
+                  <AvatarGroupWithTooltips 
+                    avatars={topPerformer.teamMembers?.map(member => ({
+                      src: member.avatar,
+                      alt: member.name,
+                      name: member.name,
+                      initials: member.initials
+                    }))} 
+                    maxAvatars={3}
+                  />
                 </div>
               </div>
             </div>
@@ -228,7 +269,7 @@ const RecentVideos: React.FC = () => {
                   {video.title}
                 </h4>
                 
-                <div className="flex items-center space-x-4 text-xs text-gray-400">
+                <div className="flex items-center space-x-4 text-xs text-gray-400 mb-2">
                   {video.status === 'published' && (
                     <>
                       <div className="flex items-center space-x-1">
@@ -252,6 +293,20 @@ const RecentVideos: React.FC = () => {
                     <Calendar className="w-3 h-3" />
                     <span>{video.publishDate}</span>
                   </div>
+                </div>
+
+                {/* Team Members */}
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-gray-500">Team:</span>
+                  <AvatarGroupWithTooltips 
+                    avatars={video.teamMembers?.map(member => ({
+                      src: member.avatar,
+                      alt: member.name,
+                      name: member.name,
+                      initials: member.initials
+                    }))} 
+                    maxAvatars={3}
+                  />
                 </div>
               </div>
 
