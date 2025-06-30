@@ -5,8 +5,7 @@ import { GlowCard } from '@/components/ui/spotlight-card';
 import { GlowButton } from '@/components/ui/glow-button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { UserPlus, Search, Users, Settings } from 'lucide-react';
+import { UserPlus, Search } from 'lucide-react';
 import { useTeamManagement } from '@/hooks/useTeamManagement';
 import TeamMemberList from '@/components/team/TeamMemberList';
 import AddMemberModal from '@/components/team/AddMemberModal';
@@ -23,16 +22,9 @@ const TeamPage: React.FC = () => {
     member.role.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Get role statistics
-  const roleStats = {
-    Admin: members.filter(m => m.role === 'Admin').length,
-    Editor: members.filter(m => m.role === 'Editor').length,
-    Collaborator: members.filter(m => m.role === 'Collaborator').length,
-  };
-
   if (loading) {
     return (
-      <DashboardLayout title="Team">
+      <DashboardLayout title="Team" hideTopBarActions={true}>
         <div className="space-y-6">
           <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
             <div className="animate-pulse">
@@ -49,7 +41,7 @@ const TeamPage: React.FC = () => {
   }
 
   return (
-    <DashboardLayout title="Team">
+    <DashboardLayout title="Team" hideTopBarActions={true}>
       <div className="space-y-6">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -70,41 +62,6 @@ const TeamPage: React.FC = () => {
               Add Team Member
             </GlowButton>
           )}
-        </div>
-
-        {/* Team Overview Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <GlowCard glowColor="blue" customSize className="w-full p-4 bg-gray-900/50">
-            <div className="text-center">
-              <Users className="w-8 h-8 text-blue-400 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-white">{members.length}</div>
-              <div className="text-sm text-gray-400">Total Members</div>
-            </div>
-          </GlowCard>
-
-          <GlowCard glowColor="red" customSize className="w-full p-4 bg-gray-900/50">
-            <div className="text-center">
-              <Settings className="w-8 h-8 text-red-400 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-white">{roleStats.Admin}</div>
-              <div className="text-sm text-gray-400">Admins</div>
-            </div>
-          </GlowCard>
-
-          <GlowCard glowColor="purple" customSize className="w-full p-4 bg-gray-900/50">
-            <div className="text-center">
-              <Users className="w-8 h-8 text-purple-400 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-white">{roleStats.Editor}</div>
-              <div className="text-sm text-gray-400">Editors</div>
-            </div>
-          </GlowCard>
-
-          <GlowCard glowColor="green" customSize className="w-full p-4 bg-gray-900/50">
-            <div className="text-center">
-              <Users className="w-8 h-8 text-green-400 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-white">{roleStats.Collaborator}</div>
-              <div className="text-sm text-gray-400">Collaborators</div>
-            </div>
-          </GlowCard>
         </div>
 
         {/* Search and Filters Section */}
