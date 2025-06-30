@@ -28,17 +28,21 @@ const CommentDropdownMenu: React.FC<CommentDropdownMenuProps> = ({
           <MoreHorizontal className="w-4 h-4" />
         </GlowButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-gray-800 border-gray-700">
+      <DropdownMenuContent 
+        className="z-[100] bg-gray-800 border border-gray-600 shadow-lg min-w-[120px]"
+        align="end"
+        sideOffset={5}
+      >
         <DropdownMenuItem 
           onClick={onEdit}
-          className="text-green-300 hover:text-green-200 hover:bg-gray-700 cursor-pointer"
+          className="text-green-300 hover:text-green-200 hover:bg-gray-700 cursor-pointer focus:bg-gray-700 focus:text-green-200"
         >
           <Edit className="w-4 h-4 mr-2" />
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem 
           onClick={onDelete}
-          className="text-red-300 hover:text-red-200 hover:bg-gray-700 cursor-pointer"
+          className="text-red-300 hover:text-red-200 hover:bg-gray-700 cursor-pointer focus:bg-gray-700 focus:text-red-200"
         >
           <Trash className="w-4 h-4 mr-2" />
           Delete
