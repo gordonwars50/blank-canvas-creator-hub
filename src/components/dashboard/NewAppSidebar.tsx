@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Home, 
@@ -13,7 +12,8 @@ import {
   User,
   Settings,
   LogOut,
-  X
+  X,
+  Plus
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -27,6 +27,14 @@ interface SidebarItem {
   href?: string;
   children?: SidebarItem[];
   comingSoon?: boolean;
+}
+
+interface Channel {
+  id: string;
+  name: string;
+  avatar: string;
+  color: string;
+  isActive: boolean;
 }
 
 const sidebarItems: SidebarItem[] = [
@@ -71,6 +79,38 @@ const sidebarItems: SidebarItem[] = [
     label: 'Monetization',
     icon: DollarSign,
     comingSoon: true
+  }
+];
+
+// Mock data for user channels
+const userChannels: Channel[] = [
+  {
+    id: 'main',
+    name: 'Main Channel',
+    avatar: '',
+    color: 'bg-red-500',
+    isActive: true
+  },
+  {
+    id: 'gaming',
+    name: 'Gaming Hub',
+    avatar: '',
+    color: 'bg-blue-500',
+    isActive: false
+  },
+  {
+    id: 'tech',
+    name: 'Tech Reviews',
+    avatar: '',
+    color: 'bg-green-500',
+    isActive: false
+  },
+  {
+    id: 'music',
+    name: 'Music Corner',
+    avatar: '',
+    color: 'bg-purple-500',
+    isActive: false
   }
 ];
 
@@ -240,7 +280,18 @@ const ExpandableMenuItem = ({ item }: { item: SidebarItem }) => {
 
 const UserProfile = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [channels, setChannels] = useState(userChannels);
   const { open } = useSidebar();
+
+  const activeChannel = channels.find(channel => channel.isActive) || channels[0];
+
+  const switchChannel = (channelId: string) => {
+    setChannels(prev => prev.map(channel => ({
+      ...channel,
+      isActive: channel.id === channelId
+    })));
+    setShowDropdown(false);
+  };
 
   return (
     <div className="relative">
@@ -251,7 +302,7 @@ const UserProfile = () => {
           open ? "justify-start" : "justify-center"
         )}
       >
-        <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+        <div className={`w-8 h-8 ${activeChannel.color} rounded-full flex items-center justify-center flex-shrink-0`}>
           <User className="w-4 h-4 text-white" />
         </div>
         <motion.div
@@ -262,7 +313,7 @@ const UserProfile = () => {
           className="ml-3 text-left flex-1"
         >
           <div className="text-sm font-medium text-white">John Creator</div>
-          <div className="text-xs text-gray-500">Main Channel</div>
+          <div className="text-xs text-gray-500">{activeChannel.name}</div>
         </motion.div>
         {open && (
           <ChevronDown className="w-4 h-4 flex-shrink-0" />
@@ -278,20 +329,42 @@ const UserProfile = () => {
         >
           <div className="p-2">
             <div className="px-3 py-2 text-xs text-gray-500 uppercase tracking-wide">
-              Switch Channel
+              Your Channels
             </div>
-            <button className="flex items-center w-full px-3 py-2 rounded-md hover:bg-gray-800 text-sm text-gray-300">
-              <div className="w-6 h-6 bg-blue-500 rounded-full mr-3"></div>
-              Gaming Channel
+            
+            {/* Channel List */}
+            <div className="space-y-1 mb-2">
+              {channels.map(channel => (
+                <button
+                  key={channel.id}
+                  onClick={() => switchChannel(channel.id)}
+                  className={`flex items-center w-full px-3 py-2 rounded-md hover:bg-gray-800 text-sm transition-colors ${
+                    channel.isActive ? 'bg-red-500/20 text-red-400' : 'text-gray-300'
+                  }`}
+                >
+                  <div className={`w-6 h-6 ${channel.color} rounded-full mr-3 flex items-center justify-center`}>
+                    <User className="w-3 h-3 text-white" />
+                  </div>
+                  <span className="flex-1 text-left">{channel.name}</span>
+                  {channel.isActive && (
+                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Add New Channel */}
+            <button className="flex items-center w-full px-3 py-2 rounded-md hover:bg-gray-800 text-sm text-gray-400 border-t border-gray-700 pt-3 mt-2">
+              <Plus className="w-4 h-4 mr-3" />
+              Add New Channel
             </button>
-            <button className="flex items-center w-full px-3 py-2 rounded-md hover:bg-gray-800 text-sm text-gray-300">
-              <div className="w-6 h-6 bg-green-500 rounded-full mr-3"></div>
-              Tech Reviews
-            </button>
+
             <hr className="my-2 border-gray-700" />
+            
+            {/* Settings & Sign Out */}
             <button className="flex items-center w-full px-3 py-2 rounded-md hover:bg-gray-800 text-sm text-gray-400">
               <Settings className="w-4 h-4 mr-3" />
-              Settings
+              Account Settings
             </button>
             <button className="flex items-center w-full px-3 py-2 rounded-md hover:bg-gray-800 text-sm text-gray-400">
               <LogOut className="w-4 h-4 mr-3" />
