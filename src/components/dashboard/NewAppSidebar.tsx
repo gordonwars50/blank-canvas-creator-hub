@@ -80,7 +80,11 @@ const Logo = () => {
   } = useSidebar();
   return <div className={cn("font-normal flex items-center text-sm text-white py-1 relative z-20", open ? "justify-between" : "justify-center")}>
       <Link to="/dashboard" className={cn("flex items-center", open ? "space-x-2" : "")}>
-        <div className="h-5 w-6 bg-red-500 rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+        <img 
+          src="/lovable-uploads/5c7fd81a-e392-4fef-b803-5684426e7184.png" 
+          alt="Creatorly Logo" 
+          className="h-6 w-6 object-contain flex-shrink-0"
+        />
         <motion.span animate={{
         opacity: open ? 1 : 0,
         display: open ? "inline-block" : "none"

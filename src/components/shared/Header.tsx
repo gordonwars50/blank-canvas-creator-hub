@@ -38,8 +38,13 @@ const Header = ({ theme = "dark" }: HeaderProps) => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-          className="flex items-center"
+          className="flex items-center gap-3"
         >
+          <img 
+            src="/lovable-uploads/5c7fd81a-e392-4fef-b803-5684426e7184.png" 
+            alt="Creatorly Logo" 
+            className="h-8 w-8 object-contain"
+          />
           <div className={`text-2xl font-bold hover:opacity-80 transition-opacity ${isDark ? 'text-white' : 'text-blue-900'}`}>
             CREATORLY
           </div>
