@@ -1,12 +1,12 @@
-
 import React, { useState } from 'react';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { GlowButton } from '@/components/ui/glow-button';
 import { GlowInput } from '@/components/ui/glow-input';
-import { Plus, X, Camera } from 'lucide-react';
+import { Plus, X, Camera, FileText } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface Camera {
   id: string;
@@ -36,6 +36,7 @@ interface Scene {
   name: string;
   tags: string[];
   shots: Shot[];
+  notes?: string;
 }
 
 interface ShotLoggingSectionProps {
@@ -81,13 +82,15 @@ const ShotLoggingSection: React.FC<ShotLoggingSectionProps> = ({ scenes, onChang
   const [editingSceneId, setEditingSceneId] = useState<string | null>(null);
   const [selectedCameraId, setSelectedCameraId] = useState<string>('none');
   const [selectedLensId, setSelectedLensId] = useState<string>('none');
+  const [openNotesScenes, setOpenNotesScenes] = useState<Set<string>>(new Set());
 
   const addScene = () => {
     const newScene: Scene = {
       id: Date.now().toString(),
       name: '',
       tags: [],
-      shots: []
+      shots: [],
+      notes: ''
     };
     onChange([...scenes, newScene]);
   };
@@ -97,6 +100,16 @@ const ShotLoggingSection: React.FC<ShotLoggingSectionProps> = ({ scenes, onChang
       scene.id === sceneId ? { ...scene, ...updates } : scene
     );
     onChange(updatedScenes);
+  };
+
+  const toggleNotesSection = (sceneId: string) => {
+    const newOpenNotesScenes = new Set(openNotesScenes);
+    if (newOpenNotesScenes.has(sceneId)) {
+      newOpenNotesScenes.delete(sceneId);
+    } else {
+      newOpenNotesScenes.add(sceneId);
+    }
+    setOpenNotesScenes(newOpenNotesScenes);
   };
 
   const removeScene = (sceneId: string) => {
@@ -272,15 +285,38 @@ const ShotLoggingSection: React.FC<ShotLoggingSectionProps> = ({ scenes, onChang
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <p className="text-sm text-gray-300">Shots:</p>
-                    <GlowButton
-                      glowColor="green"
-                      leftIcon={<Plus className="w-3 h-3" />}
-                      onClick={() => addShot(scene.id)}
-                      className="bg-green-600 hover:bg-green-700 rounded px-3 py-1 text-xs"
-                    >
-                      Add Shot
-                    </GlowButton>
+                    <div className="flex space-x-2">
+                      <GlowButton
+                        glowColor="blue"
+                        leftIcon={<FileText className="w-3 h-3" />}
+                        onClick={() => toggleNotesSection(scene.id)}
+                        className="bg-blue-600 hover:bg-blue-700 rounded px-3 py-1 text-xs"
+                      >
+                        {openNotesScenes.has(scene.id) ? 'Hide Notes' : 'Add Notes'}
+                      </GlowButton>
+                      <GlowButton
+                        glowColor="green"
+                        leftIcon={<Plus className="w-3 h-3" />}
+                        onClick={() => addShot(scene.id)}
+                        className="bg-green-600 hover:bg-green-700 rounded px-3 py-1 text-xs"
+                      >
+                        Add Shot
+                      </GlowButton>
+                    </div>
                   </div>
+
+                  {/* Notes Section */}
+                  {openNotesScenes.has(scene.id) && (
+                    <div className="bg-gray-700 rounded-lg p-3">
+                      <label className="block text-sm text-gray-300 mb-2">Scene Notes:</label>
+                      <Textarea
+                        value={scene.notes || ''}
+                        onChange={(e) => updateScene(scene.id, { notes: e.target.value })}
+                        placeholder="Add notes about this scene..."
+                        className="w-full min-h-[80px] bg-gray-600 border-gray-500 text-white placeholder-gray-400 focus:border-blue-500 resize-none"
+                      />
+                    </div>
+                  )}
 
                   {scene.shots.map((shot) => (
                     <div key={shot.id} className="bg-gray-700 rounded-lg p-3 space-y-2">
