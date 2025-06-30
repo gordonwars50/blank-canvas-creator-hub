@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewAppSidebar from '@/components/dashboard/NewAppSidebar';
@@ -6,9 +5,20 @@ import { GlowCard } from '@/components/ui/spotlight-card';
 import { GlowButton } from '@/components/ui/glow-button';
 import { GlowInput } from '@/components/ui/glow-input';
 import { Badge } from '@/components/ui/badge';
-import { Plus, ChevronDown, Play, Eye, MessageSquare, Clock, ThumbsUp, Search } from 'lucide-react';
+import { Plus, ChevronDown, Play, Eye, MessageSquare, Clock, ThumbsUp, Search, Trash2 } from 'lucide-react';
 import AddNewVideoModal from '@/components/addnewvideo/AddNewVideoModal';
 import { useProjectManagement } from '@/hooks/useProjectManagement';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { useToast } from '@/hooks/use-toast';
 
 // Project state type
 type ProjectState = 'Planning' | 'Production' | 'Scheduled' | 'Uploaded';
@@ -55,8 +65,10 @@ const PlanSchedulePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddVideoModal, setShowAddVideoModal] = useState(false);
   const [editingProjectId, setEditingProjectId] = useState<string | undefined>(undefined);
+  const [deleteProjectId, setDeleteProjectId] = useState<string | null>(null);
 
-  const { projects, loading } = useProjectManagement();
+  const { projects, loading, deleteProject } = useProjectManagement();
+  const { toast } = useToast();
   const states: (ProjectState | 'All')[] = ['All', 'Planning', 'Production', 'Scheduled', 'Uploaded'];
 
   const filteredProjects = projects.filter(project => {
@@ -94,7 +106,35 @@ const PlanSchedulePage: React.FC = () => {
     setEditingProjectId(undefined);
   };
 
-  // Mock stats for display (since we don't have real YouTube stats yet)
+  const handleDeleteProject = (projectId: string, event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent card click when clicking delete
+    setDeleteProjectId(projectId);
+  };
+
+  const confirmDeleteProject = () => {
+    if (deleteProjectId) {
+      try {
+        deleteProject(deleteProjectId);
+        toast({
+          title: "Project Deleted",
+          description: "The project has been deleted successfully.",
+        });
+        setDeleteProjectId(null);
+      } catch (error) {
+        console.error('Error deleting project:', error);
+        toast({
+          title: "Error",
+          description: "Failed to delete project. Please try again.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const cancelDeleteProject = () => {
+    setDeleteProjectId(null);
+  };
+
   const getMockStats = (state: ProjectState) => {
     if (state === 'Uploaded') {
       return {
@@ -248,11 +288,20 @@ const PlanSchedulePage: React.FC = () => {
                             </div>
                           </div>
 
-                          {/* Status Badge and Scheduled Date */}
+                          {/* Status Badge, Scheduled Date, and Delete Button */}
                           <div className="flex-shrink-0 ml-4 flex flex-col items-end">
-                            <Badge className={`${getStateColor(project.state)} border text-xs mb-1`}>
-                              {project.state}
-                            </Badge>
+                            <div className="flex items-center gap-2 mb-1">
+                              <Badge className={`${getStateColor(project.state)} border text-xs`}>
+                                {project.state}
+                              </Badge>
+                              <button
+                                onClick={(e) => handleDeleteProject(project.id, e)}
+                                className="p-1 text-gray-400 hover:text-red-400 transition-colors"
+                                title="Delete project"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
                             {project.state === 'Scheduled' && project.scheduledDate && (
                               <div className="text-xs text-gray-400">
                                 {new Date(project.scheduledDate).toLocaleDateString('en-US', {
@@ -317,6 +366,32 @@ const PlanSchedulePage: React.FC = () => {
         onClose={handleCloseModal}
         projectId={editingProjectId}
       />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!deleteProjectId} onOpenChange={() => setDeleteProjectId(null)}>
+        <AlertDialogContent className="bg-gray-900 border-gray-700">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white">Delete Project</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
+              Are you sure you want to delete this project? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              onClick={cancelDeleteProject}
+              className="bg-gray-700 text-white hover:bg-gray-600 border-gray-600"
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={confirmDeleteProject}
+              className="bg-red-600 text-white hover:bg-red-700"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
