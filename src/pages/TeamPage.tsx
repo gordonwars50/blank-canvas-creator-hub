@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { GlowCard } from '@/components/ui/spotlight-card';
@@ -49,27 +50,25 @@ const TeamPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Search and Filters Section */}
-        <GlowCard glowColor="purple" customSize className="w-full p-4 bg-gray-900/50">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
-                placeholder="Search by name, email, or role..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-gray-800 border-gray-600 text-white placeholder-gray-400 pl-10"
-              />
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <span className="text-gray-400 text-sm">Showing:</span>
-              <Badge variant="outline" className="border-gray-600 text-gray-300">
-                {filteredMembers.length} of {members.length} members
-              </Badge>
-            </div>
+        {/* Search Section */}
+        <div className="flex flex-col md:flex-row gap-4 p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Input
+              placeholder="Search by name, email, or role..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="bg-gray-800 border-gray-600 text-white placeholder-gray-400 pl-10"
+            />
           </div>
-        </GlowCard>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-gray-400 text-sm">Showing:</span>
+            <Badge variant="outline" className="border-gray-600 text-gray-300">
+              {filteredMembers.length} of {members.length} members
+            </Badge>
+          </div>
+        </div>
 
         {/* Pending Invites */}
         {invites.length > 0 && canManageTeam() && (
@@ -135,3 +134,4 @@ const TeamPage: React.FC = () => {
 };
 
 export default TeamPage;
+
