@@ -5,6 +5,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { Video, Radio, Calendar as CalendarIcon, Clock, Plus } from 'lucide-react';
 import { format, isSameDay, parseISO } from 'date-fns';
+import { useProjectManagement } from '@/hooks/useProjectManagement';
 
 interface ScheduledEvent {
   id: string;
@@ -15,51 +16,21 @@ interface ScheduledEvent {
   status: 'scheduled' | 'draft';
 }
 
-const mockEvents: ScheduledEvent[] = [
-  {
-    id: '1',
-    title: 'Upload: "Top 10 YouTube Tips"',
-    date: '2024-07-01',
-    time: '10:00 AM',
-    type: 'video',
-    status: 'scheduled'
-  },
-  {
-    id: '2',
-    title: 'Live Stream: Q&A Session',
-    date: '2024-07-03',
-    time: '3:00 PM',
-    type: 'livestream',
-    status: 'scheduled'
-  },
-  {
-    id: '3',
-    title: 'Brand Meeting: Sponsor Review',
-    date: '2024-07-05',
-    time: '2:00 PM',
-    type: 'meeting',
-    status: 'scheduled'
-  },
-  {
-    id: '4',
-    title: 'Upload: "Tech Review Series"',
-    date: '2024-07-08',
-    time: '11:30 AM',
-    type: 'video',
-    status: 'draft'
-  },
-  {
-    id: '5',
-    title: 'Live Stream: Gaming Session',
-    date: '2024-07-10',
-    time: '7:00 PM',
-    type: 'livestream',
-    status: 'scheduled'
-  }
-];
-
 const ScheduleCalendar: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const { projects, loading } = useProjectManagement();
+
+  // Transform project data to scheduled events
+  const events: ScheduledEvent[] = projects
+    .filter(project => project.scheduledDate)
+    .map(project => ({
+      id: project.id,
+      title: project.metadata.title || project.title,
+      date: project.scheduledDate!,
+      time: project.scheduledTime || '12:00 PM',
+      type: 'video' as const,
+      status: project.state === 'Scheduled' ? 'scheduled' : 'draft'
+    }));
 
   const getEventIcon = (type: ScheduledEvent['type']) => {
     switch (type) {
@@ -78,16 +49,42 @@ const ScheduleCalendar: React.FC = () => {
   };
 
   const getDatesWithEvents = () => {
-    return mockEvents.map(event => parseISO(event.date));
+    return events.map(event => parseISO(event.date));
   };
 
   const getEventsForDate = (date: Date) => {
-    return mockEvents.filter(event => 
+    return events.filter(event => 
       isSameDay(parseISO(event.date), date)
     );
   };
 
   const selectedDateEvents = selectedDate ? getEventsForDate(selectedDate) : [];
+
+  if (loading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+      >
+        <GlowCard 
+          glowColor="red" 
+          customSize={true}
+          className="bg-gray-950 border border-gray-900 rounded-lg p-6 w-full h-auto aspect-auto grid-rows-none gap-0"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+              <CalendarIcon className="w-5 h-5" />
+              Your Schedule
+            </h2>
+          </div>
+          <div className="animate-pulse">
+            <div className="h-64 bg-gray-800 rounded"></div>
+          </div>
+        </GlowCard>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div

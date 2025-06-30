@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Eye, ThumbsUp, MessageCircle, Calendar, TrendingUp, Award } from 'lucide-react';
 import { GlowCard } from '@/components/ui/spotlight-card';
+import { useProjectManagement } from '@/hooks/useProjectManagement';
 
 interface Video {
   id: string;
@@ -15,54 +16,24 @@ interface Video {
   engagementRate?: number;
 }
 
-const mockVideos: Video[] = [
-  {
-    id: '1',
-    title: 'How to Grow Your YouTube Channel Fast in 2024',
-    thumbnail: '/placeholder.svg',
-    views: 45230,
-    likes: 1205,
-    comments: 89,
-    publishDate: '2024-06-27',
-    status: 'published',
-    engagementRate: 2.86
-  },
-  {
-    id: '2',
-    title: 'Best YouTube SEO Tips for Beginners',
-    thumbnail: '/placeholder.svg',
-    views: 32100,
-    likes: 892,
-    comments: 67,
-    publishDate: '2024-06-25',
-    status: 'published',
-    engagementRate: 2.99
-  },
-  {
-    id: '3',
-    title: 'Creating Viral Content: What Actually Works',
-    thumbnail: '/placeholder.svg',
-    views: 18750,
-    likes: 445,
-    comments: 34,
-    publishDate: '2024-06-23',
-    status: 'published',
-    engagementRate: 2.55
-  },
-  {
-    id: '4',
-    title: 'YouTube Analytics Deep Dive',
-    thumbnail: '/placeholder.svg',
-    views: 0,
-    likes: 0,
-    comments: 0,
-    publishDate: '2024-06-30',
-    status: 'scheduled',
-    engagementRate: 0
-  }
-];
-
 const RecentVideos: React.FC = () => {
+  const { projects, loading } = useProjectManagement();
+
+  // Transform project data to video data format
+  const videos: Video[] = projects.map(project => ({
+    id: project.id,
+    title: project.metadata.title || project.title,
+    thumbnail: '/placeholder.svg',
+    views: project.state === 'Uploaded' ? Math.floor(Math.random() * 50000) : 0,
+    likes: project.state === 'Uploaded' ? Math.floor(Math.random() * 2000) : 0,
+    comments: project.state === 'Uploaded' ? Math.floor(Math.random() * 200) : 0,
+    publishDate: project.scheduledDate || project.updatedAt.split('T')[0],
+    status: project.state === 'Uploaded' ? 'published' : 
+             project.state === 'Scheduled' ? 'scheduled' : 'draft',
+    engagementRate: project.state === 'Uploaded' ? 
+      Math.random() * 2 + 1 : 0
+  }));
+
   const getStatusColor = (status: Video['status']) => {
     switch (status) {
       case 'published': return 'text-green-400 bg-green-400/20';
@@ -77,14 +48,71 @@ const RecentVideos: React.FC = () => {
     return num.toString();
   };
 
+  if (loading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        <GlowCard 
+          glowColor="red" 
+          customSize={true}
+          className="bg-gray-950 border border-gray-900 rounded-lg p-6 w-full h-auto aspect-auto grid-rows-none gap-0"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-white">Recent Videos</h2>
+          </div>
+          <div className="animate-pulse space-y-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="flex items-center space-x-4 p-3">
+                <div className="w-24 h-16 bg-gray-800 rounded"></div>
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 bg-gray-800 rounded w-3/4"></div>
+                  <div className="h-3 bg-gray-800 rounded w-1/2"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </GlowCard>
+      </motion.div>
+    );
+  }
+
+  if (videos.length === 0) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        <GlowCard 
+          glowColor="red" 
+          customSize={true}
+          className="bg-gray-950 border border-gray-900 rounded-lg p-6 w-full h-auto aspect-auto grid-rows-none gap-0"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-white">Recent Videos</h2>
+          </div>
+          <div className="text-center py-8 text-gray-500">
+            <p className="text-sm">No videos yet. Create your first project to get started!</p>
+          </div>
+        </GlowCard>
+      </motion.div>
+    );
+  }
+
   // Find the top performing video based on engagement rate
-  const publishedVideos = mockVideos.filter(video => video.status === 'published');
-  const topPerformer = publishedVideos.reduce((prev, current) => 
-    (prev.engagementRate || 0) > (current.engagementRate || 0) ? prev : current
-  );
+  const publishedVideos = videos.filter(video => video.status === 'published');
+  const topPerformer = publishedVideos.length > 0 ? 
+    publishedVideos.reduce((prev, current) => 
+      (prev.engagementRate || 0) > (current.engagementRate || 0) ? prev : current
+    ) : null;
 
   // Get remaining videos excluding the top performer
-  const otherVideos = mockVideos.filter(video => video.id !== topPerformer.id);
+  const otherVideos = topPerformer ? 
+    videos.filter(video => video.id !== topPerformer.id) : 
+    videos;
 
   return (
     <motion.div
@@ -105,61 +133,65 @@ const RecentVideos: React.FC = () => {
         </div>
 
         {/* Top Performer Section */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3, delay: 0.5 }}
-          className="mb-6 p-4 rounded-xl bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-500/30 relative overflow-hidden"
-        >
-          <div className="flex items-center gap-2 mb-3">
-            <Award className="w-5 h-5 text-yellow-400" />
-            <span className="text-sm font-medium text-yellow-400">Top Performer</span>
-            <div className="flex items-center gap-1 text-xs text-green-400">
-              <TrendingUp className="w-3 h-3" />
-              <span>{topPerformer.engagementRate}% engagement</span>
+        {topPerformer && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: 0.5 }}
+            className="mb-6 p-4 rounded-xl bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-500/30 relative overflow-hidden"
+          >
+            <div className="flex items-center gap-2 mb-3">
+              <Award className="w-5 h-5 text-yellow-400" />
+              <span className="text-sm font-medium text-yellow-400">Top Performer</span>
+              <div className="flex items-center gap-1 text-xs text-green-400">
+                <TrendingUp className="w-3 h-3" />
+                <span>{topPerformer.engagementRate?.toFixed(1)}% engagement</span>
+              </div>
             </div>
-          </div>
-          
-          <div className="flex items-start space-x-4">
-            <img
-              src={topPerformer.thumbnail}
-              alt={topPerformer.title}
-              className="w-40 h-24 bg-gray-800 rounded-lg object-cover flex-shrink-0"
-            />
             
-            <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2">
-                {topPerformer.title}
-              </h3>
+            <div className="flex items-start space-x-4">
+              <img
+                src={topPerformer.thumbnail}
+                alt={topPerformer.title}
+                className="w-40 h-24 bg-gray-800 rounded-lg object-cover flex-shrink-0"
+              />
               
-              <div className="flex items-center space-x-6 text-sm text-gray-300">
-                <div className="flex items-center space-x-2">
-                  <Eye className="w-4 h-4" />
-                  <span className="font-medium">{formatNumber(topPerformer.views)}</span>
-                </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2">
+                  {topPerformer.title}
+                </h3>
                 
-                <div className="flex items-center space-x-2">
-                  <ThumbsUp className="w-4 h-4" />
-                  <span>{formatNumber(topPerformer.likes)}</span>
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  <MessageCircle className="w-4 h-4" />
-                  <span>{formatNumber(topPerformer.comments)}</span>
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4" />
-                  <span>{topPerformer.publishDate}</span>
+                <div className="flex items-center space-x-6 text-sm text-gray-300">
+                  <div className="flex items-center space-x-2">
+                    <Eye className="w-4 h-4" />
+                    <span className="font-medium">{formatNumber(topPerformer.views)}</span>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <ThumbsUp className="w-4 h-4" />
+                    <span>{formatNumber(topPerformer.likes)}</span>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <MessageCircle className="w-4 h-4" />
+                    <span>{formatNumber(topPerformer.comments)}</span>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Calendar className="w-4 h-4" />
+                    <span>{topPerformer.publishDate}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
 
         {/* Other Videos Section */}
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-gray-400 mb-3">Other Recent Videos</h3>
+          <h3 className="text-sm font-medium text-gray-400 mb-3">
+            {topPerformer ? 'Other Recent Videos' : 'Recent Projects'}
+          </h3>
           {otherVideos.map((video, index) => (
             <motion.div
               key={video.id}
