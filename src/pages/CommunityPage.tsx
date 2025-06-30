@@ -1,12 +1,12 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import SearchAndFilters from '@/components/community/SearchAndFilters';
 import CommentsList from '@/components/community/CommentsList';
 import { YouTubeComment, CommentFilters, CommentInteractionState } from '@/types/comments';
 import { mockComments } from '@/data/mockComments';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { MessageSquare, Users, TrendingUp } from 'lucide-react';
+import { GlowCard } from '@/components/ui/spotlight-card';
 
 const CommunityPage: React.FC = () => {
   const { toast } = useToast();
@@ -214,41 +214,41 @@ const CommunityPage: React.FC = () => {
       <div className="space-y-6">
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+          <GlowCard glowColor="red" customSize={true} className="p-6">
             <div className="flex items-center space-x-3">
-              <div className="bg-red-500/20 p-3 rounded-lg">
+              <GlowCard glowColor="red" customSize={true} className="p-3">
                 <MessageSquare className="w-6 h-6 text-red-400" />
-              </div>
+              </GlowCard>
               <div>
                 <p className="text-gray-400 text-sm">Total Comments</p>
                 <p className="text-white text-2xl font-bold">{comments.length}</p>
               </div>
             </div>
-          </div>
+          </GlowCard>
           
-          <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+          <GlowCard glowColor="blue" customSize={true} className="p-6">
             <div className="flex items-center space-x-3">
-              <div className="bg-blue-500/20 p-3 rounded-lg">
+              <GlowCard glowColor="blue" customSize={true} className="p-3">
                 <Users className="w-6 h-6 text-blue-400" />
-              </div>
+              </GlowCard>
               <div>
                 <p className="text-gray-400 text-sm">My Comments</p>
                 <p className="text-white text-2xl font-bold">{myCommentsCount}</p>
               </div>
             </div>
-          </div>
+          </GlowCard>
           
-          <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+          <GlowCard glowColor="green" customSize={true} className="p-6">
             <div className="flex items-center space-x-3">
-              <div className="bg-green-500/20 p-3 rounded-lg">
+              <GlowCard glowColor="green" customSize={true} className="p-3">
                 <TrendingUp className="w-6 h-6 text-green-400" />
-              </div>
+              </GlowCard>
               <div>
                 <p className="text-gray-400 text-sm">Total Replies</p>
                 <p className="text-white text-2xl font-bold">{totalReplies}</p>
               </div>
             </div>
-          </div>
+          </GlowCard>
         </div>
 
         {/* Search and Filters */}

@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { MessageSquare, Edit3, Trash2, Flag, Heart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { YouTubeComment } from '@/types/comments';
+import { GlowCard } from '@/components/ui/spotlight-card';
 
 interface CommentActionsProps {
   comment: YouTubeComment;
@@ -23,58 +23,68 @@ const CommentActions: React.FC<CommentActionsProps> = ({
 }) => {
   return (
     <div className="flex items-center space-x-2 mt-3">
-      <Button
-        variant="ghost"
-        size="sm"
+      <GlowCard 
+        glowColor="red" 
+        customSize={true}
+        className="px-3 py-2 cursor-pointer hover:opacity-80"
         onClick={() => onLike(comment.id)}
-        className="text-gray-400 hover:text-red-400 h-8 px-2"
       >
-        <Heart className="w-4 h-4 mr-1" />
-        {comment.likeCount}
-      </Button>
+        <div className="flex items-center space-x-1">
+          <Heart className="w-4 h-4 text-red-400" />
+          <span className="text-sm text-red-400">{comment.likeCount}</span>
+        </div>
+      </GlowCard>
       
-      <Button
-        variant="ghost"
-        size="sm"
+      <GlowCard 
+        glowColor="blue" 
+        customSize={true}
+        className="px-3 py-2 cursor-pointer hover:opacity-80"
         onClick={() => onReply(comment.id)}
-        className="text-gray-400 hover:text-white h-8 px-2"
       >
-        <MessageSquare className="w-4 h-4 mr-1" />
-        Reply
-      </Button>
+        <div className="flex items-center space-x-1">
+          <MessageSquare className="w-4 h-4 text-blue-400" />
+          <span className="text-sm text-blue-400">Reply</span>
+        </div>
+      </GlowCard>
 
       {comment.isOwnComment ? (
         <>
-          <Button
-            variant="ghost"
-            size="sm"
+          <GlowCard 
+            glowColor="green" 
+            customSize={true}
+            className="px-3 py-2 cursor-pointer hover:opacity-80"
             onClick={() => onEdit(comment.id)}
-            className="text-gray-400 hover:text-blue-400 h-8 px-2"
           >
-            <Edit3 className="w-4 h-4 mr-1" />
-            Edit
-          </Button>
+            <div className="flex items-center space-x-1">
+              <Edit3 className="w-4 h-4 text-green-400" />
+              <span className="text-sm text-green-400">Edit</span>
+            </div>
+          </GlowCard>
           
-          <Button
-            variant="ghost"
-            size="sm"
+          <GlowCard 
+            glowColor="red" 
+            customSize={true}
+            className="px-3 py-2 cursor-pointer hover:opacity-80"
             onClick={() => onDelete(comment.id)}
-            className="text-gray-400 hover:text-red-400 h-8 px-2"
           >
-            <Trash2 className="w-4 h-4 mr-1" />
-            Delete
-          </Button>
+            <div className="flex items-center space-x-1">
+              <Trash2 className="w-4 h-4 text-red-400" />
+              <span className="text-sm text-red-400">Delete</span>
+            </div>
+          </GlowCard>
         </>
       ) : (
-        <Button
-          variant="ghost"
-          size="sm"
+        <GlowCard 
+          glowColor="orange" 
+          customSize={true}
+          className="px-3 py-2 cursor-pointer hover:opacity-80"
           onClick={() => onMarkAsSpam(comment.id)}
-          className="text-gray-400 hover:text-yellow-400 h-8 px-2"
         >
-          <Flag className="w-4 h-4 mr-1" />
-          Spam
-        </Button>
+          <div className="flex items-center space-x-1">
+            <Flag className="w-4 h-4 text-orange-400" />
+            <span className="text-sm text-orange-400">Spam</span>
+          </div>
+        </GlowCard>
       )}
     </div>
   );
