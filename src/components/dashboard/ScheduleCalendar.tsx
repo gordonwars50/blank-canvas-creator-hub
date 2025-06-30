@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Calendar } from '@/components/ui/calendar';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { Video, Radio, Calendar as CalendarIcon, Clock, Plus } from 'lucide-react';
-import { format, isSameDay, parseISO } from 'date-fns';
+import { format, isSameDay, parseISO, startOfMonth, endOfMonth, isSameMonth } from 'date-fns';
 import { useProjectManagement } from '@/hooks/useProjectManagement';
 
 interface ScheduledEvent {
@@ -52,13 +52,20 @@ const ScheduleCalendar: React.FC = () => {
     return events.map(event => parseISO(event.date));
   };
 
-  const getEventsForDate = (date: Date) => {
-    return events.filter(event => 
-      isSameDay(parseISO(event.date), date)
-    );
+  const getEventsForMonth = (date: Date) => {
+    const monthStart = startOfMonth(date);
+    const monthEnd = endOfMonth(date);
+    
+    return events
+      .filter(event => {
+        const eventDate = parseISO(event.date);
+        return eventDate >= monthStart && eventDate <= monthEnd;
+      })
+      .sort((a, b) => parseISO(a.date).getTime() - parseISO(b.date).getTime());
   };
 
-  const selectedDateEvents = selectedDate ? getEventsForDate(selectedDate) : [];
+  const currentMonth = selectedDate || new Date();
+  const monthlyEvents = getEventsForMonth(currentMonth);
 
   if (loading) {
     return (
@@ -108,17 +115,17 @@ const ScheduleCalendar: React.FC = () => {
           </button>
         </div>
 
-        <div className="flex flex-col xl:flex-row gap-6">
-          {/* Calendar - Full width on smaller screens, flex on larger */}
-          <div className="flex-1">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Calendar */}
+          <div className="space-y-4">
             <Calendar
               mode="single"
               selected={selectedDate}
               onSelect={setSelectedDate}
-              className="rounded-md border border-gray-800 bg-gray-900/50 w-full pointer-events-auto"
+              className="rounded-md border border-gray-800 bg-gray-900/50 pointer-events-auto"
               classNames={{
-                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 w-full",
-                month: "space-y-4 w-full",
+                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+                month: "space-y-4",
                 caption: "flex justify-center pt-1 relative items-center text-white",
                 caption_label: "text-sm font-medium text-white",
                 nav: "space-x-1 flex items-center",
@@ -126,11 +133,11 @@ const ScheduleCalendar: React.FC = () => {
                 nav_button_previous: "absolute left-1",
                 nav_button_next: "absolute right-1",
                 table: "w-full border-collapse space-y-1",
-                head_row: "flex w-full",
-                head_cell: "text-gray-400 rounded-md flex-1 font-normal text-[0.8rem] text-center",
+                head_row: "flex",
+                head_cell: "text-gray-400 rounded-md w-9 font-normal text-[0.8rem] text-center",
                 row: "flex w-full mt-2",
-                cell: "flex-1 h-9 text-center text-sm p-0 relative text-white hover:bg-gray-800 rounded-md",
-                day: "h-9 w-full p-0 font-normal aria-selected:opacity-100 text-white hover:bg-gray-800 rounded-md",
+                cell: "h-9 w-9 text-center text-sm p-0 relative text-white hover:bg-gray-800 rounded-md",
+                day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100 text-white hover:bg-gray-800 rounded-md",
                 day_range_end: "day-range-end",
                 day_selected: "bg-red-500 text-white hover:bg-red-600 focus:bg-red-500 rounded-md",
                 day_today: "bg-gray-800 text-white rounded-md",
@@ -148,21 +155,21 @@ const ScheduleCalendar: React.FC = () => {
             />
           </div>
 
-          {/* Events for Selected Date */}
-          <div className="flex-1 xl:max-w-md space-y-4">
+          {/* This Month's Videos */}
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-medium text-gray-400">
-                {selectedDate ? format(selectedDate, 'MMMM d, yyyy') : 'Select a date'}
+                {format(currentMonth, 'MMMM yyyy')} Videos
               </h3>
               <div className="flex items-center gap-1 text-xs text-gray-500">
                 <Clock className="w-3 h-3" />
-                {selectedDateEvents.length} events
+                {monthlyEvents.length} scheduled
               </div>
             </div>
 
             <div className="space-y-3 max-h-64 overflow-y-auto scrollbar-hide">
-              {selectedDateEvents.length > 0 ? (
-                selectedDateEvents.map((event, index) => (
+              {monthlyEvents.length > 0 ? (
+                monthlyEvents.map((event, index) => (
                   <motion.div
                     key={event.id}
                     initial={{ opacity: 0, x: 20 }}
@@ -180,9 +187,12 @@ const ScheduleCalendar: React.FC = () => {
                       <span className="text-xs text-gray-500">{event.time}</span>
                     </div>
                     
-                    <p className="text-sm text-white font-medium mb-1">{event.title}</p>
+                    <p className="text-sm text-white font-medium mb-2">{event.title}</p>
                     
                     <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-400">
+                        {format(parseISO(event.date), 'MMM d, yyyy')}
+                      </span>
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         event.status === 'scheduled' 
                           ? 'text-green-400 bg-green-400/20' 
@@ -196,7 +206,7 @@ const ScheduleCalendar: React.FC = () => {
               ) : (
                 <div className="text-center py-8 text-gray-500">
                   <CalendarIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">No events scheduled for this date</p>
+                  <p className="text-sm">No videos scheduled this month</p>
                 </div>
               )}
             </div>
