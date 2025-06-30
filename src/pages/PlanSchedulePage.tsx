@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewAppSidebar from '@/components/dashboard/NewAppSidebar';
@@ -342,16 +341,6 @@ const PlanSchedulePage: React.FC = () => {
                       : `No videos in ${selectedState} state`
                   }
                 </p>
-                {!searchQuery && selectedState === 'All' && (
-                  <GlowButton
-                    glowColor="red"
-                    leftIcon={<Plus className="w-4 h-4" />}
-                    className="bg-red-600 hover:bg-red-700 rounded-lg px-6 h-10 mt-4"
-                    onClick={handleAddNewVideo}
-                  >
-                    Add Your First Video
-                  </GlowButton>
-                )}
               </div>
             </div>
           )}
