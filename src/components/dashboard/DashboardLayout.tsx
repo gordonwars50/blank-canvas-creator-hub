@@ -39,7 +39,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             marginLeft: sidebarCollapsed ? '60px' : '300px'
           }}
         >
-          <div className="sticky top-0 z-50">
+          <div className="sticky top-0 z-20">
             <TopBar 
               title={title} 
               onMenuClick={toggleMobileMenu}

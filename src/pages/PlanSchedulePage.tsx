@@ -140,34 +140,55 @@ const PlanSchedulePage: React.FC = () => {
       <div className="space-y-6">
         {/* Header */}
         <div className="mb-4">
-          
-
           {/* Single Row with Search, Filter, and Add Button */}
           <div className="flex items-center space-x-4">
             {/* Search Bar */}
             <div className="flex-1 max-w-md">
-              <GlowInput glowColor="red" placeholder="Search videos..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} leftIcon={<Search className="w-4 h-4" />} className="h-10" />
+              <GlowInput
+                glowColor="red"
+                placeholder="Search videos..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                leftIcon={<Search className="w-4 h-4" />}
+                className="h-10"
+              />
             </div>
             
             {/* Filter Dropdown */}
             <div className="relative">
-              <button className="flex items-center justify-center space-x-2 h-10 px-4 bg-gray-900/80 border border-gray-700 hover:border-red-500/50 transition-all duration-200 rounded-full cursor-pointer" onClick={() => setFilterOpen(!filterOpen)}>
+              <button
+                className="flex items-center justify-center space-x-2 h-10 px-4 bg-gray-900/80 border border-gray-700 hover:border-red-500/50 transition-all duration-200 rounded-full cursor-pointer"
+                onClick={() => setFilterOpen(!filterOpen)}
+              >
                 <span className="text-white text-sm font-medium">{selectedState}</span>
                 <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${filterOpen ? 'rotate-180' : ''}`} />
               </button>
               
-              {filterOpen && <div className="absolute top-full left-0 mt-2 w-40 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50">
-                  {states.map(state => <div key={state} className="px-4 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer first:rounded-t-lg last:rounded-b-lg" onClick={() => {
-                setSelectedState(state);
-                setFilterOpen(false);
-              }}>
+              {filterOpen && (
+                <div className="absolute top-full left-0 mt-2 w-40 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-30">
+                  {states.map((state) => (
+                    <div
+                      key={state}
+                      className="px-4 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer first:rounded-t-lg last:rounded-b-lg"
+                      onClick={() => {
+                        setSelectedState(state);
+                        setFilterOpen(false);
+                      }}
+                    >
                       {state}
-                    </div>)}
-                </div>}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Add New Video Button */}
-            <GlowButton glowColor="red" leftIcon={<Plus className="w-4 h-4" />} className="bg-red-600 hover:bg-red-700 rounded-lg px-6 h-10" onClick={handleAddNewVideo}>
+            <GlowButton
+              glowColor="red"
+              leftIcon={<Plus className="w-4 h-4" />}
+              className="bg-red-600 hover:bg-red-700 rounded-lg px-6 h-10"
+              onClick={handleAddNewVideo}
+            >
               Add New Video
             </GlowButton>
           </div>
@@ -266,14 +287,20 @@ const PlanSchedulePage: React.FC = () => {
           </div>}
 
         {/* Click outside to close dropdown */}
-        {filterOpen && <div className="fixed inset-0 z-40" onClick={() => setFilterOpen(false)} />}
+        {filterOpen && (
+          <div className="fixed inset-0 z-20" onClick={() => setFilterOpen(false)} />
+        )}
 
         {/* Add New Video Modal */}
-        <AddNewVideoModal isOpen={showAddVideoModal} onClose={handleCloseModal} projectId={editingProjectId} />
+        <AddNewVideoModal
+          isOpen={showAddVideoModal}
+          onClose={handleCloseModal}
+          projectId={editingProjectId}
+        />
 
         {/* Delete Confirmation Dialog */}
         <AlertDialog open={!!deleteProjectId} onOpenChange={() => setDeleteProjectId(null)}>
-          <AlertDialogContent className="bg-gray-900 border-gray-700">
+          <AlertDialogContent className="bg-gray-900 border-gray-700 z-70">
             <AlertDialogHeader>
               <AlertDialogTitle className="text-white">Delete Project</AlertDialogTitle>
               <AlertDialogDescription className="text-gray-400">
@@ -281,10 +308,16 @@ const PlanSchedulePage: React.FC = () => {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={cancelDeleteProject} className="bg-gray-700 text-white hover:bg-gray-600 border-gray-600">
+              <AlertDialogCancel
+                onClick={cancelDeleteProject}
+                className="bg-gray-700 text-white hover:bg-gray-600 border-gray-600"
+              >
                 Cancel
               </AlertDialogCancel>
-              <AlertDialogAction onClick={confirmDeleteProject} className="bg-red-600 text-white hover:bg-red-700">
+              <AlertDialogAction
+                onClick={confirmDeleteProject}
+                className="bg-red-600 text-white hover:bg-red-700"
+              >
                 Delete
               </AlertDialogAction>
             </AlertDialogFooter>
