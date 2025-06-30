@@ -1,0 +1,187 @@
+
+{
+  "categories": [
+    {
+      "id": "getting-started",
+      "name": "Getting Started",
+      "description": "Learn the basics of using Youtilify"
+    },
+    {
+      "id": "trip-planning",
+      "name": "Trip Planning",
+      "description": "Advanced trip planning features"
+    },
+    {
+      "id": "troubleshooting",
+      "name": "Troubleshooting",
+      "description": "Common issues and solutions"
+    }
+  ],
+  "articles": [
+    {
+      "id": 1,
+      "slug": "how-to-create-your-first-trip",
+      "title": "How to Create Your First Trip",
+      "description": "Step-by-step guide to planning your first trip with Youtilify",
+      "category": "getting-started",
+      "author": {
+        "name": "Sarah Johnson",
+        "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face"
+      },
+      "publishedAt": "2024-12-15",
+      "readTime": "5 min read",
+      "popular": true,
+      "tags": ["beginner", "trip-planning", "tutorial"],
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Creating your first trip with Youtilify is simple and intuitive. This guide will walk you through every step of the process, from setting up your preferences to generating your personalized itinerary."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Step 1: Set Your Destination"
+        },
+        {
+          "type": "paragraph",
+          "text": "Start by telling us where you want to go. You can search for cities, countries, or even specific attractions. Our AI will understand your preferences and suggest the best options."
+        },
+        {
+          "type": "callout",
+          "variant": "info",
+          "text": "Pro tip: Be specific about your destination. Instead of just 'Europe', try 'Paris, France' or 'Italian Coastline' for better recommendations."
+        },
+        {
+          "type": "image",
+          "src": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=450&fit=crop",
+          "alt": "Beautiful travel destination",
+          "aspectRatio": "16:9"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Step 2: Choose Your Travel Dates"
+        },
+        {
+          "type": "paragraph",
+          "text": "Select your preferred travel dates and duration. Our system will consider seasonal factors, local events, and weather patterns to optimize your itinerary."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "understanding-ai-recommendations",
+      "title": "Understanding AI Recommendations",
+      "description": "Learn how our AI creates personalized travel suggestions",
+      "category": "trip-planning",
+      "author": {
+        "name": "Michael Chen",
+        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+      },
+      "publishedAt": "2024-12-10",
+      "readTime": "7 min read",
+      "popular": true,
+      "tags": ["ai", "recommendations", "personalization"],
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Our AI recommendation engine analyzes millions of data points to create the perfect itinerary for your unique travel style. Here's how it works."
+        },
+        {
+          "type": "callout",
+          "variant": "success",
+          "text": "The more information you provide about your preferences, the better our AI can tailor recommendations to your specific needs."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "troubleshooting-login-issues",
+      "title": "Troubleshooting Login Issues",
+      "description": "Common login problems and their solutions",
+      "category": "troubleshooting",
+      "author": {
+        "name": "Emma Davis",
+        "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
+      },
+      "publishedAt": "2024-12-08",
+      "readTime": "3 min read",
+      "popular": false,
+      "tags": ["login", "troubleshooting", "account"],
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Having trouble logging into your Youtilify account? This guide covers the most common login issues and their solutions."
+        },
+        {
+          "type": "callout",
+          "variant": "warning",
+          "text": "If you continue to experience issues after following these steps, please contact our support team."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "collaborative-trip-planning",
+      "title": "Collaborative Trip Planning",
+      "description": "How to plan trips with friends and family",
+      "category": "trip-planning",
+      "author": {
+        "name": "Alex Thompson",
+        "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+      },
+      "publishedAt": "2024-12-05",
+      "readTime": "6 min read",
+      "popular": true,
+      "tags": ["collaboration", "sharing", "group-travel"],
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Planning a trip with multiple people can be challenging. Our collaborative features make it easy to coordinate with your travel companions."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "expense-tracking-guide",
+      "title": "Expense Tracking Guide",
+      "description": "Master your travel budget with smart expense tracking",
+      "category": "trip-planning",
+      "author": {
+        "name": "Lisa Rodriguez",
+        "avatar": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face"
+      },
+      "publishedAt": "2024-12-01",
+      "readTime": "4 min read",
+      "popular": false,
+      "tags": ["budget", "expenses", "money"],
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Keep track of your travel expenses effortlessly with our intelligent expense tracking features."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "slug": "mobile-app-features",
+      "title": "Mobile App Features",
+      "description": "Get the most out of the Youtilify mobile experience",
+      "category": "getting-started",
+      "author": {
+        "name": "David Park",
+        "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face"
+      },
+      "publishedAt": "2024-11-28",
+      "readTime": "5 min read",
+      "popular": true,
+      "tags": ["mobile", "app", "features"],
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Discover all the powerful features available in our mobile app to enhance your travel experience on the go."
+        }
+      ]
+    }
+  ]
+}
