@@ -155,7 +155,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({
             </div>
 
             <DialogFooter className="flex gap-2 pt-4">
-              <Button type="button" variant="outline" onClick={handleClose} disabled={isSubmitting} className="border-gray-600 text-gray-300 hover:bg-gray-700">
+              <Button type="button" variant="outline" onClick={handleClose} disabled={isSubmitting} className="border-gray-600 hover:bg-gray-700 text-slate-50">
                 Cancel
               </Button>
               <Button type="submit" disabled={isSubmitting} className="bg-blue-600 hover:bg-blue-700">
