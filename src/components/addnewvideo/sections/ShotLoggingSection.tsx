@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { GlowButton } from '@/components/ui/glow-button';
@@ -244,7 +245,7 @@ const ShotLoggingSection: React.FC<ShotLoggingSectionProps> = ({ scenes, onChang
         ) : (
           <div className="space-y-4">
             {scenes.map((scene) => (
-              <div key={scene.id} className="bg-gray-800 rounded-lg p-4 space-y-4">
+              <div key={scene.id} className="bg-gray-800 rounded-lg p-4 space-y-4 relative z-10">
                 <div className="flex items-center justify-between">
                   <GlowInput
                     glowColor="green"
@@ -319,7 +320,7 @@ const ShotLoggingSection: React.FC<ShotLoggingSectionProps> = ({ scenes, onChang
                   )}
 
                   {scene.shots.map((shot) => (
-                    <div key={shot.id} className="bg-gray-700 rounded-lg p-3 space-y-2">
+                    <div key={shot.id} className="bg-gray-700 rounded-lg p-3 space-y-2 relative z-20">
                       {/* Shot Name Row */}
                       <div className="flex items-center space-x-2">
                         <GlowInput
@@ -332,7 +333,7 @@ const ShotLoggingSection: React.FC<ShotLoggingSectionProps> = ({ scenes, onChang
                         <GlowButton
                           glowColor="green"
                           onClick={() => openEditShotModal(scene.id, shot.id)}
-                          className="bg-green-600 hover:bg-green-700 rounded-lg px-4 py-2 h-8 text-sm"
+                          className="bg-green-600 hover:bg-green-700 rounded-lg px-4 py-2 h-8 text-sm relative z-30"
                           leftIcon={<Camera className="w-3 h-3" />}
                         >
                           Choose Camera & Lens
@@ -373,7 +374,7 @@ const ShotLoggingSection: React.FC<ShotLoggingSectionProps> = ({ scenes, onChang
 
       {/* Edit Shot Modal */}
       <Dialog open={editingShotId !== null} onOpenChange={closeEditShotModal}>
-        <DialogContent className="sm:max-w-md bg-gray-800 border-gray-700 text-white">
+        <DialogContent className="sm:max-w-md bg-gray-800 border-gray-700 text-white z-[9999]">
           <DialogHeader>
             <DialogTitle className="text-white">Choose Camera & Lens</DialogTitle>
           </DialogHeader>
@@ -396,7 +397,7 @@ const ShotLoggingSection: React.FC<ShotLoggingSectionProps> = ({ scenes, onChang
                   <SelectValue placeholder="Select camera" />
                 </SelectTrigger>
                 <SelectContent 
-                  className="bg-gray-700 border-gray-600 text-white" 
+                  className="bg-gray-700 border-gray-600 text-white z-[10000]" 
                   position="popper"
                 >
                   <SelectItem value="none" className="text-white hover:bg-gray-600">
@@ -430,7 +431,7 @@ const ShotLoggingSection: React.FC<ShotLoggingSectionProps> = ({ scenes, onChang
                   <SelectValue placeholder="Select lens" />
                 </SelectTrigger>
                 <SelectContent 
-                  className="bg-gray-700 border-gray-600 text-white" 
+                  className="bg-gray-700 border-gray-600 text-white z-[10000]" 
                   position="popper"
                 >
                   <SelectItem value="none" className="text-white hover:bg-gray-600">
