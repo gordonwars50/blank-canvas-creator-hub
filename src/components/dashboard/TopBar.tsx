@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Search, Bell, Menu, Upload } from 'lucide-react';
 import { GlowCard } from '@/components/ui/spotlight-card';
@@ -114,18 +115,21 @@ const TopBar: React.FC<TopBarProps> = ({
 
         {/* Notifications */}
         <div className="relative">
-          <GlowButton
-            glowColor="red"
-            className="bg-gray-800 hover:bg-gray-700 rounded-full h-12 w-12 p-0 flex items-center justify-center relative transition-all duration-200"
-            onClick={() => setNotificationPanelOpen(!notificationPanelOpen)}
-          >
-            <Bell className="w-6 h-6 text-gray-300" />
+          <div className="relative">
+            <GlowButton
+              glowColor="red"
+              className="bg-gray-800 hover:bg-gray-700 rounded-full h-12 w-12 p-0 flex items-center justify-center transition-all duration-200"
+              onClick={() => setNotificationPanelOpen(!notificationPanelOpen)}
+            >
+              <Bell className="w-6 h-6 text-gray-300" />
+            </GlowButton>
+            
             {unreadCount > 0 && (
               <span className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center px-1 font-medium shadow-lg border-2 border-black z-20">
                 {unreadCount > 99 ? '99+' : unreadCount}
               </span>
             )}
-          </GlowButton>
+          </div>
           
           <NotificationPanel 
             isOpen={notificationPanelOpen}
