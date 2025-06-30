@@ -1,9 +1,10 @@
+
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Search } from 'lucide-react';
+import { Search, UserPlus } from 'lucide-react';
 import { useTeamManagement } from '@/hooks/useTeamManagement';
 import TeamMemberList from '@/components/team/TeamMemberList';
 import AddMemberModal from '@/components/team/AddMemberModal';
