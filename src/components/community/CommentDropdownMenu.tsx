@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Edit, Trash } from 'lucide-react';
-import { GlowButton } from '@/components/ui/glow-button';
 
 interface CommentDropdownMenuProps {
   onEdit: () => void;
@@ -14,21 +13,19 @@ const CommentDropdownMenu: React.FC<CommentDropdownMenuProps> = ({
 }) => {
   return (
     <div className="flex items-center gap-1">
-      <GlowButton
+      <button
         onClick={onEdit}
-        glowColor="green"
-        className="w-8 h-8 rounded-full p-0 flex items-center justify-center text-gray-300 hover:text-green-300 border border-gray-600 hover:border-green-400"
+        className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-green-400 hover:bg-green-400/10 transition-colors"
       >
         <Edit className="w-4 h-4" />
-      </GlowButton>
+      </button>
       
-      <GlowButton
+      <button
         onClick={onDelete}
-        glowColor="red"
-        className="w-8 h-8 rounded-full p-0 flex items-center justify-center text-gray-300 hover:text-red-300 border border-gray-600 hover:border-red-400"
+        className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-red-400 hover:bg-red-400/10 transition-colors"
       >
         <Trash className="w-4 h-4" />
-      </GlowButton>
+      </button>
     </div>
   );
 };
