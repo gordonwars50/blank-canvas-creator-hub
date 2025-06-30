@@ -261,9 +261,14 @@ const PlanSchedulePage: React.FC = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between">
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-base font-bold text-white mb-1 truncate">
-                              {project.title}
-                            </h3>
+                            <div className="flex items-center gap-2 mb-1">
+                              <h3 className="text-base font-bold text-white truncate">
+                                {project.title}
+                              </h3>
+                              <span className="text-xs text-gray-500 font-mono bg-gray-800 px-2 py-1 rounded">
+                                {project.id}
+                              </span>
+                            </div>
                             <p className="text-sm text-gray-400 mb-2 line-clamp-1 leading-relaxed">
                               {project.metadata.description || project.ideas || 'No description available'}
                             </p>

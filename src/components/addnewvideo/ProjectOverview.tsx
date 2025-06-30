@@ -104,7 +104,12 @@ const ProjectOverview: React.FC<ProjectOverviewProps> = ({
       {/* Header */}
       <div className="flex items-start justify-between mb-8">
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-white mb-4">{project.title}</h1>
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-3xl font-bold text-white">{project.title}</h1>
+            <span className="text-sm text-gray-400 font-mono bg-gray-800 px-3 py-1 rounded-lg">
+              ID: {project.id}
+            </span>
+          </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="text-lg">{getStateEmoji(currentState)}</span>
