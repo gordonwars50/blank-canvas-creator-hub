@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewAppSidebar from '@/components/dashboard/NewAppSidebar';
@@ -151,7 +152,7 @@ const PlanSchedulePage: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex w-full relative">
-        <BGPattern variant="grid" mask="fade-edges" size={32} fill="rgba(255, 255, 255, 0.05)" />
+        <BGPattern variant="grid" mask="fade-edges" size={24} fill="rgba(255, 255, 255, 0.1)" />
         <NewAppSidebar collapsed={sidebarCollapsed} onToggle={toggleSidebar} />
         <div 
           className="flex-1 flex items-center justify-center transition-all duration-300"
@@ -165,7 +166,7 @@ const PlanSchedulePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black flex w-full relative">
-      <BGPattern variant="grid" mask="fade-edges" size={32} fill="rgba(255, 255, 255, 0.05)" />
+      <BGPattern variant="grid" mask="fade-edges" size={24} fill="rgba(255, 255, 255, 0.1)" />
       <NewAppSidebar collapsed={sidebarCollapsed} onToggle={toggleSidebar} />
 
       <div 
