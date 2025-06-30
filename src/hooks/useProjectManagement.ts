@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 
 // Define the project state type
@@ -66,9 +65,30 @@ interface VideoProject {
   userId?: string;
 }
 
-// Helper function to generate unique IDs
-const generateId = () => {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+// Helper function to generate unique IDs in AA111 format
+const generateId = (existingProjects: VideoProject[] = []): string => {
+  const existingIds = new Set(existingProjects.map(p => p.id));
+  
+  const generateRandomId = (): string => {
+    // Generate 2 random letters (A-Z)
+    const letters = String.fromCharCode(
+      65 + Math.floor(Math.random() * 26),
+      65 + Math.floor(Math.random() * 26)
+    );
+    
+    // Generate 3 random digits (0-9)
+    const digits = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+    
+    return letters + digits;
+  };
+  
+  // Keep generating until we get a unique ID
+  let newId = generateRandomId();
+  while (existingIds.has(newId)) {
+    newId = generateRandomId();
+  }
+  
+  return newId;
 };
 
 // Helper function to generate default team assignments
@@ -148,7 +168,7 @@ export const useProjectManagement = () => {
   // Create a new project
   const createProject = (data: Partial<VideoProject>): VideoProject => {
     const newProject: VideoProject = {
-      id: generateId(),
+      id: generateId(projects),
       title: data.title || generateUntitledName(projects),
       state: 'Planning',
       createdAt: new Date().toISOString(),
