@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -76,23 +75,34 @@ const CommentCard: React.FC<CommentCardProps> = ({
         {/* Comment Content */}
         <div className="flex-1 min-w-0">
           {/* Header with Three-Dot Menu */}
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center flex-wrap gap-2">
-              <span className="font-semibold text-white">{comment.authorName}</span>
-              
-              {comment.isOwnComment && (
-                <span className="bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-xs font-medium">
-                  Your comment
-                </span>
+          <div className="flex items-start justify-between mb-2">
+            <div className="flex flex-col sm:flex-row sm:items-center flex-wrap gap-2">
+              <div className="flex items-center flex-wrap gap-2">
+                <span className="font-semibold text-white">{comment.authorName}</span>
+                
+                {comment.isOwnComment && (
+                  <span className="bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-xs font-medium">
+                    Your comment
+                  </span>
+                )}
+                
+                {!comment.isRead && (
+                  <span className="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full text-xs font-medium">
+                    Unread
+                  </span>
+                )}
+                
+                <span className="text-gray-400 text-sm">{formatTimeAgo(comment.publishedAt)}</span>
+              </div>
+
+              {/* Video Title - Now responsive */}
+              {comment.videoTitle && (
+                <div className="flex items-center gap-2">
+                  <span className="hidden sm:inline text-gray-500">•</span>
+                  <span className="text-gray-400 text-sm sm:hidden">on </span>
+                  <span className="text-blue-300 text-sm font-medium">{comment.videoTitle}</span>
+                </div>
               )}
-              
-              {!comment.isRead && (
-                <span className="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full text-xs font-medium">
-                  Unread
-                </span>
-              )}
-              
-              <span className="text-gray-400 text-sm">{formatTimeAgo(comment.publishedAt)}</span>
             </div>
 
             {/* Three-Dot Menu for Own Comments */}
@@ -104,18 +114,10 @@ const CommentCard: React.FC<CommentCardProps> = ({
             )}
           </div>
 
-          {/* Video Title - Reduced gap */}
-          {comment.videoTitle && (
-            <div className="mb-2">
-              <span className="text-gray-400 text-sm">on </span>
-              <span className="text-blue-300 text-sm font-medium">{comment.videoTitle}</span>
-            </div>
-          )}
-
           {/* Comment Text */}
           <p className="text-gray-300 leading-relaxed mb-3">{comment.textDisplay}</p>
 
-          {/* Stats and Show Replies on same line - Removed replies count */}
+          {/* Stats and Show Replies on same line */}
           <div className="flex items-center justify-between mb-3 text-sm text-gray-400">
             <div className="flex items-center">
               <span>{comment.likeCount} likes</span>
