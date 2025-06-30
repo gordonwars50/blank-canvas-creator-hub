@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
@@ -6,7 +5,7 @@ import { GlowCard } from '@/components/ui/spotlight-card';
 import { GlowButton } from '@/components/ui/glow-button';
 import { GlowInput } from '@/components/ui/glow-input';
 import { Badge } from '@/components/ui/badge';
-import { Plus, ChevronDown, Play, Eye, MessageSquare, Clock, ThumbsUp, Search, Trash2 } from 'lucide-react';
+import { Plus, ChevronDown, Play, Eye, MessageSquare, Clock, ThumbsUp, Search, Trash2, Bell } from 'lucide-react';
 import AddNewVideoModal from '@/components/addnewvideo/AddNewVideoModal';
 import { useProjectManagement } from '@/hooks/useProjectManagement';
 import {
@@ -20,6 +19,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from '@/hooks/use-toast';
+import { useNotifications } from '@/contexts/NotificationContext';
+import NotificationPanel from '@/components/dashboard/NotificationPanel';
 
 // Project state type
 type ProjectState = 'Planning' | 'Production' | 'Scheduled' | 'Uploaded';
@@ -66,9 +67,11 @@ const PlanSchedulePage: React.FC = () => {
   const [showAddVideoModal, setShowAddVideoModal] = useState(false);
   const [editingProjectId, setEditingProjectId] = useState<string | undefined>(undefined);
   const [deleteProjectId, setDeleteProjectId] = useState<string | null>(null);
+  const [notificationPanelOpen, setNotificationPanelOpen] = useState(false);
 
   const { projects, loading, deleteProject } = useProjectManagement();
   const { toast } = useToast();
+  const { unreadCount } = useNotifications();
   const states: (ProjectState | 'All')[] = ['All', 'Planning', 'Production', 'Scheduled', 'Uploaded'];
 
   const filteredProjects = projects.filter(project => {
@@ -145,7 +148,7 @@ const PlanSchedulePage: React.FC = () => {
 
   if (loading) {
     return (
-      <DashboardLayout title="Plan & Schedule">
+      <DashboardLayout title="Plan & Schedule" hideTopBarActions={true}>
         <div className="flex items-center justify-center h-64">
           <div className="text-white">Loading projects...</div>
         </div>
@@ -154,11 +157,34 @@ const PlanSchedulePage: React.FC = () => {
   }
 
   return (
-    <DashboardLayout title="Plan & Schedule">
+    <DashboardLayout title="Plan & Schedule" hideTopBarActions={true}>
       <div className="space-y-6">
-        {/* Header */}
+        {/* Header with Notification Button */}
         <div className="mb-4">
-          <h1 className="text-2xl font-bold text-white mb-4">Plan & Schedule</h1>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-2xl font-bold text-white">Plan & Schedule</h1>
+            
+            {/* Notification Button */}
+            <div className="relative">
+              <GlowButton
+                glowColor="red"
+                className="bg-gray-800 hover:bg-gray-700 rounded-full h-12 w-12 p-0 flex items-center justify-center relative transition-all duration-200"
+                onClick={() => setNotificationPanelOpen(!notificationPanelOpen)}
+              >
+                <Bell className="w-6 h-6 text-gray-300" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center px-1 font-medium shadow-lg border-2 border-black z-20">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </GlowButton>
+              
+              <NotificationPanel 
+                isOpen={notificationPanelOpen}
+                onClose={() => setNotificationPanelOpen(false)}
+              />
+            </div>
+          </div>
 
           {/* Single Row with Search, Filter, and Add Button */}
           <div className="flex items-center space-x-4">
