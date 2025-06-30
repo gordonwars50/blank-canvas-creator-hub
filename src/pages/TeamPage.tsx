@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { GlowCard } from '@/components/ui/spotlight-card';
@@ -15,9 +14,9 @@ const TeamPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddMember, setShowAddMember] = useState(false);
 
-  // Gear Management state
-  const [cameras, setCameras] = useState<string[]>(['Canon EOS R5', 'Sony A7 III']);
-  const [lenses, setLenses] = useState<string[]>(['24-70mm f/2.8', '85mm f/1.4', '16-35mm f/2.8']);
+  // Gear Management state - start with empty arrays
+  const [cameras, setCameras] = useState<string[]>([]);
+  const [lenses, setLenses] = useState<string[]>([]);
   const [newCamera, setNewCamera] = useState('');
   const [newLens, setNewLens] = useState('');
   const [editingCamera, setEditingCamera] = useState<{ index: number, value: string } | null>(null);
