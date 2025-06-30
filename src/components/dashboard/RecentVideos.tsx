@@ -96,8 +96,8 @@ const RecentVideos: React.FC = () => {
               </GlowButton>
             </Link>
           </div>
-          <div className="animate-pulse space-y-4">
-            {[1, 2, 3].map(i => (
+          <div className="animate-pulse grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[1, 2, 3, 4].map(i => (
               <div key={i} className="flex items-center space-x-4 p-3">
                 <div className="w-24 h-16 bg-gray-800 rounded"></div>
                 <div className="flex-1 space-y-2">
@@ -153,6 +153,9 @@ const RecentVideos: React.FC = () => {
     videos.filter(video => video.id !== topPerformer.id) : 
     videos;
 
+  // Determine if we need special layout for odd number of videos
+  const isOddCount = otherVideos.length % 2 !== 0;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -174,7 +177,7 @@ const RecentVideos: React.FC = () => {
           </Link>
         </div>
 
-        {/* Top Performer Section */}
+        {/* Top Performer Section - Keep existing full width layout */}
         {topPerformer && (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -245,58 +248,72 @@ const RecentVideos: React.FC = () => {
           </motion.div>
         )}
 
-        {/* Other Videos Section */}
-        <div className="space-y-3">
+        {/* Other Videos Section - New Grid Layout */}
+        <div>
           <h3 className="text-sm font-medium text-gray-400 mb-3">
             {topPerformer ? 'Other Recent Videos' : 'Recent Projects'}
           </h3>
-          {otherVideos.map((video, index) => (
-            <motion.div
-              key={video.id}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: 0.6 + index * 0.1 }}
-              className="flex items-center space-x-4 p-3 rounded-xl hover:bg-red-500/10 hover:rounded-xl transition-all duration-300 cursor-pointer"
-            >
-              <img
-                src={video.thumbnail}
-                alt={video.title}
-                className="w-24 h-16 bg-gray-800 rounded object-cover flex-shrink-0"
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {otherVideos.map((video, index) => (
+              <motion.div
+                key={video.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.6 + index * 0.1 }}
+                className={`
+                  flex flex-col space-y-3 p-3 rounded-xl hover:bg-red-500/10 hover:rounded-xl transition-all duration-300 cursor-pointer
+                  ${isOddCount && index === otherVideos.length - 1 ? 'md:col-span-2' : ''}
+                `}
+              >
+                {/* Video thumbnail and basic info */}
+                <div className="flex items-start space-x-3">
+                  <img
+                    src={video.thumbnail}
+                    alt={video.title}
+                    className="w-20 h-14 bg-gray-800 rounded object-cover flex-shrink-0"
+                  />
 
-              <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-medium text-white truncate mb-1">
-                  {video.title}
-                </h4>
-                
-                <div className="flex items-center space-x-4 text-xs text-gray-400 mb-2">
-                  {video.status === 'published' && (
-                    <>
-                      <div className="flex items-center space-x-1">
-                        <Eye className="w-3 h-3" />
-                        <span>{formatNumber(video.views)}</span>
-                      </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-medium text-white truncate mb-1">
+                      {video.title}
+                    </h4>
+                    
+                    <div className="flex items-center space-x-3 text-xs text-gray-400 mb-2">
+                      {video.status === 'published' && (
+                        <>
+                          <div className="flex items-center space-x-1">
+                            <Eye className="w-3 h-3" />
+                            <span>{formatNumber(video.views)}</span>
+                          </div>
+                          
+                          <div className="flex items-center space-x-1">
+                            <ThumbsUp className="w-3 h-3" />
+                            <span>{formatNumber(video.likes)}</span>
+                          </div>
+                          
+                          <div className="flex items-center space-x-1">
+                            <MessageCircle className="w-3 h-3" />
+                            <span>{formatNumber(video.comments)}</span>
+                          </div>
+                        </>
+                      )}
                       
                       <div className="flex items-center space-x-1">
-                        <ThumbsUp className="w-3 h-3" />
-                        <span>{formatNumber(video.likes)}</span>
+                        <Calendar className="w-3 h-3" />
+                        <span>{video.publishDate}</span>
                       </div>
-                      
-                      <div className="flex items-center space-x-1">
-                        <MessageCircle className="w-3 h-3" />
-                        <span>{formatNumber(video.comments)}</span>
-                      </div>
-                    </>
-                  )}
-                  
-                  <div className="flex items-center space-x-1">
-                    <Calendar className="w-3 h-3" />
-                    <span>{video.publishDate}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex-shrink-0">
+                    <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(video.status)}`}>
+                      {video.status}
+                    </span>
                   </div>
                 </div>
 
                 {/* Team Members */}
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 pl-23">
                   <span className="text-xs text-gray-500">Team:</span>
                   <AvatarGroupWithTooltips 
                     avatars={video.teamMembers?.map(member => ({
@@ -308,15 +325,9 @@ const RecentVideos: React.FC = () => {
                     maxAvatars={3}
                   />
                 </div>
-              </div>
-
-              <div className="flex-shrink-0">
-                <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(video.status)}`}>
-                  {video.status}
-                </span>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </GlowCard>
     </motion.div>
