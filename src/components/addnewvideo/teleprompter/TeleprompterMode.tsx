@@ -137,12 +137,14 @@ const TeleprompterMode: React.FC<TeleprompterModeProps> = ({ script, onClose }) 
           msOverflowStyle: 'none', /* Internet Explorer 10+ */
         }}
       >
-        <style jsx>{`
-          div::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
-          }
-        `}</style>
-        <div className="max-w-4xl mx-auto">
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            .teleprompter-content::-webkit-scrollbar {
+              display: none; /* Chrome, Safari, Opera */
+            }
+          `
+        }} />
+        <div className="max-w-4xl mx-auto teleprompter-content">
           <div 
             className="text-white leading-relaxed text-2xl md:text-3xl lg:text-4xl prose prose-invert max-w-none"
             style={{
