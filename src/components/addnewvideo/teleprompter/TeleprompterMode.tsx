@@ -1,7 +1,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Settings, Minus } from 'lucide-react';
+import { Settings, Minus } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
+import { GlowButton } from '@/components/ui/glow-button';
+import { GlowCard } from '@/components/ui/spotlight-card';
 
 interface TeleprompterModeProps {
   script: string;
@@ -50,76 +52,81 @@ const TeleprompterMode: React.FC<TeleprompterModeProps> = ({ script, onClose }) 
     <div className="fixed inset-0 z-[100] bg-black">
       {/* Toolbar */}
       {showToolbar && (
-        <div className="absolute top-0 left-0 right-0 bg-gray-900/90 backdrop-blur-sm border-b border-gray-700 p-4 z-[101]">
-          <div className="flex items-center justify-between max-w-4xl mx-auto">
-            <div className="flex items-center space-x-6">
-              {/* Scroll Speed Control */}
-              <div className="flex items-center space-x-3">
-                <span className="text-white text-sm">Speed:</span>
-                <div className="w-32">
-                  <Slider
-                    value={[scrollSpeed]}
-                    onValueChange={(value) => setScrollSpeed(value[0])}
-                    max={100}
-                    min={10}
-                    step={5}
-                    className="cursor-pointer"
-                  />
+        <div className="absolute top-0 left-0 right-0 z-[101] p-4">
+          <GlowCard glowColor="blue" customSize className="w-full p-4">
+            <div className="flex items-center justify-between max-w-4xl mx-auto">
+              <div className="flex items-center space-x-6">
+                {/* Scroll Speed Control */}
+                <div className="flex items-center space-x-3">
+                  <span className="text-white text-sm">Speed:</span>
+                  <div className="w-32">
+                    <Slider
+                      value={[scrollSpeed]}
+                      onValueChange={(value) => setScrollSpeed(value[0])}
+                      max={100}
+                      min={10}
+                      step={5}
+                      className="cursor-pointer"
+                    />
+                  </div>
+                  <span className="text-gray-400 text-sm w-8">{scrollSpeed}</span>
                 </div>
-                <span className="text-gray-400 text-sm w-8">{scrollSpeed}</span>
+
+                {/* Start/Stop Button */}
+                <GlowButton
+                  glowColor={isScrolling ? "red" : "green"}
+                  onClick={toggleScrolling}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    isScrolling 
+                      ? 'bg-red-600 hover:bg-red-700 text-white' 
+                      : 'bg-green-600 hover:bg-green-700 text-white'
+                  }`}
+                >
+                  {isScrolling ? 'Pause' : 'Start'}
+                </GlowButton>
               </div>
 
-              {/* Start/Stop Button */}
-              <button
-                onClick={toggleScrolling}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  isScrolling 
-                    ? 'bg-red-600 hover:bg-red-700 text-white' 
-                    : 'bg-green-600 hover:bg-green-700 text-white'
-                }`}
-              >
-                {isScrolling ? 'Pause' : 'Start'}
-              </button>
-            </div>
+              <div className="flex items-center space-x-2">
+                {/* Minimize Toolbar */}
+                <GlowButton
+                  glowColor="blue"
+                  onClick={() => setShowToolbar(false)}
+                  leftIcon={<Minus className="w-4 h-4" />}
+                  className="p-2 bg-gray-600 hover:bg-gray-700 text-white transition-colors rounded-lg"
+                >
+                  Minimize
+                </GlowButton>
 
-            <div className="flex items-center space-x-2">
-              {/* Minimize Toolbar */}
-              <button
-                onClick={() => setShowToolbar(false)}
-                className="p-2 text-gray-400 hover:text-white transition-colors"
-                title="Minimize toolbar"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
-
-              {/* Close */}
-              <button
-                onClick={onClose}
-                className="p-2 text-gray-400 hover:text-white transition-colors"
-                title="Close teleprompter"
-              >
-                <X className="w-4 h-4" />
-              </button>
+                {/* Close */}
+                <GlowButton
+                  glowColor="red"
+                  onClick={onClose}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white transition-colors rounded-lg"
+                >
+                  Close Teleprompter
+                </GlowButton>
+              </div>
             </div>
-          </div>
+          </GlowCard>
         </div>
       )}
 
       {/* Floating Edit Button (when toolbar is hidden) */}
       {!showToolbar && (
-        <button
+        <GlowButton
+          glowColor="blue"
           onClick={() => setShowToolbar(true)}
+          leftIcon={<Settings className="w-5 h-5" />}
           className="fixed top-4 right-4 z-[101] p-3 bg-gray-900/80 hover:bg-gray-800 rounded-full text-white transition-colors"
-          title="Show toolbar"
         >
-          <Settings className="w-5 h-5" />
-        </button>
+          Show Toolbar
+        </GlowButton>
       )}
 
       {/* Script Content */}
       <div 
         ref={contentRef}
-        className={`h-full overflow-y-auto px-8 py-20 ${showToolbar ? 'pt-28' : 'pt-20'}`}
+        className={`h-full overflow-y-auto px-8 py-20 ${showToolbar ? 'pt-32' : 'pt-20'}`}
         style={{
           scrollBehavior: 'smooth'
         }}
