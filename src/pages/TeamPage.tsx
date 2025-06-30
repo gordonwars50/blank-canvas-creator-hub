@@ -1,11 +1,9 @@
-
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { GlowCard } from '@/components/ui/spotlight-card';
-import { GlowButton } from '@/components/ui/glow-button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { UserPlus, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useTeamManagement } from '@/hooks/useTeamManagement';
 import TeamMemberList from '@/components/team/TeamMemberList';
 import AddMemberModal from '@/components/team/AddMemberModal';
@@ -48,20 +46,6 @@ const TeamPage: React.FC = () => {
           <p className="text-gray-400 text-lg">
             Manage your team members, roles, and project assignments
           </p>
-        </div>
-
-        {/* Header Section with Add Button */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          {canManageTeam() && (
-            <GlowButton
-              glowColor="blue"
-              leftIcon={<UserPlus className="w-4 h-4" />}
-              onClick={() => setShowAddMember(true)}
-              className="bg-blue-600 hover:bg-blue-700 rounded-lg px-4 ml-auto"
-            >
-              Add Team Member
-            </GlowButton>
-          )}
         </div>
 
         {/* Search and Filters Section */}
@@ -120,7 +104,11 @@ const TeamPage: React.FC = () => {
         )}
 
         {/* Team Members List */}
-        <TeamMemberList members={filteredMembers} />
+        <TeamMemberList 
+          members={filteredMembers} 
+          onAddMember={() => setShowAddMember(true)}
+          canManageTeam={canManageTeam()}
+        />
 
         {/* Phase 2 Features (Commented for future development) */}
         {/* 

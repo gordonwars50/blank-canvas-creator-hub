@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { GlowCard } from '@/components/ui/spotlight-card';
+import { GlowButton } from '@/components/ui/glow-button';
 import {
   Table,
   TableBody,
@@ -21,7 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Edit, Trash2, Users } from 'lucide-react';
+import { Edit, Trash2, Users, UserPlus } from 'lucide-react';
 import { TeamMember, TeamRole, TEAM_ROLES } from '@/types/team';
 import { useTeamManagement } from '@/hooks/useTeamManagement';
 import { useProjectManagement } from '@/hooks/useProjectManagement';
@@ -29,6 +29,8 @@ import EditMemberModal from './EditMemberModal';
 
 interface TeamMemberListProps {
   members: TeamMember[];
+  onAddMember?: () => void;
+  canManageTeam?: boolean;
 }
 
 const getRoleBadgeColor = (role: TeamRole) => {
@@ -44,12 +46,19 @@ const getRoleBadgeColor = (role: TeamRole) => {
   }
 };
 
-const TeamMemberList: React.FC<TeamMemberListProps> = ({ members }) => {
+const TeamMemberList: React.FC<TeamMemberListProps> = ({ 
+  members, 
+  onAddMember, 
+  canManageTeam: canManageTeamProp 
+}) => {
   const { removeMember, getMemberInitials, canManageTeam } = useTeamManagement();
   const { projects } = useProjectManagement();
   
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
   const [memberToDelete, setMemberToDelete] = useState<TeamMember | null>(null);
+
+  // Use prop if provided, otherwise use hook
+  const canManage = canManageTeamProp !== undefined ? canManageTeamProp : canManageTeam();
 
   // Get projects assigned to a member
   const getMemberProjects = (memberEmail: string) => {
@@ -87,16 +96,29 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members }) => {
   return (
     <GlowCard glowColor="blue" customSize className="w-full p-6 bg-gray-900/50">
       <div className="space-y-6">
-        <div className="flex items-center gap-2 mb-4">
-          <Users className="w-5 h-5 text-blue-400" />
-          <h2 className="text-xl font-semibold text-white">Team Members</h2>
-          <Badge variant="secondary" className="ml-2 bg-gray-700 text-gray-200">
-            {members.length} {members.length === 1 ? 'member' : 'members'}
-          </Badge>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Users className="w-5 h-5 text-blue-400" />
+            <h2 className="text-xl font-semibold text-white">Team Members</h2>
+            <Badge variant="secondary" className="ml-2 bg-gray-700 text-gray-200">
+              {members.length} {members.length === 1 ? 'member' : 'members'}
+            </Badge>
+          </div>
+          
+          {canManage && onAddMember && (
+            <GlowButton
+              glowColor="blue"
+              leftIcon={<UserPlus className="w-4 h-4" />}
+              onClick={onAddMember}
+              className="bg-blue-600 hover:bg-blue-700 rounded-lg px-4"
+            >
+              Add Team Member
+            </GlowButton>
+          )}
         </div>
 
         {/* Admin-only workload summary */}
-        {canManageTeam() && (
+        {canManage && (
           <div className="bg-gray-800/50 rounded-lg p-4 mb-6">
             <h3 className="text-sm font-medium text-gray-300 mb-2">Workload Summary</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
@@ -128,7 +150,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members }) => {
                 <TableHead className="text-gray-300">Role</TableHead>
                 <TableHead className="text-gray-300">Projects</TableHead>
                 <TableHead className="text-gray-300">Joined</TableHead>
-                {canManageTeam() && <TableHead className="text-gray-300">Actions</TableHead>}
+                {canManage && <TableHead className="text-gray-300">Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -170,7 +192,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ members }) => {
                     <TableCell className="text-gray-300">
                       {formatJoinDate(member.joinedAt)}
                     </TableCell>
-                    {canManageTeam() && (
+                    {canManage && (
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Button
