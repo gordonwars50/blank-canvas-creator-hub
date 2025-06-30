@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Reply, Circle } from 'lucide-react';
+import { Reply } from 'lucide-react';
 import { GlowButton } from '@/components/ui/glow-button';
 
 interface CommentActionsProps {
@@ -34,9 +34,8 @@ const CommentActions: React.FC<CommentActionsProps> = ({
       {!isOwnComment && (
         <GlowButton
           onClick={onMarkAsSpam}
-          glowColor="orange"
-          leftIcon={<Circle className="w-3 h-3" />}
-          className="px-3 py-1.5 rounded-full text-xs font-medium text-orange-300 hover:text-orange-200"
+          glowColor="red"
+          className="px-3 py-1.5 rounded-full text-xs font-medium text-red-300 hover:text-red-200"
         >
           Mark as Spam
         </GlowButton>

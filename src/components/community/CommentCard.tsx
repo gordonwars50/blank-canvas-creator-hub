@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -166,7 +167,7 @@ const CommentCard: React.FC<CommentCardProps> = ({
               <div className="ml-8">
                 <div className="space-y-3">
                   {comment.replies.map((reply) => (
-                    <div key={reply.id} className="w-full p-4 bg-gray-800/20 backdrop-blur-sm border border-gray-700/30 rounded-lg">
+                    <div key={reply.id} className="w-full p-4 bg-gray-800/20 backdrop-blur-sm border border-gray-700/30 rounded-2xl">
                       <div className="flex gap-3">
                         <Avatar className="w-8 h-8 flex-shrink-0">
                           <AvatarImage src={reply.authorProfileImageUrl} alt={reply.authorName} />
