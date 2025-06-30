@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Settings, Palette, Minus } from 'lucide-react';
+import { X, Settings, Minus, Download } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 
 interface TeleprompterModeProps {
@@ -10,7 +10,6 @@ interface TeleprompterModeProps {
 
 const TeleprompterMode: React.FC<TeleprompterModeProps> = ({ script, onClose }) => {
   const [scrollSpeed, setScrollSpeed] = useState(50);
-  const [highlightColor, setHighlightColor] = useState('#ef4444');
   const [showToolbar, setShowToolbar] = useState(true);
   const [isScrolling, setIsScrolling] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -38,27 +37,61 @@ const TeleprompterMode: React.FC<TeleprompterModeProps> = ({ script, onClose }) 
     setIsScrolling(!isScrolling);
   };
 
-  const highlightColors = [
-    { name: 'Red', value: '#ef4444' },
-    { name: 'Yellow', value: '#eab308' },
-    { name: 'Green', value: '#22c55e' },
-    { name: 'Blue', value: '#3b82f6' },
-    { name: 'Purple', value: '#a855f7' }
-  ];
+  const exportToPDF = () => {
+    // Create a new window for PDF export
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
 
-  // Process HTML content and apply custom highlight color
+    // Clean script content for PDF (remove HTML tags for plain text)
+    const cleanScript = script.replace(/<[^>]*>/g, '');
+    
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Teleprompter Script</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              font-size: 16px;
+              line-height: 1.6;
+              margin: 40px;
+              color: #000;
+            }
+            h1 {
+              color: #333;
+              border-bottom: 2px solid #333;
+              padding-bottom: 10px;
+            }
+            .script-content {
+              margin-top: 30px;
+              white-space: pre-wrap;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>Teleprompter Script</h1>
+          <div class="script-content">${cleanScript}</div>
+        </body>
+      </html>
+    `);
+    
+    printWindow.document.close();
+    printWindow.focus();
+    
+    // Trigger print dialog
+    setTimeout(() => {
+      printWindow.print();
+    }, 250);
+  };
+
+  // Process HTML content (simplified without color customization)
   const processFormattedText = (htmlContent: string) => {
     if (!htmlContent || htmlContent.trim() === '') {
       return 'No script content available. Add content in the script editor to see it here.';
     }
     
-    // Replace the default highlight color with the selected one
-    const processedContent = htmlContent.replace(
-      /bg-yellow-500/g,
-      `bg-[${highlightColor}]`
-    );
-    
-    return processedContent;
+    return htmlContent;
   };
 
   return (
@@ -84,26 +117,6 @@ const TeleprompterMode: React.FC<TeleprompterModeProps> = ({ script, onClose }) 
                 <span className="text-gray-400 text-sm w-8">{scrollSpeed}</span>
               </div>
 
-              {/* Highlight Color Picker */}
-              <div className="flex items-center space-x-3">
-                <span className="text-white text-sm">Color:</span>
-                <div className="flex space-x-1">
-                  {highlightColors.map((color) => (
-                    <button
-                      key={color.value}
-                      onClick={() => setHighlightColor(color.value)}
-                      className={`w-6 h-6 rounded-full border-2 transition-all ${
-                        highlightColor === color.value 
-                          ? 'border-white scale-110' 
-                          : 'border-gray-600 hover:border-gray-400'
-                      }`}
-                      style={{ backgroundColor: color.value }}
-                      title={color.name}
-                    />
-                  ))}
-                </div>
-              </div>
-
               {/* Start/Stop Button */}
               <button
                 onClick={toggleScrolling}
@@ -114,6 +127,15 @@ const TeleprompterMode: React.FC<TeleprompterModeProps> = ({ script, onClose }) 
                 }`}
               >
                 {isScrolling ? 'Pause' : 'Start'}
+              </button>
+
+              {/* Export PDF Button */}
+              <button
+                onClick={exportToPDF}
+                className="px-4 py-2 rounded-lg font-medium bg-blue-600 hover:bg-blue-700 text-white transition-colors flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Export PDF
               </button>
             </div>
 
