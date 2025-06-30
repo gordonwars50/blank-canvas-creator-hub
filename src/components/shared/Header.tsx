@@ -41,7 +41,7 @@ const Header = ({ theme = "dark" }: HeaderProps) => {
           className="flex items-center gap-3"
         >
           <img 
-            src="/lovable-uploads/5c7fd81a-e392-4fef-b803-5684426e7184.png" 
+            src="/logo.png" 
             alt="Creatorly Logo" 
             className="h-8 w-8 object-contain"
           />
