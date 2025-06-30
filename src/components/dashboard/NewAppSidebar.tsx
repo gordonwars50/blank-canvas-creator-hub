@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sidebar, SidebarBody, SidebarLink, useSidebar } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
+
 interface SidebarItem {
   id: string;
   label: string;
@@ -34,11 +35,6 @@ const sidebarItems: SidebarItem[] = [{
   label: 'Community',
   icon: Users,
   href: '/dashboard/community'
-}, {
-  id: 'team',
-  label: 'Team',
-  icon: TeamIcon,
-  href: '/dashboard/team'
 }, {
   id: 'analytics',
   label: 'Analytics',
@@ -265,7 +261,14 @@ const NewAppSidebar: React.FC<NewAppSidebarProps> = ({
             {sidebarItems.map(item => <ExpandableMenuItem key={item.id} item={item} />)}
           </div>
         </div>
-        <div>
+        <div className="space-y-2">
+          {/* Team / Gear Management Link */}
+          <SidebarLink link={{
+            label: 'Team / Gear Management',
+            href: '/dashboard/team',
+            icon: <TeamIcon className="w-4 h-4 flex-shrink-0 text-gray-400" />
+          }} className="text-gray-400 hover:text-white hover:bg-gray-800" />
+          
           <UserProfile />
         </div>
       </SidebarBody>
