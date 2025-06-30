@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Upload } from 'lucide-react';
 import { GlowCard } from '@/components/ui/spotlight-card';
@@ -65,16 +66,18 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
   };
 
   const handleModeChange = (mode: 'schedule' | 'upload') => {
-    console.log('Mode changed to:', mode);
+    console.log('ScheduleSection - Mode changing from:', selectedMode, 'to:', mode);
     onModeChange(mode);
     if (mode === 'upload') {
       onUploadNowChange(true);
     } else {
       onUploadNowChange(false);
     }
+    console.log('ScheduleSection - Mode change complete, new mode:', mode);
   };
 
-  console.log('Current selectedMode:', selectedMode);
+  console.log('ScheduleSection - Current selectedMode:', selectedMode);
+  console.log('ScheduleSection - Current uploadNow:', uploadNow);
 
   return (
     <GlowCard glowColor="red" customSize className="w-full p-6 mb-8 rounded-2xl">
@@ -88,12 +91,16 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-300">Choose an option:</label>
           <Select value={selectedMode} onValueChange={handleModeChange}>
-            <SelectTrigger className="w-full bg-gray-800 border-gray-600 text-white rounded-xl">
+            <SelectTrigger className="w-full bg-gray-800 border-gray-600 text-white rounded-xl hover:bg-gray-700 focus:ring-2 focus:ring-red-500">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
-            <SelectContent className="bg-gray-800 border-gray-600 rounded-xl">
-              <SelectItem value="schedule" className="text-white hover:bg-gray-700">Schedule</SelectItem>
-              <SelectItem value="upload" className="text-white hover:bg-gray-700">Upload</SelectItem>
+            <SelectContent className="bg-gray-800 border-gray-600 rounded-xl z-[20000] shadow-2xl">
+              <SelectItem value="schedule" className="text-white hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">
+                Schedule
+              </SelectItem>
+              <SelectItem value="upload" className="text-white hover:bg-gray-700 focus:bg-gray-700 cursor-pointer">
+                Upload
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
