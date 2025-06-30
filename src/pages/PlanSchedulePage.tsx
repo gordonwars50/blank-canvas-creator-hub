@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
@@ -154,7 +155,7 @@ const PlanSchedulePage: React.FC = () => {
   }
 
   return (
-    <DashboardLayout title="Plan & Schedule" hideTopBarActions={false}>
+    <DashboardLayout title="Plan & Schedule" hideTopBarActions={true}>
       <div className="space-y-6">
         {/* Header */}
         <div className="mb-4">
@@ -375,3 +376,4 @@ const PlanSchedulePage: React.FC = () => {
 };
 
 export default PlanSchedulePage;
+
