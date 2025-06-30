@@ -3,7 +3,6 @@ import {
   Home, 
   BarChart3, 
   Upload, 
-  Radio, 
   Calendar, 
   Users, 
   DollarSign, 
@@ -51,12 +50,6 @@ const sidebarItems: SidebarItem[] = [
     label: 'Plan & Schedule',
     icon: Upload,
     href: '/dashboard/plan-schedule'
-  },
-  {
-    id: 'livestreams',
-    label: 'Live Streams',
-    icon: Radio,
-    href: '/dashboard/livestreams'
   },
   {
     id: 'calendar',
