@@ -171,6 +171,9 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose, pr
   };
 
   const handleFormChange = (newData: any) => {
+    console.log('AddNewVideoModal - handleFormChange called with:', newData);
+    console.log('AddNewVideoModal - Old selectedMode:', formData.selectedMode, 'New selectedMode:', newData.selectedMode);
+    
     setFormData(newData);
     
     // Check if at least one required field is filled

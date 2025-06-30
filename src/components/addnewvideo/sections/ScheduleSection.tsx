@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Upload } from 'lucide-react';
 import { GlowCard } from '@/components/ui/spotlight-card';
@@ -35,6 +34,13 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
   const [timeHour, setTimeHour] = useState('12');
   const [timeMinute, setTimeMinute] = useState('00');
   const [timeAmPm, setTimeAmPm] = useState('PM');
+  const [localSelectedMode, setLocalSelectedMode] = useState<'schedule' | 'upload'>(selectedMode);
+
+  // Sync local mode with props
+  useEffect(() => {
+    console.log('ScheduleSection - selectedMode prop changed to:', selectedMode);
+    setLocalSelectedMode(selectedMode);
+  }, [selectedMode]);
 
   // Sync time state with props
   useEffect(() => {
@@ -67,18 +73,25 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
 
   const handleTabChange = (value: string) => {
     const mode = value as 'schedule' | 'upload';
-    console.log('ScheduleSection - Tab changing from:', selectedMode, 'to:', mode);
+    console.log('ScheduleSection - Tab changing from:', localSelectedMode, 'to:', mode);
+    
+    // Update local state immediately for responsive UI
+    setLocalSelectedMode(mode);
+    
+    // Call parent callback
     onModeChange(mode);
+    
+    // Update upload state based on mode
     if (mode === 'upload') {
       onUploadNowChange(true);
     } else {
       onUploadNowChange(false);
     }
+    
     console.log('ScheduleSection - Tab change complete, new mode:', mode);
   };
 
-  console.log('ScheduleSection - Current selectedMode:', selectedMode);
-  console.log('ScheduleSection - Current uploadNow:', uploadNow);
+  console.log('ScheduleSection - Render with localSelectedMode:', localSelectedMode, 'selectedMode prop:', selectedMode, 'uploadNow:', uploadNow);
 
   return (
     <GlowCard glowColor="red" customSize className="w-full p-6 mb-8 rounded-2xl">
@@ -89,7 +102,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
         </div>
 
         {/* Tabs for Schedule/Upload */}
-        <Tabs value={selectedMode} onValueChange={handleTabChange} className="w-full">
+        <Tabs value={localSelectedMode} onValueChange={handleTabChange} className="w-full">
           <TabsList className="grid w-full grid-cols-2 bg-gray-800 border border-gray-700 rounded-xl p-1">
             <TabsTrigger 
               value="schedule" 

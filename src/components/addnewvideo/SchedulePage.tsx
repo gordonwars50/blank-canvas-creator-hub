@@ -17,10 +17,12 @@ const SchedulePage: React.FC<SchedulePageProps> = ({
   scheduleSectionRef
 }) => {
   const updateFormData = (field: string, value: any) => {
+    console.log('SchedulePage - updateFormData called with field:', field, 'value:', value);
     const newData = {
       ...formData,
       [field]: value
     };
+    console.log('SchedulePage - calling onChange with newData:', newData);
     onChange(newData);
   };
 
