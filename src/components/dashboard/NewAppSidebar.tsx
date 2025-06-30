@@ -85,7 +85,7 @@ const Logo = () => {
         opacity: open ? 1 : 0,
         display: open ? "inline-block" : "none"
       }} className="font-bold text-white whitespace-pre">
-          YOUTILIFY
+          CREATORLY
         </motion.span>
       </Link>
       

@@ -184,9 +184,9 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, onToggle }) => {
       {/* Header */}
       <div className="p-4 border-b border-gray-800">
         {!collapsed ? (
-          <div className="text-white font-bold text-xl">YOUTILIFY</div>
+          <div className="text-white font-bold text-xl">CREATORLY</div>
         ) : (
-          <div className="text-white font-bold text-center">YT</div>
+          <div className="text-white font-bold text-center">CR</div>
         )}
       </div>
 

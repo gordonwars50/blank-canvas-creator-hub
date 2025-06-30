@@ -41,7 +41,7 @@ const Header = ({ theme = "dark" }: HeaderProps) => {
           className="flex items-center"
         >
           <div className={`text-2xl font-bold hover:opacity-80 transition-opacity ${isDark ? 'text-white' : 'text-blue-900'}`}>
-            YOUTILIFY
+            CREATORLY
           </div>
         </motion.div>
 
