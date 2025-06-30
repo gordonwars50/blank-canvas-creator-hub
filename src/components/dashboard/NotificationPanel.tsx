@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { X, MessageCircle, Heart, Users, Upload, DollarSign } from 'lucide-react';
 import { useNotifications } from '@/contexts/NotificationContext';
 import { Badge } from '@/components/ui/badge';
@@ -14,12 +13,29 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
   isOpen,
   onClose
 }) => {
+  const panelRef = useRef<HTMLDivElement>(null);
   const {
     notifications,
     markAsRead,
     markAllAsRead,
     unreadCount
   } = useNotifications();
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -53,7 +69,10 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
   };
 
   return (
-    <div className="absolute top-full right-0 mt-2 w-80 bg-gray-900 border border-gray-700 rounded-lg shadow-xl z-40">
+    <div 
+      ref={panelRef}
+      className="absolute top-full right-0 mt-2 w-80 bg-gray-900 border border-gray-700 rounded-lg shadow-xl z-40"
+    >
       <div className="p-4 border-b border-gray-700 flex items-center justify-between bg-zinc-950">
         <div className="flex items-center space-x-2">
           <h3 className="text-lg font-semibold text-white">Notifications</h3>
