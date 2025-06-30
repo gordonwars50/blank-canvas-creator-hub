@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Eye, ThumbsUp, MessageCircle, Calendar, TrendingUp, Award, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { GlowCard } from '@/components/ui/spotlight-card';
-import { Button } from '@/components/ui/button';
+import { GlowButton } from '@/components/ui/glow-button';
 import { useProjectManagement } from '@/hooks/useProjectManagement';
 
 interface Video {
@@ -64,16 +64,12 @@ const RecentVideos: React.FC = () => {
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-white">Recent Videos</h2>
-            <Button
-              asChild
-              size="sm"
-              className="bg-red-500 hover:bg-red-600 text-white"
-            >
-              <Link to="/dashboard/plan-schedule">
+            <Link to="/dashboard/plan-schedule">
+              <GlowButton glowColor="red" className="px-4 py-2">
                 <Plus className="w-4 h-4 mr-2" />
                 Add New Video
-              </Link>
-            </Button>
+              </GlowButton>
+            </Link>
           </div>
           <div className="animate-pulse space-y-4">
             {[1, 2, 3].map(i => (
@@ -105,16 +101,12 @@ const RecentVideos: React.FC = () => {
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-white">Recent Videos</h2>
-            <Button
-              asChild
-              size="sm"
-              className="bg-red-500 hover:bg-red-600 text-white"
-            >
-              <Link to="/dashboard/plan-schedule">
+            <Link to="/dashboard/plan-schedule">
+              <GlowButton glowColor="red" className="px-4 py-2">
                 <Plus className="w-4 h-4 mr-2" />
                 Add New Video
-              </Link>
-            </Button>
+              </GlowButton>
+            </Link>
           </div>
           <div className="text-center py-8 text-gray-500">
             <p className="text-sm">No videos yet. Create your first project to get started!</p>
@@ -149,16 +141,12 @@ const RecentVideos: React.FC = () => {
       >
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold text-white">Recent Videos</h2>
-          <Button
-            asChild
-            size="sm"
-            className="bg-red-500 hover:bg-red-600 text-white"
-          >
-            <Link to="/dashboard/plan-schedule">
+          <Link to="/dashboard/plan-schedule">
+            <GlowButton glowColor="red" className="px-4 py-2">
               <Plus className="w-4 h-4 mr-2" />
               Add New Video
-            </Link>
-          </Button>
+            </GlowButton>
+          </Link>
         </div>
 
         {/* Top Performer Section */}
