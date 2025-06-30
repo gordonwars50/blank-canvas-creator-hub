@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Search, Bell, Menu, Upload, Radio } from 'lucide-react';
+import { Search, Bell, Menu, Upload } from 'lucide-react';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { GlowInput } from '@/components/ui/glow-input';
 import { GlowButton } from '@/components/ui/glow-button';
@@ -31,13 +30,6 @@ const TopBar: React.FC<TopBarProps> = ({
       icon: Upload,
       color: 'bg-red-600 hover:bg-red-700',
       href: '/dashboard/upload'
-    },
-    {
-      id: 'livestream',
-      label: 'Go Live',
-      icon: Radio,
-      color: 'bg-blue-600 hover:bg-blue-700',
-      href: '/dashboard/livestreams'
     }
   ];
 
