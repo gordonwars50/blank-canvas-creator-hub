@@ -50,11 +50,11 @@ const TeleprompterMode: React.FC<TeleprompterModeProps> = ({ script, onClose }) 
 
   return (
     <div className="fixed inset-0 z-[100] bg-black">
-      {/* Toolbar - Now at bottom center */}
+      {/* Toolbar - At bottom center */}
       {showToolbar && (
         <div className="absolute bottom-4 left-0 right-0 z-[101] p-4">
           <div className="max-w-4xl mx-auto">
-            <GlowCard glowColor="blue" customSize className="w-full p-4">
+            <GlowCard glowColor="blue" customSize className="w-full p-4 backdrop-blur-xl">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-6">
                   {/* Scroll Speed Control */}
@@ -114,13 +114,13 @@ const TeleprompterMode: React.FC<TeleprompterModeProps> = ({ script, onClose }) 
         </div>
       )}
 
-      {/* Floating Edit Button (when toolbar is hidden) */}
+      {/* Floating Show Toolbar Button (when toolbar is hidden) - Now at bottom */}
       {!showToolbar && (
         <GlowButton
           glowColor="blue"
           onClick={() => setShowToolbar(true)}
           leftIcon={<Settings className="w-5 h-5" />}
-          className="fixed top-4 right-4 z-[101] p-3 bg-gray-900/80 hover:bg-gray-800 rounded-full text-white transition-colors"
+          className="fixed bottom-4 right-4 z-[101] p-3 bg-gray-900/80 hover:bg-gray-800 rounded-full text-white transition-colors"
         >
           Show Toolbar
         </GlowButton>
