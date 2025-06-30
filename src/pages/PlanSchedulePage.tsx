@@ -5,6 +5,7 @@ import { GlowCard } from '@/components/ui/spotlight-card';
 import { GlowButton } from '@/components/ui/glow-button';
 import { GlowInput } from '@/components/ui/glow-input';
 import { Badge } from '@/components/ui/badge';
+import { BGPattern } from '@/components/ui/bg-pattern';
 import { Plus, ChevronDown, Play, Eye, MessageSquare, Clock, ThumbsUp, Search, Trash2 } from 'lucide-react';
 import AddNewVideoModal from '@/components/addnewvideo/AddNewVideoModal';
 import { useProjectManagement } from '@/hooks/useProjectManagement';
@@ -149,7 +150,8 @@ const PlanSchedulePage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex w-full">
+      <div className="min-h-screen bg-black flex w-full relative">
+        <BGPattern variant="grid" mask="fade-edges" size={32} fill="rgba(255, 255, 255, 0.05)" />
         <NewAppSidebar collapsed={sidebarCollapsed} onToggle={toggleSidebar} />
         <div 
           className="flex-1 flex items-center justify-center transition-all duration-300"
@@ -162,7 +164,8 @@ const PlanSchedulePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black flex w-full">
+    <div className="min-h-screen bg-black flex w-full relative">
+      <BGPattern variant="grid" mask="fade-edges" size={32} fill="rgba(255, 255, 255, 0.05)" />
       <NewAppSidebar collapsed={sidebarCollapsed} onToggle={toggleSidebar} />
 
       <div 
