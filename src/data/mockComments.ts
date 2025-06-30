@@ -12,6 +12,7 @@ export const mockComments: Comment[] = [
     isOwnComment: true,
     likeCount: 45,
     totalReplyCount: 8,
+    isRead: true,
     replies: [
       {
         id: 'r1',
@@ -43,6 +44,7 @@ export const mockComments: Comment[] = [
     isOwnComment: false,
     likeCount: 23,
     totalReplyCount: 3,
+    isRead: false,
     replies: [
       {
         id: 'r3',
@@ -65,6 +67,7 @@ export const mockComments: Comment[] = [
     isOwnComment: false,
     likeCount: 31,
     totalReplyCount: 5,
+    isRead: false,
     replies: []
   },
   {
@@ -77,6 +80,7 @@ export const mockComments: Comment[] = [
     isOwnComment: true,
     likeCount: 67,
     totalReplyCount: 12,
+    isRead: true,
     replies: []
   },
   {
@@ -89,13 +93,14 @@ export const mockComments: Comment[] = [
     isOwnComment: false,
     likeCount: 19,
     totalReplyCount: 2,
+    isRead: true,
     replies: []
   }
 ];
 
 export const mockStats: CommentStats = {
   totalComments: mockComments.length,
-  myComments: mockComments.filter(c => c.isOwnComment).length,
-  othersComments: mockComments.filter(c => !c.isOwnComment).length,
+  unreadComments: mockComments.filter(c => !c.isRead).length,
+  readComments: mockComments.filter(c => c.isRead).length,
   totalReplies: mockComments.reduce((acc, comment) => acc + comment.totalReplyCount, 0)
 };

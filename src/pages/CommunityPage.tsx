@@ -5,7 +5,7 @@ import { GlowCard } from '@/components/ui/spotlight-card';
 import SearchAndFilters from '@/components/community/SearchAndFilters';
 import CommentsList from '@/components/community/CommentsList';
 import { Comment, CommentFilters } from '@/types/comments';
-import { mockComments, mockStats } from '@/data/mockComments';
+import { mockComments } from '@/data/mockComments';
 
 const CommunityPage: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>(mockComments);
@@ -26,8 +26,8 @@ const CommunityPage: React.FC = () => {
 
     return {
       totalComments: filteredComments.length,
-      myComments: filteredComments.filter(c => c.isOwnComment).length,
-      othersComments: filteredComments.filter(c => !c.isOwnComment).length,
+      unreadComments: filteredComments.filter(c => !c.isRead).length,
+      readComments: filteredComments.filter(c => c.isRead).length,
       totalReplies: filteredComments.reduce((acc, comment) => acc + comment.totalReplyCount, 0)
     };
   }, [comments, filters.searchText]);
@@ -71,16 +71,6 @@ const CommunityPage: React.FC = () => {
   return (
     <DashboardLayout title="Community Management">
       <div className="space-y-6">
-        {/* API Integration Notice */}
-        <GlowCard glowColor="orange" customSize className="w-full p-4">
-          <div className="text-center text-orange-300">
-            <p className="font-medium mb-1">🔧 Backend Integration Required</p>
-            <p className="text-sm text-orange-200">
-              Connect to YouTube API via Google OAuth 2.0 to enable live comment management
-            </p>
-          </div>
-        </GlowCard>
-
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <GlowCard glowColor="blue" customSize className="p-6 text-center">
@@ -89,17 +79,17 @@ const CommunityPage: React.FC = () => {
           </GlowCard>
           
           <GlowCard glowColor="green" customSize className="p-6 text-center">
-            <div className="text-3xl font-bold text-green-300 mb-2">{stats.myComments}</div>
-            <div className="text-gray-400 text-sm font-medium">My Comments</div>
-          </GlowCard>
-          
-          <GlowCard glowColor="purple" customSize className="p-6 text-center">
-            <div className="text-3xl font-bold text-purple-300 mb-2">{stats.othersComments}</div>
-            <div className="text-gray-400 text-sm font-medium">Others' Comments</div>
+            <div className="text-3xl font-bold text-green-300 mb-2">{stats.unreadComments}</div>
+            <div className="text-gray-400 text-sm font-medium">Unread Comments</div>
           </GlowCard>
           
           <GlowCard glowColor="orange" customSize className="p-6 text-center">
-            <div className="text-3xl font-bold text-orange-300 mb-2">{stats.totalReplies}</div>
+            <div className="text-3xl font-bold text-orange-300 mb-2">{stats.readComments}</div>
+            <div className="text-gray-400 text-sm font-medium">Previously Read</div>
+          </GlowCard>
+          
+          <GlowCard glowColor="purple" customSize className="p-6 text-center">
+            <div className="text-3xl font-bold text-purple-300 mb-2">{stats.totalReplies}</div>
             <div className="text-gray-400 text-sm font-medium">Total Replies</div>
           </GlowCard>
         </div>

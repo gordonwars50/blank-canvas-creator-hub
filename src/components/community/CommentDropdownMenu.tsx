@@ -1,0 +1,51 @@
+
+import React from 'react';
+import { MoreHorizontal, Edit, Trash } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { GlowButton } from '@/components/ui/glow-button';
+
+interface CommentDropdownMenuProps {
+  onEdit: () => void;
+  onDelete: () => void;
+}
+
+const CommentDropdownMenu: React.FC<CommentDropdownMenuProps> = ({
+  onEdit,
+  onDelete
+}) => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <GlowButton
+          glowColor="purple"
+          className="w-8 h-8 rounded-full p-0 text-gray-400 hover:text-white"
+        >
+          <MoreHorizontal className="w-4 h-4" />
+        </GlowButton>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="bg-gray-800 border-gray-700">
+        <DropdownMenuItem 
+          onClick={onEdit}
+          className="text-green-300 hover:text-green-200 hover:bg-gray-700 cursor-pointer"
+        >
+          <Edit className="w-4 h-4 mr-2" />
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem 
+          onClick={onDelete}
+          className="text-red-300 hover:text-red-200 hover:bg-gray-700 cursor-pointer"
+        >
+          <Trash className="w-4 h-4 mr-2" />
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export default CommentDropdownMenu;

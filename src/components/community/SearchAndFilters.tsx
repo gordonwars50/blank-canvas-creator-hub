@@ -59,31 +59,31 @@ const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({ filters, onFiltersC
           </GlowButton>
           
           <GlowButton
-            onClick={() => handleFilterChange('my-comments')}
-            glowColor={filters.filterType === 'my-comments' ? 'green' : 'purple'}
+            onClick={() => handleFilterChange('unread')}
+            glowColor={filters.filterType === 'unread' ? 'green' : 'purple'}
             className={`
               px-6 py-2 rounded-full text-sm font-medium transition-all
-              ${filters.filterType === 'my-comments' 
+              ${filters.filterType === 'unread' 
                 ? 'text-green-300 shadow-lg' 
                 : 'text-gray-300 hover:text-white'
               }
             `}
           >
-            My Comments
+            Unread Comments
           </GlowButton>
           
           <GlowButton
-            onClick={() => handleFilterChange('others-comments')}
-            glowColor={filters.filterType === 'others-comments' ? 'orange' : 'purple'}
+            onClick={() => handleFilterChange('read')}
+            glowColor={filters.filterType === 'read' ? 'orange' : 'purple'}
             className={`
               px-6 py-2 rounded-full text-sm font-medium transition-all
-              ${filters.filterType === 'others-comments' 
+              ${filters.filterType === 'read' 
                 ? 'text-orange-300 shadow-lg' 
                 : 'text-gray-300 hover:text-white'
               }
             `}
           >
-            Others' Comments
+            Previously Read Comments
           </GlowButton>
         </div>
       </div>

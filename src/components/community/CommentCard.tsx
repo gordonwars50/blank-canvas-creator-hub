@@ -4,6 +4,7 @@ import { GlowCard } from '@/components/ui/spotlight-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Comment } from '@/types/comments';
 import CommentActions from './CommentActions';
+import CommentDropdownMenu from './CommentDropdownMenu';
 import ReplySection from './ReplySection';
 
 interface CommentCardProps {
@@ -59,14 +60,14 @@ const CommentCard: React.FC<CommentCardProps> = ({
 
   return (
     <GlowCard 
-      glowColor={comment.isOwnComment ? "green" : "blue"} 
+      glowColor={comment.isOwnComment ? "green" : comment.isRead ? "blue" : "orange"} 
       customSize 
       className="w-full p-6 mb-4"
     >
       <div className="flex gap-4">
         {/* Profile Picture with Spotlight Glow */}
         <GlowCard 
-          glowColor={comment.isOwnComment ? "green" : "blue"} 
+          glowColor={comment.isOwnComment ? "green" : comment.isRead ? "blue" : "orange"} 
           customSize 
           width={48} 
           height={48} 
@@ -82,17 +83,33 @@ const CommentCard: React.FC<CommentCardProps> = ({
 
         {/* Comment Content */}
         <div className="flex-1 min-w-0">
-          {/* Header */}
-          <div className="flex items-center flex-wrap gap-2 mb-2">
-            <span className="font-semibold text-white">{comment.authorName}</span>
-            
+          {/* Header with Three-Dot Menu */}
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center flex-wrap gap-2">
+              <span className="font-semibold text-white">{comment.authorName}</span>
+              
+              {comment.isOwnComment && (
+                <span className="bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-xs font-medium">
+                  Your comment
+                </span>
+              )}
+              
+              {!comment.isRead && (
+                <span className="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full text-xs font-medium">
+                  Unread
+                </span>
+              )}
+              
+              <span className="text-gray-400 text-sm">{formatTimeAgo(comment.publishedAt)}</span>
+            </div>
+
+            {/* Three-Dot Menu for Own Comments */}
             {comment.isOwnComment && (
-              <span className="bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-xs font-medium">
-                Your comment
-              </span>
+              <CommentDropdownMenu
+                onEdit={() => setShowEditBox(true)}
+                onDelete={handleDelete}
+              />
             )}
-            
-            <span className="text-gray-400 text-sm">{formatTimeAgo(comment.publishedAt)}</span>
           </div>
 
           {/* Video Title */}
@@ -118,8 +135,6 @@ const CommentCard: React.FC<CommentCardProps> = ({
           <CommentActions
             isOwnComment={comment.isOwnComment}
             onReply={() => setShowReplyBox(true)}
-            onEdit={comment.isOwnComment ? () => setShowEditBox(true) : undefined}
-            onDelete={comment.isOwnComment ? handleDelete : undefined}
             onMarkAsSpam={!comment.isOwnComment ? handleMarkAsSpam : undefined}
           />
 

@@ -31,8 +31,8 @@ const CommentsList: React.FC<CommentsListProps> = ({
     // Filter by type
     const matchesFilter = 
       filters.filterType === 'all' ||
-      (filters.filterType === 'my-comments' && comment.isOwnComment) ||
-      (filters.filterType === 'others-comments' && !comment.isOwnComment);
+      (filters.filterType === 'unread' && !comment.isRead) ||
+      (filters.filterType === 'read' && comment.isRead);
 
     return matchesSearch && matchesFilter;
   });
@@ -44,9 +44,11 @@ const CommentsList: React.FC<CommentsListProps> = ({
         <div className="text-gray-500 text-sm">
           {filters.searchText 
             ? `No comments match your search "${filters.searchText}"`
-            : filters.filterType === 'my-comments'
-            ? "You haven't posted any comments yet"
-            : "No comments from others yet"
+            : filters.filterType === 'unread'
+            ? "No unread comments"
+            : filters.filterType === 'read'
+            ? "No previously read comments"
+            : "No comments available"
           }
         </div>
       </div>

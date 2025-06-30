@@ -10,6 +10,7 @@ export interface Comment {
   likeCount: number;
   totalReplyCount: number;
   replies: Reply[];
+  isRead: boolean;
 }
 
 export interface Reply {
@@ -24,12 +25,12 @@ export interface Reply {
 
 export interface CommentFilters {
   searchText: string;
-  filterType: 'all' | 'my-comments' | 'others-comments';
+  filterType: 'all' | 'unread' | 'read';
 }
 
 export interface CommentStats {
   totalComments: number;
-  myComments: number;
-  othersComments: number;
+  unreadComments: number;
+  readComments: number;
   totalReplies: number;
 }
