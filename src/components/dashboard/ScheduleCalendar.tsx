@@ -1,214 +1,207 @@
 
 import React, { useState } from 'react';
+import { Calendar, ChevronLeft, ChevronRight, Clock, Users, Video } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Calendar } from '@/components/ui/calendar';
-import { GlowCard } from '@/components/ui/spotlight-card';
-import { Video, Radio, Calendar as CalendarIcon, Clock, Plus } from 'lucide-react';
-import { format, isSameDay, parseISO, startOfMonth, endOfMonth, isSameMonth } from 'date-fns';
-import { useProjectManagement } from '@/hooks/useProjectManagement';
-
-interface ScheduledEvent {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  type: 'video' | 'livestream' | 'meeting';
-  status: 'scheduled' | 'draft';
-}
 
 const ScheduleCalendar: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  const {
-    projects,
-    loading
-  } = useProjectManagement();
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-  // Transform project data to scheduled events
-  const events: ScheduledEvent[] = projects.filter(project => project.scheduledDate).map(project => ({
-    id: project.id,
-    title: project.metadata.title || project.title,
-    date: project.scheduledDate!,
-    time: project.scheduledTime || '12:00 PM',
-    type: 'video' as const,
-    status: project.state === 'Scheduled' ? 'scheduled' : 'draft'
-  }));
+  // TODO: BACKEND CONNECTION - Replace with API call to fetch scheduled content
+  // Example: const { data: scheduledContent, isLoading } = useQuery({
+  //   queryKey: ['scheduled-content', currentDate.getMonth(), currentDate.getFullYear()],
+  //   queryFn: async () => {
+  //     const response = await fetch(`/api/schedule/${currentDate.getMonth()}/${currentDate.getFullYear()}`);
+  //     return response.json();
+  //   }
+  // });
 
-  const getEventIcon = (type: ScheduledEvent['type']) => {
-    switch (type) {
-      case 'video':
-        return <Video className="w-3 h-3" />;
-      case 'livestream':
-        return <Radio className="w-3 h-3" />;
-      case 'meeting':
-        return <CalendarIcon className="w-3 h-3" />;
+  const scheduledContent = [
+    {
+      id: 1,
+      title: "Weekly Tech Review", // BACKEND: Fetch from scheduled_videos table
+      date: "2024-01-15", // BACKEND: Scheduled publish date
+      time: "10:00 AM", // BACKEND: Scheduled publish time
+      type: "video", // BACKEND: Content type (video, short, live, etc.)
+      status: "scheduled", // BACKEND: Status (scheduled, published, draft, etc.)
+      assignedTo: ["John Doe", "Sarah Smith"], // BACKEND: Assigned team members
+      priority: "high" // BACKEND: Priority level
+    },
+    {
+      id: 2,
+      title: "Community Q&A Session", // BACKEND: Fetch from scheduled_content table
+      date: "2024-01-16", // BACKEND: Scheduled date
+      time: "3:00 PM", // BACKEND: Scheduled time
+      type: "live", // BACKEND: Content type
+      status: "scheduled", // BACKEND: Status
+      assignedTo: ["Alex Wong"], // BACKEND: Team assignments
+      priority: "medium" // BACKEND: Priority
+    },
+    {
+      id: 3,
+      title: "Product Launch Video", // BACKEND: Content title
+      date: "2024-01-18", // BACKEND: Scheduled date
+      time: "12:00 PM", // BACKEND: Scheduled time
+      type: "video", // BACKEND: Content type
+      status: "in-progress", // BACKEND: Current status
+      assignedTo: ["Emma Johnson", "John Doe"], // BACKEND: Team assignments
+      priority: "high" // BACKEND: Priority level
     }
+  ];
+
+  const getDaysInMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
 
-  const getEventColor = (type: ScheduledEvent['type']) => {
-    switch (type) {
-      case 'video':
-        return 'text-blue-400 bg-blue-400/20';
-      case 'livestream':
-        return 'text-red-400 bg-red-400/20';
-      case 'meeting':
-        return 'text-green-400 bg-green-400/20';
+  const getFirstDayOfMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  };
+
+  const navigateMonth = (direction: 'prev' | 'next') => {
+    setCurrentDate(prev => {
+      const newDate = new Date(prev);
+      if (direction === 'prev') {
+        newDate.setMonth(prev.getMonth() - 1);
+      } else {
+        newDate.setMonth(prev.getMonth() + 1);
+      }
+      return newDate;
+    });
+  };
+
+  const renderCalendarDays = () => {
+    const daysInMonth = getDaysInMonth(currentDate);
+    const firstDay = getFirstDayOfMonth(currentDate);
+    const days = [];
+
+    // Empty cells for days before the first day of the month
+    for (let i = 0; i < firstDay; i++) {
+      days.push(<div key={`empty-${i}`} className="h-24 p-2"></div>);
     }
-  };
 
-  const getDatesWithEvents = () => {
-    return events.map(event => parseISO(event.date));
-  };
+    // Days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const dayContent = scheduledContent.filter(item => item.date === dateStr);
+      const isToday = new Date().toDateString() === new Date(currentDate.getFullYear(), currentDate.getMonth(), day).toDateString();
 
-  const getEventsForMonth = (date: Date) => {
-    const monthStart = startOfMonth(date);
-    const monthEnd = endOfMonth(date);
-    return events.filter(event => {
-      const eventDate = parseISO(event.date);
-      return eventDate >= monthStart && eventDate <= monthEnd;
-    }).sort((a, b) => parseISO(a.date).getTime() - parseISO(b.date).getTime());
-  };
-
-  const currentMonth = selectedDate || new Date();
-  const monthlyEvents = getEventsForMonth(currentMonth);
-
-  if (loading) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.6 }}
-      >
-        <GlowCard glowColor="red" customSize={true} className="bg-gray-950 border border-gray-900 rounded-lg p-6 w-full h-auto aspect-auto grid-rows-none gap-0">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-              <CalendarIcon className="w-5 h-5" />
-              Your Schedule
-            </h2>
+      days.push(
+        <div key={day} className={`h-24 p-2 border border-gray-800 rounded-lg ${isToday ? 'bg-red-500/10 border-red-500/30' : 'bg-gray-900/30'}`}>
+          <div className="flex items-center justify-between mb-1">
+            <span className={`text-sm font-medium ${isToday ? 'text-red-400' : 'text-gray-300'}`}>
+              {day}
+            </span>
+            {dayContent.length > 0 && (
+              <span className="text-xs text-gray-500">
+                {dayContent.length}
+              </span>
+            )}
           </div>
-          <div className="animate-pulse">
-            <div className="h-64 bg-gray-800 rounded"></div>
+          <div className="space-y-1">
+            {dayContent.slice(0, 2).map((item, index) => (
+              <div key={index} className="text-xs bg-gray-800 px-2 py-1 rounded truncate">
+                <div className="flex items-center gap-1">
+                  {item.type === 'video' && <Video className="w-3 h-3" />}
+                  {item.type === 'live' && <Users className="w-3 h-3" />}
+                  <span className="text-gray-300 truncate">{item.title}</span>
+                </div>
+                <div className="text-gray-500 flex items-center gap-1 mt-1">
+                  <Clock className="w-2 h-2" />
+                  {item.time}
+                </div>
+              </div>
+            ))}
           </div>
-        </GlowCard>
-      </motion.div>
-    );
-  }
+        </div>
+      );
+    }
+
+    return days;
+  };
+
+  const upcomingContent = scheduledContent
+    .filter(item => new Date(item.date) >= new Date())
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(0, 3);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.6 }}
-    >
-      <GlowCard glowColor="red" customSize={true} className="bg-gray-950 border border-gray-900 rounded-lg p-6 w-full h-auto aspect-auto grid-rows-none gap-0">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-            <CalendarIcon className="w-5 h-5" />
-            Your Schedule
-          </h2>
+    <div className="bg-gray-950 border border-gray-900 rounded-lg p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+          <Calendar className="w-5 h-5" />
+          Content Schedule
+        </h2>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigateMonth('prev')}
+            className="p-2 text-gray-400 hover:text-white transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <span className="text-gray-300 font-medium min-w-[120px] text-center">
+            {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+          </span>
+          <button
+            onClick={() => navigateMonth('next')}
+            className="p-2 text-gray-400 hover:text-white transition-colors"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
+      </div>
 
-        <div className="flex gap-6">
-          {/* Calendar Section - Fixed Width */}
-          <div className="flex-shrink-0">
-            <div className="bg-gray-900/50 rounded-lg p-4 w-fit">
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={setSelectedDate}
-                className="rounded-md pointer-events-auto"
-                classNames={{
-                  months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-                  month: "space-y-4",
-                  caption: "flex justify-center pt-1 relative items-center text-white",
-                  caption_label: "text-sm font-medium text-white",
-                  nav: "space-x-1 flex items-center",
-                  nav_button: "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 text-white hover:bg-gray-800 rounded",
-                  nav_button_previous: "absolute left-1",
-                  nav_button_next: "absolute right-1",
-                  table: "w-full border-collapse space-y-1",
-                  head_row: "flex",
-                  head_cell: "text-gray-400 rounded-md w-9 font-normal text-[0.8rem] text-center",
-                  row: "flex w-full mt-2",
-                  cell: "h-9 w-9 text-center text-sm p-0 relative text-white hover:bg-gray-800 rounded-md",
-                  day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100 text-white hover:bg-gray-800 rounded-md",
-                  day_range_end: "day-range-end",
-                  day_selected: "bg-red-500 text-white hover:bg-red-600 focus:bg-red-500 rounded-md",
-                  day_today: "bg-gray-800 text-white rounded-md",
-                  day_outside: "text-gray-600 opacity-50",
-                  day_disabled: "text-gray-600 opacity-50",
-                  day_range_middle: "aria-selected:bg-gray-800 aria-selected:text-white",
-                  day_hidden: "invisible"
-                }}
-                modifiers={{
-                  hasEvent: getDatesWithEvents()
-                }}
-                modifiersClassNames={{
-                  hasEvent: "bg-red-500/30 text-red-200 font-semibold"
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Video List Section - Takes Remaining Space */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-medium text-gray-400">
-                {format(currentMonth, 'MMMM yyyy')} Videos
-              </h3>
-              <div className="flex items-center gap-1 text-xs text-gray-500">
-                <Clock className="w-3 h-3" />
-                {monthlyEvents.length} scheduled
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Calendar Grid */}
+        <div className="lg:col-span-2">
+          <div className="grid grid-cols-7 gap-1 mb-4">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+              <div key={day} className="text-center text-sm font-medium text-gray-400 py-2">
+                {day}
               </div>
-            </div>
-
-            <div className="space-y-3 max-h-80 overflow-y-auto scrollbar-hide">
-              {monthlyEvents.length > 0 ? (
-                monthlyEvents.map((event, index) => (
-                  <motion.div
-                    key={event.id}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="p-3 rounded-lg bg-gray-900/50 border border-gray-800 hover:border-gray-700 transition-colors"
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className={`p-1 rounded ${getEventColor(event.type)}`}>
-                          {getEventIcon(event.type)}
-                        </span>
-                        <span className="text-xs text-gray-400 capitalize">{event.type}</span>
-                      </div>
-                      <span className="text-xs text-gray-500">{event.time}</span>
-                    </div>
-                    
-                    <p className="text-sm text-white font-medium mb-2 line-clamp-2">{event.title}</p>
-                    
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-400">
-                        {format(parseISO(event.date), 'MMM d, yyyy')}
-                      </span>
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        event.status === 'scheduled' 
-                          ? 'text-green-400 bg-green-400/20' 
-                          : 'text-yellow-400 bg-yellow-400/20'
-                      }`}>
-                        {event.status}
-                      </span>
-                    </div>
-                  </motion.div>
-                ))
-              ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <CalendarIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">No videos scheduled this month</p>
-                  <p className="text-xs mt-1 text-gray-600">Schedule your first video to see it here</p>
-                </div>
-              )}
-            </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-7 gap-1">
+            {renderCalendarDays()}
           </div>
         </div>
-      </GlowCard>
-    </motion.div>
+
+        {/* Upcoming Content */}
+        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4">
+          <h3 className="text-lg font-semibold text-white mb-4">Upcoming</h3>
+          <div className="space-y-3">
+            {upcomingContent.map((item, index) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="bg-gray-800 rounded-lg p-3"
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="text-sm font-medium text-white line-clamp-2">
+                    {item.title}
+                  </h4>
+                  <span className={`text-xs px-2 py-1 rounded-full ${
+                    item.priority === 'high' ? 'bg-red-500/20 text-red-400' :
+                    item.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
+                    'bg-gray-500/20 text-gray-400'
+                  }`}>
+                    {item.priority}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-400 mb-2">
+                  <Clock className="w-3 h-3" />
+                  <span>{new Date(item.date).toLocaleDateString()} at {item.time}</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <Users className="w-3 h-3" />
+                  <span>{item.assignedTo.join(', ')}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
