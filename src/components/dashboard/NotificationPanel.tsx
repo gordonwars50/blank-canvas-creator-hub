@@ -1,12 +1,15 @@
+
 import React from 'react';
 import { X, MessageCircle, Heart, Users, Upload, DollarSign } from 'lucide-react';
 import { useNotifications } from '@/contexts/NotificationContext';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+
 interface NotificationPanelProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
 const NotificationPanel: React.FC<NotificationPanelProps> = ({
   isOpen,
   onClose
@@ -17,7 +20,9 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
     markAllAsRead,
     unreadCount
   } = useNotifications();
+
   if (!isOpen) return null;
+
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'comment':
@@ -34,39 +39,65 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
         return <MessageCircle className="w-4 h-4 text-gray-500" />;
     }
   };
+
   const formatTime = (timestamp: Date) => {
     const now = new Date();
     const diff = now.getTime() - timestamp.getTime();
     const minutes = Math.floor(diff / (1000 * 60));
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
     if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
     return `${days}d ago`;
   };
-  return <div className="absolute top-full right-0 mt-2 w-80 bg-gray-900 border border-gray-700 rounded-lg shadow-xl z-40">
+
+  return (
+    <div className="absolute top-full right-0 mt-2 w-80 bg-gray-900 border border-gray-700 rounded-lg shadow-xl z-40">
       <div className="p-4 border-b border-gray-700 flex items-center justify-between bg-zinc-950">
         <div className="flex items-center space-x-2">
           <h3 className="text-lg font-semibold text-white">Notifications</h3>
-          {unreadCount > 0 && <Badge variant="destructive" className="bg-red-500 text-white">
+          {unreadCount > 0 && (
+            <Badge variant="destructive" className="bg-red-500 text-white">
               {unreadCount}
-            </Badge>}
+            </Badge>
+          )}
         </div>
         <div className="flex items-center space-x-2">
-          {unreadCount > 0 && <Button variant="ghost" size="sm" onClick={markAllAsRead} className="text-blue-400 hover:text-blue-300 text-xs">
+          {unreadCount > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={markAllAsRead}
+              className="text-blue-400 hover:text-blue-300 text-xs"
+            >
               Mark all read
-            </Button>}
-          <button onClick={onClose} className="p-1 hover:bg-gray-800 rounded text-gray-400 hover:text-white">
+            </Button>
+          )}
+          <button
+            onClick={onClose}
+            className="p-1 hover:bg-gray-800 rounded text-gray-400 hover:text-white"
+          >
             <X className="w-4 h-4" />
           </button>
         </div>
       </div>
 
       <div className="max-h-96 overflow-y-auto">
-        {notifications.length === 0 ? <div className="p-6 text-center text-gray-400">
+        {notifications.length === 0 ? (
+          <div className="p-6 text-center text-gray-400">
             <MessageCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
             <p>No notifications yet</p>
-          </div> : notifications.map(notification => <div key={notification.id} className={`p-4 border-b border-gray-700 hover:bg-gray-800 cursor-pointer transition-colors ${!notification.isRead ? 'bg-gray-800/50' : ''}`} onClick={() => !notification.isRead && markAsRead(notification.id)}>
+          </div>
+        ) : (
+          notifications.map(notification => (
+            <div
+              key={notification.id}
+              className={`p-4 border-b border-gray-700 hover:bg-zinc-900 cursor-pointer transition-colors ${
+                !notification.isRead ? 'bg-zinc-950' : 'bg-gray-900'
+              }`}
+              onClick={() => !notification.isRead && markAsRead(notification.id)}
+            >
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0 mt-1">
                   {getNotificationIcon(notification.type)}
@@ -83,11 +114,17 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({
                   <p className="text-sm text-gray-300 mt-1 line-clamp-2">
                     {notification.message}
                   </p>
-                  {!notification.isRead && <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>}
+                  {!notification.isRead && (
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                  )}
                 </div>
               </div>
-            </div>)}
+            </div>
+          ))
+        )}
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default NotificationPanel;
