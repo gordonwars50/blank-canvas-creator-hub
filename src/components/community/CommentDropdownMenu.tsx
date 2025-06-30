@@ -13,7 +13,7 @@ const CommentDropdownMenu: React.FC<CommentDropdownMenuProps> = ({
   onDelete
 }) => {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       <GlowButton
         onClick={onEdit}
         glowColor="green"
