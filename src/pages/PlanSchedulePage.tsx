@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewAppSidebar from '@/components/dashboard/NewAppSidebar';
@@ -231,7 +232,7 @@ const PlanSchedulePage: React.FC = () => {
 
         {/* Projects List */}
         <div className="flex-1 p-6">
-          <div className="space-y-1">
+          <div className="space-y-2">
             {filteredProjects.map((project) => {
               const mockStats = getMockStats(project.state);
               return (
@@ -243,7 +244,7 @@ const PlanSchedulePage: React.FC = () => {
                   <GlowCard
                     glowColor="red"
                     customSize={true}
-                    className="w-full h-auto bg-gray-900/50 border border-gray-800 hover:border-red-500/50 transition-all duration-200 p-3 flex flex-col gap-0"
+                    className="w-full bg-gray-900/50 border border-gray-800 hover:border-red-500/50 transition-all duration-200 p-4"
                   >
                     <div className="flex items-center space-x-4">
                       {/* Video Thumbnail Placeholder */}
@@ -263,7 +264,7 @@ const PlanSchedulePage: React.FC = () => {
                             <h3 className="text-base font-bold text-white mb-1 truncate">
                               {project.title}
                             </h3>
-                            <p className="text-sm text-gray-400 mb-2 line-clamp-2 leading-relaxed">
+                            <p className="text-sm text-gray-400 mb-2 line-clamp-1 leading-relaxed">
                               {project.metadata.description || project.ideas || 'No description available'}
                             </p>
 
