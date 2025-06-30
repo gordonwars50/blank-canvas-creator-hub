@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { GlowCard } from '@/components/ui/spotlight-card';
 import { GlowTextarea } from '@/components/ui/glow-textarea';
 import { GlowButton } from '@/components/ui/glow-button';
 import { Reply } from '@/types/comments';
@@ -47,7 +46,7 @@ const ReplySection: React.FC<ReplySectionProps> = ({
   return (
     <div className="mt-4 space-y-4">
       {/* Reply/Edit Input */}
-      <GlowCard glowColor="purple" customSize className="w-full p-4">
+      <div className="w-full p-4 bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg">
         <div className="space-y-3">
           <GlowTextarea
             value={text}
@@ -77,23 +76,22 @@ const ReplySection: React.FC<ReplySectionProps> = ({
             </GlowButton>
           </div>
         </div>
-      </GlowCard>
+      </div>
 
       {/* Replies List */}
       {replies.length > 0 && (
         <div className="ml-8">
-          <GlowButton
+          <button
             onClick={onToggleReplies}
-            glowColor="blue"
-            className="px-3 py-1 rounded-full text-xs font-medium text-blue-300 hover:text-blue-200 mb-3"
+            className="px-3 py-1 rounded-full text-xs font-medium text-blue-300 hover:text-blue-200 hover:bg-blue-500/10 transition-colors mb-3"
           >
             {showReplies ? 'Hide' : 'Show'} {replies.length} {replies.length === 1 ? 'reply' : 'replies'}
-          </GlowButton>
+          </button>
           
           {showReplies && (
             <div className="space-y-3">
               {replies.map((reply) => (
-                <GlowCard key={reply.id} glowColor="green" customSize className="w-full p-4">
+                <div key={reply.id} className="w-full p-4 bg-gray-800/20 backdrop-blur-sm border border-gray-700/30 rounded-lg">
                   <div className="flex gap-3">
                     <Avatar className="w-8 h-8 flex-shrink-0">
                       <AvatarImage src={reply.authorProfileImageUrl} alt={reply.authorName} />
@@ -120,7 +118,7 @@ const ReplySection: React.FC<ReplySectionProps> = ({
                       </div>
                     </div>
                   </div>
-                </GlowCard>
+                </div>
               ))}
             </div>
           )}
