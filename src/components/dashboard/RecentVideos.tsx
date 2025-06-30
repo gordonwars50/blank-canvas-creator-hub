@@ -1,7 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Eye, ThumbsUp, MessageCircle, Calendar, TrendingUp, Award } from 'lucide-react';
+import { Eye, ThumbsUp, MessageCircle, Calendar, TrendingUp, Award, Plus } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { GlowCard } from '@/components/ui/spotlight-card';
+import { Button } from '@/components/ui/button';
 import { useProjectManagement } from '@/hooks/useProjectManagement';
 
 interface Video {
@@ -62,6 +64,16 @@ const RecentVideos: React.FC = () => {
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-white">Recent Videos</h2>
+            <Button
+              asChild
+              size="sm"
+              className="bg-red-500 hover:bg-red-600 text-white"
+            >
+              <Link to="/dashboard/plan-schedule">
+                <Plus className="w-4 h-4 mr-2" />
+                Add New Video
+              </Link>
+            </Button>
           </div>
           <div className="animate-pulse space-y-4">
             {[1, 2, 3].map(i => (
@@ -93,6 +105,16 @@ const RecentVideos: React.FC = () => {
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-white">Recent Videos</h2>
+            <Button
+              asChild
+              size="sm"
+              className="bg-red-500 hover:bg-red-600 text-white"
+            >
+              <Link to="/dashboard/plan-schedule">
+                <Plus className="w-4 h-4 mr-2" />
+                Add New Video
+              </Link>
+            </Button>
           </div>
           <div className="text-center py-8 text-gray-500">
             <p className="text-sm">No videos yet. Create your first project to get started!</p>
@@ -127,9 +149,16 @@ const RecentVideos: React.FC = () => {
       >
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold text-white">Recent Videos</h2>
-          <button className="text-sm text-red-400 hover:text-red-300">
-            View All
-          </button>
+          <Button
+            asChild
+            size="sm"
+            className="bg-red-500 hover:bg-red-600 text-white"
+          >
+            <Link to="/dashboard/plan-schedule">
+              <Plus className="w-4 h-4 mr-2" />
+              Add New Video
+            </Link>
+          </Button>
         </div>
 
         {/* Top Performer Section */}
@@ -212,20 +241,24 @@ const RecentVideos: React.FC = () => {
                 </h4>
                 
                 <div className="flex items-center space-x-4 text-xs text-gray-400">
-                  <div className="flex items-center space-x-1">
-                    <Eye className="w-3 h-3" />
-                    <span>{formatNumber(video.views)}</span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-1">
-                    <ThumbsUp className="w-3 h-3" />
-                    <span>{formatNumber(video.likes)}</span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-1">
-                    <MessageCircle className="w-3 h-3" />
-                    <span>{formatNumber(video.comments)}</span>
-                  </div>
+                  {video.status === 'published' && (
+                    <>
+                      <div className="flex items-center space-x-1">
+                        <Eye className="w-3 h-3" />
+                        <span>{formatNumber(video.views)}</span>
+                      </div>
+                      
+                      <div className="flex items-center space-x-1">
+                        <ThumbsUp className="w-3 h-3" />
+                        <span>{formatNumber(video.likes)}</span>
+                      </div>
+                      
+                      <div className="flex items-center space-x-1">
+                        <MessageCircle className="w-3 h-3" />
+                        <span>{formatNumber(video.comments)}</span>
+                      </div>
+                    </>
+                  )}
                   
                   <div className="flex items-center space-x-1">
                     <Calendar className="w-3 h-3" />
