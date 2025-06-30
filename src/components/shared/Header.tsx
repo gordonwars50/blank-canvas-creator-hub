@@ -40,7 +40,7 @@ const Header = ({ theme = "dark" }: HeaderProps) => {
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           className="flex items-center gap-3"
         >
-          <div className={`text-2xl font-playfair font-bold hover:opacity-80 transition-opacity ${isDark ? 'text-white' : 'text-blue-900'}`}>
+          <div className={`text-3xl font-bebas tracking-wider hover:opacity-80 transition-opacity ${isDark ? 'text-white' : 'text-blue-900'}`}>
             CREATORLY
           </div>
         </motion.div>
