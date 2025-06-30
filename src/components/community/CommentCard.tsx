@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -103,7 +104,7 @@ const CommentCard: React.FC<CommentCardProps> = ({
             )}
           </div>
 
-          {/* Video Title */}
+          {/* Video Title - Reduced gap */}
           {comment.videoTitle && (
             <div className="mb-2">
               <span className="text-gray-400 text-sm">on </span>
@@ -114,13 +115,10 @@ const CommentCard: React.FC<CommentCardProps> = ({
           {/* Comment Text */}
           <p className="text-gray-300 leading-relaxed mb-3">{comment.textDisplay}</p>
 
-          {/* Stats and Show Replies on same line */}
+          {/* Stats and Show Replies on same line - Removed replies count */}
           <div className="flex items-center justify-between mb-3 text-sm text-gray-400">
-            <div className="flex items-center gap-6">
+            <div className="flex items-center">
               <span>{comment.likeCount} likes</span>
-              {comment.totalReplyCount > 0 && (
-                <span>{comment.totalReplyCount} {comment.totalReplyCount === 1 ? 'reply' : 'replies'}</span>
-              )}
             </div>
             
             {/* Show Replies Button - Only show when not in reply/edit mode */}
