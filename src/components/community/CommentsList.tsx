@@ -10,6 +10,7 @@ interface CommentsListProps {
   onEdit: (commentId: string, newText: string) => void;
   onDelete: (commentId: string) => void;
   onMarkAsSpam: (commentId: string) => void;
+  onMarkAsRead: (commentId: string) => void;
 }
 
 const CommentsList: React.FC<CommentsListProps> = ({
@@ -18,7 +19,8 @@ const CommentsList: React.FC<CommentsListProps> = ({
   onReply,
   onEdit,
   onDelete,
-  onMarkAsSpam
+  onMarkAsSpam,
+  onMarkAsRead
 }) => {
   // Filter comments based on search text and filter type
   const filteredComments = comments.filter(comment => {
@@ -65,6 +67,7 @@ const CommentsList: React.FC<CommentsListProps> = ({
           onEdit={onEdit}
           onDelete={onDelete}
           onMarkAsSpam={onMarkAsSpam}
+          onMarkAsRead={onMarkAsRead}
         />
       ))}
     </div>

@@ -33,6 +33,14 @@ const CommunityPage: React.FC = () => {
     };
   }, [comments, filters.searchText]);
 
+  const handleMarkAsRead = (commentId: string) => {
+    setComments(prev => prev.map(comment => 
+      comment.id === commentId 
+        ? { ...comment, isRead: true }
+        : comment
+    ));
+  };
+
   const handleReply = (commentId: string, replyText: string) => {
     // TODO: Implement YouTube API call to comments.insert
     console.log('Reply to comment:', commentId, 'with text:', replyText);
@@ -145,6 +153,7 @@ const CommunityPage: React.FC = () => {
           onEdit={handleEdit}
           onDelete={handleDelete}
           onMarkAsSpam={handleMarkAsSpam}
+          onMarkAsRead={handleMarkAsRead}
         />
       </div>
     </DashboardLayout>

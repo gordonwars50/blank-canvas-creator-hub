@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Comment } from '@/types/comments';
@@ -13,6 +12,7 @@ interface CommentCardProps {
   onEdit: (commentId: string, newText: string) => void;
   onDelete: (commentId: string) => void;
   onMarkAsSpam: (commentId: string) => void;
+  onMarkAsRead: (commentId: string) => void;
 }
 
 const CommentCard: React.FC<CommentCardProps> = ({
@@ -20,11 +20,24 @@ const CommentCard: React.FC<CommentCardProps> = ({
   onReply,
   onEdit,
   onDelete,
-  onMarkAsSpam
+  onMarkAsSpam,
+  onMarkAsRead
 }) => {
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [showEditBox, setShowEditBox] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
+
+  // Mark comment as read when it's viewed (component mounts)
+  useEffect(() => {
+    if (!comment.isRead) {
+      // Add a small delay to simulate "viewing" the comment
+      const timer = setTimeout(() => {
+        onMarkAsRead(comment.id);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [comment.id, comment.isRead, onMarkAsRead]);
 
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
