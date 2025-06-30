@@ -89,7 +89,7 @@ Don't forget to subscribe for more valuable content and hit the notification bel
   };
 
   const generateAll = async () => {
-    if (!videoIdea.trim()) return;
+    if (!hasScript && !videoIdea.trim()) return;
     
     setIsGenerating(prev => ({ ...prev, all: true }));
     
@@ -175,9 +175,22 @@ Don't forget to subscribe for more valuable content and hit the notification bel
     <GlowCard glowColor="purple" customSize className="w-full p-6 bg-gray-900/90">
       <div className="space-y-6">
         <div className="space-y-3">
-          <div className="flex items-center gap-3">
-            <Sparkles className="w-6 h-6 text-purple-400" />
-            <h2 className="text-xl font-semibold text-white">Generate Video Details</h2>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Sparkles className="w-6 h-6 text-purple-400" />
+              <h2 className="text-xl font-semibold text-white">Generate Video Details</h2>
+            </div>
+            {hasScript && (
+              <GlowButton
+                glowColor="purple"
+                leftIcon={<RefreshCw className={`w-4 h-4 ${isGenerating.all ? 'animate-spin' : ''}`} />}
+                onClick={generateAll}
+                disabled={isGenerating.all}
+                className="bg-purple-600 hover:bg-purple-700 rounded-xl px-4 h-9 text-sm"
+              >
+                {isGenerating.all ? 'Regenerating...' : 'Regenerate All'}
+              </GlowButton>
+            )}
           </div>
           <p className="text-gray-300 text-sm leading-relaxed">
             Generate titles, tags, and descriptions optimized for YouTube upload to maximize reach and engagement
