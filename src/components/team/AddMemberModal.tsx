@@ -113,7 +113,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({
           }) => <FormItem>
                   <FormLabel className="text-gray-300">Full Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Enter full name" className="bg-gray-800 border-gray-600 text-white placeholder-gray-400" disabled={isSubmitting} />
+                    <Input placeholder="Enter full name" disabled={isSubmitting} className="border-gray-600 text-white placeholder-gray-400 bg-zinc-900" />
                   </FormControl>
                   <FormMessage className="text-red-400" />
                 </FormItem>} />
@@ -128,7 +128,7 @@ const AddMemberModal: React.FC<AddMemberModalProps> = ({
                   <FormControl>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <Input {...field} type="email" placeholder="Enter email address" className="bg-gray-800 border-gray-600 text-white placeholder-gray-400 pl-10" disabled={isSubmitting} />
+                      <Input type="email" placeholder="Enter email address" disabled={isSubmitting} className="border-gray-600 text-white placeholder-gray-400 pl-10 bg-zinc-900" />
                     </div>
                   </FormControl>
                   <FormMessage className="text-red-400" />
