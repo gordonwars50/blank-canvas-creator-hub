@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Home, 
@@ -12,8 +13,7 @@ import {
   User,
   Settings,
   LogOut,
-  X,
-  Plus
+  X
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -353,12 +353,6 @@ const UserProfile = () => {
                 </button>
               ))}
             </div>
-
-            {/* Add New Channel */}
-            <button className="flex items-center w-full px-3 py-2 rounded-md hover:bg-gray-800 text-sm text-gray-400 border-t border-gray-700 pt-3 mt-2">
-              <Plus className="w-4 h-4 mr-3" />
-              Add New Channel
-            </button>
 
             <hr className="my-2 border-gray-700" />
             
