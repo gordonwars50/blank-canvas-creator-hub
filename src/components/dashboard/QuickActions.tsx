@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Upload, UserPlus } from 'lucide-react';
+import { Upload, Radio, UserPlus } from 'lucide-react';
 
 const QuickActions: React.FC = () => {
   const actions = [
@@ -11,6 +11,13 @@ const QuickActions: React.FC = () => {
       icon: Upload,
       color: 'bg-red-500 hover:bg-red-600',
       href: '/dashboard/upload'
+    },
+    {
+      id: 'livestream',
+      label: 'Schedule Livestream',
+      icon: Radio,
+      color: 'bg-blue-500 hover:bg-blue-600',
+      href: '/dashboard/livestreams'
     },
     {
       id: 'team',
@@ -30,7 +37,7 @@ const QuickActions: React.FC = () => {
     >
       <h2 className="text-lg font-semibold text-white mb-6">Quick Actions</h2>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {actions.map((action, index) => (
           <motion.button
             key={action.id}
