@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewAppSidebar from '@/components/dashboard/NewAppSidebar';
@@ -146,21 +145,11 @@ const CalendarPage: React.FC = () => {
       >
         {/* Header */}
         <div className="p-6 border-b border-gray-800">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-white">Content Calendar</h1>
-              <p className="text-gray-400 text-sm mt-1">
-                Plan and track your scheduled content
-              </p>
-            </div>
-            <GlowButton
-              glowColor="red"
-              leftIcon={<Plus className="w-4 h-4" />}
-              className="bg-red-600 hover:bg-red-700 rounded-lg px-6 h-10"
-              onClick={() => setShowAddVideoModal(true)}
-            >
-              Schedule New Video
-            </GlowButton>
+          <div>
+            <h1 className="text-2xl font-bold text-white">Content Calendar</h1>
+            <p className="text-gray-400 text-sm mt-1">
+              Plan and track your scheduled content
+            </p>
           </div>
         </div>
 
@@ -185,12 +174,6 @@ const CalendarPage: React.FC = () => {
                       className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
                     >
                       <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => setCurrentMonth(new Date())}
-                      className="px-3 py-1 text-xs text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
-                    >
-                      Today
                     </button>
                     <button
                       onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
@@ -221,7 +204,7 @@ const CalendarPage: React.FC = () => {
                     head_row: "flex",
                     head_cell: "text-gray-400 rounded-md w-full font-normal text-[0.8rem] flex-1 text-center",
                     row: "flex w-full mt-2",
-                    cell: "relative text-center text-sm p-0 text-white hover:bg-gray-800 rounded-md flex-1 h-24 border border-gray-800",
+                    cell: "relative text-center text-sm p-0 text-white hover:bg-gray-800 rounded-md flex-1 aspect-square border border-gray-800",
                     day: "h-full w-full p-1 font-normal aria-selected:opacity-100 text-white hover:bg-gray-800 rounded-md flex flex-col items-start justify-start",
                     day_range_end: "day-range-end",
                     day_selected: "bg-red-500/30 text-red-200 hover:bg-red-500/40 focus:bg-red-500/30 rounded-md border-red-500/50",
@@ -283,13 +266,25 @@ const CalendarPage: React.FC = () => {
                 customSize={true}
                 className="bg-gray-900/50 border border-gray-800 p-6 h-full flex flex-col"
               >
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-semibold text-white">
-                    {format(selectedDate, 'MMMM d, yyyy')}
-                  </h2>
-                  <div className="text-sm text-gray-400">
-                    {selectedDateProjects.length} scheduled
+                {/* Header with Date Info and Schedule Button */}
+                <div className="space-y-4 mb-6">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-semibold text-white">
+                      {format(selectedDate, 'MMMM d, yyyy')}
+                    </h2>
+                    <div className="text-sm text-gray-400">
+                      {selectedDateProjects.length} scheduled
+                    </div>
                   </div>
+                  
+                  <GlowButton
+                    glowColor="red"
+                    leftIcon={<Plus className="w-4 h-4" />}
+                    className="bg-red-600 hover:bg-red-700 rounded-lg px-4 h-9 text-sm w-full"
+                    onClick={() => setShowAddVideoModal(true)}
+                  >
+                    Schedule New Video
+                  </GlowButton>
                 </div>
 
                 <div className="flex-1 overflow-y-auto space-y-3">
