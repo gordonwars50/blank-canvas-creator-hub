@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, BarChart3, Upload, Users, DollarSign, Users as TeamIcon, ChevronDown, ChevronRight, User, Settings, LogOut, X } from 'lucide-react';
+import { Home, BarChart3, Upload, Users, DollarSign, Users as TeamIcon, ChevronDown, ChevronRight, User, Settings, LogOut, X, Camera } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sidebar, SidebarBody, SidebarLink, useSidebar } from '@/components/ui/sidebar';
@@ -266,7 +266,7 @@ const NewAppSidebar: React.FC<NewAppSidebarProps> = ({
           <SidebarLink link={{
             label: 'Team / Gear Management',
             href: '/dashboard/team',
-            icon: <TeamIcon className="w-4 h-4 flex-shrink-0 text-gray-400" />
+            icon: <Camera className="w-4 h-4 flex-shrink-0 text-gray-400" />
           }} className="text-gray-400 hover:text-white hover:bg-gray-800" />
           
           <UserProfile />
