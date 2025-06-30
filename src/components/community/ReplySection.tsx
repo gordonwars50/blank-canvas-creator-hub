@@ -45,8 +45,8 @@ const ReplySection: React.FC<ReplySectionProps> = ({
 
   return (
     <div className="mt-4 space-y-4">
-      {/* Reply/Edit Input */}
-      <div className="w-full p-4 bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg">
+      {/* Reply/Edit Input with rounded corners */}
+      <div className="w-full p-4 bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-2xl">
         <div className="space-y-3">
           <GlowTextarea
             value={text}

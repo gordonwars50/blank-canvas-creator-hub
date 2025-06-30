@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -123,38 +122,79 @@ const CommentCard: React.FC<CommentCardProps> = ({
             )}
           </div>
 
-          {/* Actions */}
+          {/* Actions - Hide reply button when reply box or edit box is shown */}
           <CommentActions
             isOwnComment={comment.isOwnComment}
+            showReplyButton={!showReplyBox && !showEditBox}
             onReply={() => setShowReplyBox(true)}
             onMarkAsSpam={!comment.isOwnComment ? handleMarkAsSpam : undefined}
           />
 
-          {/* Reply/Edit Sections */}
-          {(showReplyBox || showEditBox) && (
+          {/* Reply Input Section - Only show when replying */}
+          {showReplyBox && (
             <ReplySection
-              isEditing={showEditBox}
-              initialText={showEditBox ? comment.textDisplay : ''}
-              replies={comment.replies}
-              showReplies={showReplies}
-              onSubmit={showEditBox ? handleEdit : handleReply}
-              onCancel={() => {
-                setShowReplyBox(false);
-                setShowEditBox(false);
-              }}
-              onToggleReplies={() => setShowReplies(!showReplies)}
+              onSubmit={handleReply}
+              onCancel={() => setShowReplyBox(false)}
             />
           )}
 
-          {/* Show Replies Button (when not in reply/edit mode) */}
-          {!showReplyBox && !showEditBox && comment.replies.length > 0 && (
+          {/* Edit Input Section - Only show when editing */}
+          {showEditBox && (
             <ReplySection
-              replies={comment.replies}
-              showReplies={showReplies}
-              onSubmit={() => {}}
-              onCancel={() => {}}
-              onToggleReplies={() => setShowReplies(!showReplies)}
+              isEditing={true}
+              initialText={comment.textDisplay}
+              onSubmit={handleEdit}
+              onCancel={() => setShowEditBox(false)}
             />
+          )}
+
+          {/* Show Replies Section - Only show when not in reply/edit mode */}
+          {!showReplyBox && !showEditBox && comment.replies.length > 0 && (
+            <div className="mt-4">
+              <div className="ml-8">
+                <button
+                  onClick={() => setShowReplies(!showReplies)}
+                  className="px-3 py-1 rounded-full text-xs font-medium text-blue-300 hover:text-blue-200 hover:bg-blue-500/10 transition-colors mb-3"
+                >
+                  {showReplies ? 'Hide' : 'Show'} {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}
+                </button>
+                
+                {showReplies && (
+                  <div className="space-y-3">
+                    {comment.replies.map((reply) => (
+                      <div key={reply.id} className="w-full p-4 bg-gray-800/20 backdrop-blur-sm border border-gray-700/30 rounded-lg">
+                        <div className="flex gap-3">
+                          <Avatar className="w-8 h-8 flex-shrink-0">
+                            <AvatarImage src={reply.authorProfileImageUrl} alt={reply.authorName} />
+                            <AvatarFallback className="bg-gray-700 text-white text-xs">
+                              {reply.authorName.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="font-medium text-white text-sm">{reply.authorName}</span>
+                              {reply.isOwnComment && (
+                                <span className="bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full text-xs font-medium">
+                                  Your reply
+                                </span>
+                              )}
+                              <span className="text-gray-400 text-xs">{formatTimeAgo(reply.publishedAt)}</span>
+                            </div>
+                            
+                            <p className="text-gray-300 text-sm leading-relaxed">{reply.textDisplay}</p>
+                            
+                            <div className="flex items-center gap-4 mt-2">
+                              <span className="text-gray-400 text-xs">{reply.likeCount} likes</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           )}
         </div>
       </div>
