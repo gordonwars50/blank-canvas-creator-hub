@@ -1,10 +1,8 @@
-
 import React, { useState } from 'react';
 import { 
   Home, 
   BarChart3, 
   Upload, 
-  Calendar, 
   Users, 
   DollarSign, 
   Users as TeamIcon,
@@ -49,12 +47,6 @@ const sidebarItems: SidebarItem[] = [
     label: 'Plan & Schedule',
     icon: Upload,
     href: '/dashboard/plan-schedule'
-  },
-  {
-    id: 'calendar',
-    label: 'Content Calendar',
-    icon: Calendar,
-    href: '/dashboard/calendar'
   },
   {
     id: 'community',
