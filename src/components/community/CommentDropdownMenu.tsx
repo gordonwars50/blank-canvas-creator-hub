@@ -17,7 +17,7 @@ const CommentDropdownMenu: React.FC<CommentDropdownMenuProps> = ({
       <GlowButton
         onClick={onEdit}
         glowColor="green"
-        className="w-8 h-8 rounded-full p-0 text-gray-400 hover:text-green-300"
+        className="w-8 h-8 rounded-full p-0 flex items-center justify-center text-gray-300 hover:text-green-300 border border-gray-600 hover:border-green-400"
       >
         <Edit className="w-4 h-4" />
       </GlowButton>
@@ -25,7 +25,7 @@ const CommentDropdownMenu: React.FC<CommentDropdownMenuProps> = ({
       <GlowButton
         onClick={onDelete}
         glowColor="red"
-        className="w-8 h-8 rounded-full p-0 text-gray-400 hover:text-red-300"
+        className="w-8 h-8 rounded-full p-0 flex items-center justify-center text-gray-300 hover:text-red-300 border border-gray-600 hover:border-red-400"
       >
         <Trash className="w-4 h-4" />
       </GlowButton>
