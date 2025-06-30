@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { TeamMember, TeamInvite, TeamRole } from '@/types/team';
 
@@ -35,7 +34,7 @@ export const useTeamManagement = () => {
   const [members, setMembers] = useState<TeamMember[]>([]);
   const [invites, setInvites] = useState<TeamInvite[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentUserRole] = useState<TeamRole>('Admin'); // Mock current user as Admin
+  const [currentUserRole] = useState<TeamRole>('Director'); // Mock current user as Director
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -48,16 +47,16 @@ export const useTeamManagement = () => {
         setMembers(parsedMembers);
         console.log('Loaded team members from localStorage:', parsedMembers);
       } else {
-        // Initialize with default admin user if no members exist
-        const defaultAdmin: TeamMember = {
+        // Initialize with default director user if no members exist
+        const defaultDirector: TeamMember = {
           id: generateMemberId([]),
           name: 'John Doe',
           email: 'john.doe@example.com',
-          role: 'Admin',
+          role: 'Director',
           joinedAt: new Date().toISOString(),
           isActive: true
         };
-        setMembers([defaultAdmin]);
+        setMembers([defaultDirector]);
       }
       
       if (storedInvites) {
@@ -151,7 +150,7 @@ export const useTeamManagement = () => {
 
   // Check if current user can perform admin actions
   const canManageTeam = (): boolean => {
-    return currentUserRole === 'Admin';
+    return currentUserRole === 'Director';
   };
 
   return {
