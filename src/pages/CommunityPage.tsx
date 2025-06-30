@@ -2,6 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { GlowCard } from '@/components/ui/spotlight-card';
+import { CountAnimation } from '@/components/ui/count-animation';
 import SearchAndFilters from '@/components/community/SearchAndFilters';
 import CommentsList from '@/components/community/CommentsList';
 import { Comment, CommentFilters } from '@/types/comments';
@@ -79,7 +80,10 @@ const CommunityPage: React.FC = () => {
             className="w-full h-auto aspect-auto grid-rows-none gap-0 p-4"
           >
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-300 mb-2">{stats.totalComments}</div>
+              <CountAnimation 
+                number={stats.totalComments} 
+                className="text-3xl font-bold text-blue-300 mb-2"
+              />
               <div className="text-gray-400 text-sm font-medium">Total Comments</div>
             </div>
           </GlowCard>
@@ -90,7 +94,10 @@ const CommunityPage: React.FC = () => {
             className="w-full h-auto aspect-auto grid-rows-none gap-0 p-4"
           >
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-300 mb-2">{stats.unreadComments}</div>
+              <CountAnimation 
+                number={stats.unreadComments} 
+                className="text-3xl font-bold text-green-300 mb-2"
+              />
               <div className="text-gray-400 text-sm font-medium">Unread Comments</div>
             </div>
           </GlowCard>
@@ -101,7 +108,10 @@ const CommunityPage: React.FC = () => {
             className="w-full h-auto aspect-auto grid-rows-none gap-0 p-4"
           >
             <div className="text-center">
-              <div className="text-3xl font-bold text-orange-300 mb-2">{stats.readComments}</div>
+              <CountAnimation 
+                number={stats.readComments} 
+                className="text-3xl font-bold text-orange-300 mb-2"
+              />
               <div className="text-gray-400 text-sm font-medium">Previously Read</div>
             </div>
           </GlowCard>
@@ -112,7 +122,10 @@ const CommunityPage: React.FC = () => {
             className="w-full h-auto aspect-auto grid-rows-none gap-0 p-4"
           >
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-300 mb-2">{stats.totalReplies}</div>
+              <CountAnimation 
+                number={stats.totalReplies} 
+                className="text-3xl font-bold text-purple-300 mb-2"
+              />
               <div className="text-gray-400 text-sm font-medium">Total Replies</div>
             </div>
           </GlowCard>
