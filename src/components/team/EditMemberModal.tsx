@@ -133,11 +133,11 @@ const EditMemberModal: React.FC<EditMemberModalProps> = ({ member, onClose, onSa
               type="email"
               placeholder="Enter email address"
               className="bg-gray-800 border-gray-600 text-white placeholder-gray-400"
-              disabled={isSubmitting || member.role === 'Admin'} // Prevent changing admin email
+              disabled={isSubmitting || member.role === 'Director'} // Prevent changing director email
             />
             {errors.email && <p className="text-red-400 text-sm">{errors.email}</p>}
-            {member.role === 'Admin' && (
-              <p className="text-gray-500 text-xs">Admin email cannot be changed</p>
+            {member.role === 'Director' && (
+              <p className="text-gray-500 text-xs">Director email cannot be changed</p>
             )}
           </div>
 
@@ -152,13 +152,13 @@ const EditMemberModal: React.FC<EditMemberModalProps> = ({ member, onClose, onSa
                       ? 'border-blue-500 bg-blue-500/10'
                       : 'border-gray-600 bg-gray-800/50 hover:bg-gray-800'
                   } ${
-                    member.role === 'Admin' && role.value !== 'Admin' 
+                    member.role === 'Director' && role.value !== 'Director' 
                       ? 'opacity-50 cursor-not-allowed' 
                       : ''
                   }`}
                   onClick={() => {
-                    // Prevent changing admin role to non-admin
-                    if (member.role === 'Admin' && role.value !== 'Admin') return;
+                    // Prevent changing director role to non-director
+                    if (member.role === 'Director' && role.value !== 'Director') return;
                     setSelectedRole(role.value);
                   }}
                 >
@@ -185,8 +185,8 @@ const EditMemberModal: React.FC<EditMemberModalProps> = ({ member, onClose, onSa
                 </div>
               ))}
             </div>
-            {member.role === 'Admin' && (
-              <p className="text-gray-500 text-xs">Admin role cannot be changed</p>
+            {member.role === 'Director' && (
+              <p className="text-gray-500 text-xs">Director role cannot be changed</p>
             )}
           </div>
         </div>
