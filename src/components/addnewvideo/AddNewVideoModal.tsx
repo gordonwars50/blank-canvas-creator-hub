@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { X } from 'lucide-react';
 import PlanningShootingPage from './PlanningShootingPage';
@@ -331,6 +332,10 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose, pr
 
   return (
     <>
+      {/* Fullscreen dark background overlay */}
+      <div className="fixed inset-0 z-40 bg-black" />
+      
+      {/* Modal content */}
       <div className="fixed inset-0 z-50 bg-black overflow-hidden">
         <button
           onClick={onClose}
