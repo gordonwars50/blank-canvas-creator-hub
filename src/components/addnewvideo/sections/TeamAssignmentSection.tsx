@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Users } from 'lucide-react';
+import { useTeamManagement } from '@/hooks/useTeamManagement';
 
 // Updated interface to support all 8 roles
 interface TeamAssignments {
@@ -18,28 +19,10 @@ interface TeamAssignments {
   insightsLead: string[];
 }
 
-interface TeamMember {
-  id: string;
-  name: string;
-  avatar?: string;
-  email: string;
-}
-
 interface TeamAssignmentSectionProps {
   teamAssignments: TeamAssignments;
   onChange: (assignments: TeamAssignments) => void;
 }
-
-// TODO: Connect to user settings for team member management
-// This should be populated from user's team settings/preferences
-const mockTeamMembers: TeamMember[] = [
-  { id: '1', name: 'Alex Johnson', email: 'alex@example.com' },
-  { id: '2', name: 'Sarah Chen', email: 'sarah@example.com' },
-  { id: '3', name: 'Mike Rodriguez', email: 'mike@example.com' },
-  { id: '4', name: 'Emma Wilson', email: 'emma@example.com' },
-  { id: '5', name: 'David Kim', email: 'david@example.com' },
-  { id: '6', name: 'Lisa Thompson', email: 'lisa@example.com' }
-];
 
 const roleLabels = {
   scriptwriter: 'Script',
@@ -56,6 +39,8 @@ const TeamAssignmentSection: React.FC<TeamAssignmentSectionProps> = ({
   teamAssignments,
   onChange
 }) => {
+  const { members, loading, getMemberInitials } = useTeamManagement();
+
   const isAssigned = (memberId: string, role: keyof TeamAssignments) => {
     return teamAssignments[role]?.includes(memberId) || false;
   };
@@ -74,10 +59,6 @@ const TeamAssignmentSection: React.FC<TeamAssignmentSectionProps> = ({
     onChange(updatedAssignments);
   };
 
-  const getInitials = (name: string) => {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-  };
-
   const getMemberAssignedRoles = (memberId: string) => {
     const assignedRoles: string[] = [];
     Object.entries(roleLabels).forEach(([roleKey, roleLabel]) => {
@@ -94,7 +75,38 @@ const TeamAssignmentSection: React.FC<TeamAssignmentSectionProps> = ({
     }
   };
 
-  // NOTE: Once roles are assigned and project is saved, all assigned team members will be contacted by email
+  if (loading) {
+    return (
+      <GlowCard glowColor="orange" customSize className="w-full p-6">
+        <div className="space-y-6">
+          <div className="flex items-center gap-2">
+            <Users className="w-5 h-5 text-orange-400" />
+            <h2 className="text-xl font-semibold text-white">Team Assignment</h2>
+          </div>
+          <div className="text-gray-400">Loading team members...</div>
+        </div>
+      </GlowCard>
+    );
+  }
+
+  if (members.length === 0) {
+    return (
+      <GlowCard glowColor="orange" customSize className="w-full p-6">
+        <div className="space-y-6">
+          <div className="flex items-center gap-2">
+            <Users className="w-5 h-5 text-orange-400" />
+            <h2 className="text-xl font-semibold text-white">Team Assignment</h2>
+          </div>
+          
+          <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-4 text-center">
+            <p className="text-orange-200">
+              No team members found. Please add team members in the Team Management section first.
+            </p>
+          </div>
+        </div>
+      </GlowCard>
+    );
+  }
   
   return (
     <GlowCard glowColor="orange" customSize className="w-full p-6">
@@ -120,7 +132,7 @@ const TeamAssignmentSection: React.FC<TeamAssignmentSectionProps> = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockTeamMembers.map((member) => {
+              {members.map((member) => {
                 const assignedRoles = getMemberAssignedRoles(member.id);
                 
                 return (
@@ -128,7 +140,7 @@ const TeamAssignmentSection: React.FC<TeamAssignmentSectionProps> = ({
                     <TableCell className="py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                          {getInitials(member.name)}
+                          {getMemberInitials(member)}
                         </div>
                         <div>
                           <div className="text-white font-medium">{member.name}</div>
