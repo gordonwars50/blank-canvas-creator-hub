@@ -114,7 +114,7 @@ const TeleprompterMode: React.FC<TeleprompterModeProps> = ({ script, onClose }) 
         </div>
       )}
 
-      {/* Floating Show Toolbar Button (when toolbar is hidden) - Now at bottom */}
+      {/* Floating Show Toolbar Button (when toolbar is hidden) - At bottom right */}
       {!showToolbar && (
         <GlowButton
           glowColor="blue"
@@ -129,11 +129,19 @@ const TeleprompterMode: React.FC<TeleprompterModeProps> = ({ script, onClose }) 
       {/* Script Content */}
       <div 
         ref={contentRef}
-        className={`h-full overflow-y-auto px-8 py-20 ${showToolbar ? 'pb-32' : 'pb-20'}`}
+        className={`h-full px-8 py-20 ${showToolbar ? 'pb-32' : 'pb-20'}`}
         style={{
-          scrollBehavior: 'smooth'
+          scrollBehavior: 'smooth',
+          overflowY: 'auto',
+          scrollbarWidth: 'none', /* Firefox */
+          msOverflowStyle: 'none', /* Internet Explorer 10+ */
         }}
       >
+        <style jsx>{`
+          div::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+          }
+        `}</style>
         <div className="max-w-4xl mx-auto">
           <div 
             className="text-white leading-relaxed text-2xl md:text-3xl lg:text-4xl prose prose-invert max-w-none"
