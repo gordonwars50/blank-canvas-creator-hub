@@ -11,7 +11,7 @@ import { useToast } from '@/components/ui/use-toast';
 interface AddNewVideoModalProps {
   isOpen: boolean;
   onClose: () => void;
-  projectId?: string; // Optional project ID for editing existing projects
+  projectId?: string;
 }
 
 const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose, projectId }) => {
@@ -72,7 +72,7 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose, pr
           title: existingProject.title,
           ideas: existingProject.ideas,
           script: existingProject.script,
-          storyboardFiles: existingProject.storyboardFiles,
+          storyboardFiles: [], // Can't restore File objects from serialized data
           scenes: existingProject.scenes,
           teamAssignments: existingProject.teamAssignments,
           scheduledDate: existingProject.scheduledDate ? new Date(existingProject.scheduledDate) : null,
@@ -92,7 +92,6 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose, pr
       setCurrentStep('plan');
       setCurrentProjectId(projectId || null);
       if (!projectId) {
-        // Only reset form data if not editing an existing project
         setFormData({
           title: '',
           ideas: '',
@@ -208,6 +207,7 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose, pr
         state: 'Planning' as const
       };
 
+      console.log('Saving project data:', projectData);
       const savedProject = saveProject(projectData);
       setCurrentProjectId(savedProject.id);
       
@@ -216,7 +216,7 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose, pr
         description: "Your project has been saved successfully.",
       });
       
-      console.log('Project saved:', savedProject);
+      console.log('Project saved successfully:', savedProject);
     } catch (error) {
       console.error('Error saving project:', error);
       toast({
@@ -260,6 +260,7 @@ const AddNewVideoModal: React.FC<AddNewVideoModalProps> = ({ isOpen, onClose, pr
           state: formData.selectedMode === 'schedule' ? 'Scheduled' : 'Production'
         };
 
+        console.log('Completing project:', completedProjectData);
         saveProject(completedProjectData);
         
         toast({

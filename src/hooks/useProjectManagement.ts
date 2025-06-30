@@ -36,6 +36,16 @@ interface VideoMetadata {
   visibility?: 'public' | 'unlisted' | 'private';
 }
 
+// Serializable file reference for localStorage
+interface SerializableFile {
+  name: string;
+  size: number;
+  type: string;
+  lastModified: number;
+  // Note: We can't store the actual file content in localStorage
+  // In a real app, files would be uploaded to a file storage service
+}
+
 // Define the main project interface
 interface VideoProject {
   id: string;
@@ -46,7 +56,7 @@ interface VideoProject {
   scheduledDate?: string;
   ideas: string;
   script: string;
-  storyboardFiles: File[];
+  storyboardFiles: SerializableFile[];
   scenes: Scene[];
   teamAssignments: TeamAssignments;
   metadata: VideoMetadata;
@@ -90,6 +100,16 @@ const generateUntitledName = (existingProjects: VideoProject[]): string => {
   return `Untitled Project ${untitledCount + 1}`;
 };
 
+// Helper function to convert File objects to serializable format
+const serializeFiles = (files: File[]): SerializableFile[] => {
+  return files.map(file => ({
+    name: file.name,
+    size: file.size,
+    type: file.type,
+    lastModified: file.lastModified
+  }));
+};
+
 // Storage key for localStorage
 const STORAGE_KEY = 'videoProjects';
 
@@ -104,6 +124,7 @@ export const useProjectManagement = () => {
       if (stored) {
         const parsedProjects = JSON.parse(stored);
         setProjects(parsedProjects);
+        console.log('Loaded projects from localStorage:', parsedProjects);
       }
     } catch (error) {
       console.error('Error loading projects from localStorage:', error);
@@ -117,6 +138,7 @@ export const useProjectManagement = () => {
     if (!loading) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+        console.log('Saved projects to localStorage:', projects);
       } catch (error) {
         console.error('Error saving projects to localStorage:', error);
       }
@@ -144,24 +166,26 @@ export const useProjectManagement = () => {
       userId: data.userId
     };
 
+    console.log('Creating new project:', newProject);
     setProjects(prev => [...prev, newProject]);
     return newProject;
   };
 
   // Update an existing project
-  const updateProject = (data: Partial<VideoProject> & { id: string }) => {
+  const updateProject = (data: Partial<VideoProject> & { id: string }): VideoProject => {
+    let updatedProject: VideoProject | null = null;
+    
     setProjects(prev => prev.map(project => {
       if (project.id === data.id) {
-        // Extract metadata and teamAssignments from data to handle them separately
         const { metadata: newMetadata, teamAssignments: newTeamAssignments, ...restData } = data;
         
-        const updatedProject: VideoProject = { 
+        updatedProject = { 
           ...project, 
           ...restData, 
           updatedAt: new Date().toISOString()
         };
         
-        // Handle metadata update properly - ensure all required fields are present
+        // Handle metadata update properly
         if (newMetadata) {
           updatedProject.metadata = {
             title: newMetadata.title ?? project.metadata.title,
@@ -172,7 +196,7 @@ export const useProjectManagement = () => {
           };
         }
 
-        // Handle team assignments update properly - ensure all required fields are present
+        // Handle team assignments update properly
         if (newTeamAssignments) {
           updatedProject.teamAssignments = {
             scriptwriter: newTeamAssignments.scriptwriter ?? project.teamAssignments.scriptwriter,
@@ -186,10 +210,13 @@ export const useProjectManagement = () => {
           };
         }
         
+        console.log('Updated project:', updatedProject);
         return updatedProject;
       }
       return project;
     }));
+
+    return updatedProject!;
   };
 
   // Delete a project
@@ -204,16 +231,24 @@ export const useProjectManagement = () => {
 
   // Save or update a project (used by the modal)
   const saveProject = (data: any): VideoProject => {
+    // Handle File objects by converting them to serializable format
+    const processedData = {
+      ...data,
+      storyboardFiles: data.storyboardFiles ? serializeFiles(data.storyboardFiles) : [],
+      scheduledDate: data.scheduledDate && typeof data.scheduledDate === 'string' ? data.scheduledDate : undefined
+    };
+
     // Check if project already exists
     const existingProject = data.id ? getProject(data.id) : null;
     
     if (existingProject) {
       // Update existing project
-      updateProject(data);
-      return { ...existingProject, ...data };
+      console.log('Updating existing project with ID:', data.id);
+      return updateProject(processedData);
     } else {
       // Create new project
-      return createProject(data);
+      console.log('Creating new project');
+      return createProject(processedData);
     }
   };
 
