@@ -24,7 +24,7 @@ const TeamPage: React.FC = () => {
 
   if (loading) {
     return (
-      <DashboardLayout title="Team" hideTopBarActions={true}>
+      <DashboardLayout title="Team Management" hideTopBarActions={true}>
         <div className="space-y-6">
           <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
             <div className="animate-pulse">
@@ -41,23 +41,16 @@ const TeamPage: React.FC = () => {
   }
 
   return (
-    <DashboardLayout title="Team" hideTopBarActions={true}>
+    <DashboardLayout title="Team Management - Manage your team members, roles, and project assignments" hideTopBarActions={true}>
       <div className="space-y-6">
-        {/* Header Section */}
+        {/* Header Section with Add Button */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-white mb-2">Team Management</h1>
-            <p className="text-gray-400">
-              Manage your team members, roles, and project assignments
-            </p>
-          </div>
-          
           {canManageTeam() && (
             <GlowButton
               glowColor="blue"
               leftIcon={<UserPlus className="w-4 h-4" />}
               onClick={() => setShowAddMember(true)}
-              className="bg-blue-600 hover:bg-blue-700 rounded-lg px-4"
+              className="bg-blue-600 hover:bg-blue-700 rounded-lg px-4 ml-auto"
             >
               Add Team Member
             </GlowButton>
