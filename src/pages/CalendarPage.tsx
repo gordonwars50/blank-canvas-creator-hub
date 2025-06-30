@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewAppSidebar from '@/components/dashboard/NewAppSidebar';
@@ -260,37 +259,28 @@ const CalendarPage: React.FC = () => {
               </GlowCard>
             </div>
 
-            {/* Right Column - Project List (40%) */}
+            {/* Right Column - Monthly Project List (40%) */}
             <div className="lg:col-span-2">
               <GlowCard 
                 glowColor="red" 
                 customSize={true}
                 className="bg-gray-900/50 border border-gray-800 p-6 h-full flex flex-col"
               >
-                {/* Header with Date Info and Schedule Button */}
+                {/* Header with Month Info */}
                 <div className="space-y-4 mb-6">
                   <div className="flex items-center justify-between">
                     <h2 className="text-lg font-semibold text-white">
-                      {format(selectedDate, 'MMMM d, yyyy')}
+                      {format(currentMonth, 'MMMM yyyy')}
                     </h2>
                     <div className="text-sm text-gray-400">
-                      {selectedDateProjects.length} scheduled
+                      {monthProjects.length} scheduled
                     </div>
                   </div>
-                  
-                  <GlowButton
-                    glowColor="red"
-                    leftIcon={<Plus className="w-4 h-4" />}
-                    className="bg-red-600 hover:bg-red-700 rounded-lg px-4 h-9 text-sm w-full"
-                    onClick={() => setShowAddVideoModal(true)}
-                  >
-                    Schedule New Video
-                  </GlowButton>
                 </div>
 
                 <div className="flex-1 overflow-y-auto space-y-3">
-                  {selectedDateProjects.length > 0 ? (
-                    selectedDateProjects.map((project) => {
+                  {monthProjects.length > 0 ? (
+                    monthProjects.map((project) => {
                       const mockStats = getMockStats(project.state);
                       return (
                         <div
@@ -330,7 +320,7 @@ const CalendarPage: React.FC = () => {
                             
                             {project.scheduledDate && (
                               <div className="text-xs text-gray-400">
-                                {format(parseISO(project.scheduledDate), 'h:mm a')}
+                                {format(parseISO(project.scheduledDate), 'MMM d, h:mm a')}
                               </div>
                             )}
                           </div>
@@ -344,20 +334,11 @@ const CalendarPage: React.FC = () => {
                         No content scheduled
                       </h3>
                       <p className="text-sm text-gray-500 mb-6">
-                        Schedule your first video for {format(selectedDate, 'MMMM d')}
+                        No videos scheduled for {format(currentMonth, 'MMMM yyyy')}
                       </p>
                     </div>
                   )}
                 </div>
-
-                {/* Month Summary */}
-                {monthProjects.length > selectedDateProjects.length && (
-                  <div className="mt-6 pt-4 border-t border-gray-700">
-                    <div className="text-xs text-gray-400 text-center">
-                      {monthProjects.length} total videos scheduled this month
-                    </div>
-                  </div>
-                )}
               </GlowCard>
             </div>
           </div>
