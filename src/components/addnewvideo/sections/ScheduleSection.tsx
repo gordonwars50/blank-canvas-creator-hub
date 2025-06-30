@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Upload } from 'lucide-react';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { GlowButton } from '@/components/ui/glow-button';
@@ -36,6 +35,22 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
   const [timeMinute, setTimeMinute] = useState('00');
   const [timeAmPm, setTimeAmPm] = useState('PM');
 
+  // Sync time state with props
+  useEffect(() => {
+    if (scheduledTime) {
+      const timeParts = scheduledTime.split(' ');
+      if (timeParts.length === 2) {
+        const [hourMinute, ampm] = timeParts;
+        const [hour, minute] = hourMinute.split(':');
+        if (hour && minute && ampm) {
+          setTimeHour(hour);
+          setTimeMinute(minute);
+          setTimeAmPm(ampm);
+        }
+      }
+    }
+  }, [scheduledTime]);
+
   const handleTimeChange = (hour: string, minute: string, ampm: string) => {
     setTimeHour(hour);
     setTimeMinute(minute);
@@ -50,7 +65,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
   };
 
   const handleModeChange = (mode: 'schedule' | 'upload') => {
-    console.log('Mode changed to:', mode); // Debug log
+    console.log('Mode changed to:', mode);
     onModeChange(mode);
     if (mode === 'upload') {
       onUploadNowChange(true);
@@ -59,7 +74,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
     }
   };
 
-  console.log('Current selectedMode:', selectedMode); // Debug log
+  console.log('Current selectedMode:', selectedMode);
 
   return (
     <GlowCard glowColor="red" customSize className="w-full p-6 mb-8 rounded-2xl">
