@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
@@ -10,21 +8,11 @@ import { Badge } from '@/components/ui/badge';
 import { Plus, ChevronDown, Play, Eye, MessageSquare, Clock, ThumbsUp, Search, Trash2 } from 'lucide-react';
 import AddNewVideoModal from '@/components/addnewvideo/AddNewVideoModal';
 import { useProjectManagement } from '@/hooks/useProjectManagement';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useToast } from '@/hooks/use-toast';
 
 // Project state type
 type ProjectState = 'Planning' | 'Production' | 'Scheduled' | 'Uploaded';
-
 const getStateColor = (state: ProjectState) => {
   switch (state) {
     case 'Planning':
@@ -39,7 +27,6 @@ const getStateColor = (state: ProjectState) => {
       return 'bg-gray-500/20 text-gray-400 border-gray-500/50';
   }
 };
-
 const formatNumber = (num: number) => {
   if (num >= 1000000) {
     return (num / 1000000).toFixed(1) + 'M';
@@ -48,7 +35,6 @@ const formatNumber = (num: number) => {
   }
   return num.toString();
 };
-
 const formatWatchTime = (minutes: number) => {
   if (minutes === 0) return '0 min';
   const hours = Math.floor(minutes / 60);
@@ -58,7 +44,6 @@ const formatWatchTime = (minutes: number) => {
   }
   return `${mins} min`;
 };
-
 const PlanSchedulePage: React.FC = () => {
   const navigate = useNavigate();
   const [selectedState, setSelectedState] = useState<ProjectState | 'All'>('All');
@@ -67,18 +52,20 @@ const PlanSchedulePage: React.FC = () => {
   const [showAddVideoModal, setShowAddVideoModal] = useState(false);
   const [editingProjectId, setEditingProjectId] = useState<string | undefined>(undefined);
   const [deleteProjectId, setDeleteProjectId] = useState<string | null>(null);
-
-  const { projects, loading, deleteProject } = useProjectManagement();
-  const { toast } = useToast();
+  const {
+    projects,
+    loading,
+    deleteProject
+  } = useProjectManagement();
+  const {
+    toast
+  } = useToast();
   const states: (ProjectState | 'All')[] = ['All', 'Planning', 'Production', 'Scheduled', 'Uploaded'];
-
   const filteredProjects = projects.filter(project => {
     const matchesState = selectedState === 'All' || project.state === selectedState;
-    const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         project.metadata.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) || project.metadata.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesState && matchesSearch;
   });
-
   const handleProjectClick = (projectId: string) => {
     const project = projects.find(p => p.id === projectId);
     if (project) {
@@ -92,29 +79,25 @@ const PlanSchedulePage: React.FC = () => {
       }
     }
   };
-
   const handleAddNewVideo = () => {
     setEditingProjectId(undefined);
     setShowAddVideoModal(true);
   };
-
   const handleCloseModal = () => {
     setShowAddVideoModal(false);
     setEditingProjectId(undefined);
   };
-
   const handleDeleteProject = (projectId: string, event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent card click when clicking delete
     setDeleteProjectId(projectId);
   };
-
   const confirmDeleteProject = () => {
     if (deleteProjectId) {
       try {
         deleteProject(deleteProjectId);
         toast({
           title: "Project Deleted",
-          description: "The project has been deleted successfully.",
+          description: "The project has been deleted successfully."
         });
         setDeleteProjectId(null);
       } catch (error) {
@@ -122,16 +105,14 @@ const PlanSchedulePage: React.FC = () => {
         toast({
           title: "Error",
           description: "Failed to delete project. Please try again.",
-          variant: "destructive",
+          variant: "destructive"
         });
       }
     }
   };
-
   const cancelDeleteProject = () => {
     setDeleteProjectId(null);
   };
-
   const getMockStats = (state: ProjectState) => {
     if (state === 'Uploaded') {
       return {
@@ -141,75 +122,52 @@ const PlanSchedulePage: React.FC = () => {
         likes: Math.floor(Math.random() * 1000) + 50
       };
     }
-    return { views: 0, comments: 0, watchTime: 0, likes: 0 };
+    return {
+      views: 0,
+      comments: 0,
+      watchTime: 0,
+      likes: 0
+    };
   };
-
   if (loading) {
-    return (
-      <DashboardLayout title="Plan & Schedule" hideTopBarActions={true}>
+    return <DashboardLayout title="Plan & Schedule" hideTopBarActions={true}>
         <div className="flex items-center justify-center h-64">
           <div className="text-white">Loading projects...</div>
         </div>
-      </DashboardLayout>
-    );
+      </DashboardLayout>;
   }
-
-  return (
-    <DashboardLayout title="Plan & Schedule" hideTopBarActions={true}>
+  return <DashboardLayout title="Plan & Schedule" hideTopBarActions={true}>
       <div className="space-y-6">
         {/* Header */}
         <div className="mb-4">
-          <h1 className="text-2xl font-bold text-white mb-4">Plan & Schedule</h1>
+          
 
           {/* Single Row with Search, Filter, and Add Button */}
           <div className="flex items-center space-x-4">
             {/* Search Bar */}
             <div className="flex-1 max-w-md">
-              <GlowInput
-                glowColor="red"
-                placeholder="Search videos..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                leftIcon={<Search className="w-4 h-4" />}
-                className="h-10"
-              />
+              <GlowInput glowColor="red" placeholder="Search videos..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} leftIcon={<Search className="w-4 h-4" />} className="h-10" />
             </div>
             
             {/* Filter Dropdown */}
             <div className="relative">
-              <button 
-                className="flex items-center justify-center space-x-2 h-10 px-4 bg-gray-900/80 border border-gray-700 hover:border-red-500/50 transition-all duration-200 rounded-full cursor-pointer"
-                onClick={() => setFilterOpen(!filterOpen)}
-              >
+              <button className="flex items-center justify-center space-x-2 h-10 px-4 bg-gray-900/80 border border-gray-700 hover:border-red-500/50 transition-all duration-200 rounded-full cursor-pointer" onClick={() => setFilterOpen(!filterOpen)}>
                 <span className="text-white text-sm font-medium">{selectedState}</span>
                 <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${filterOpen ? 'rotate-180' : ''}`} />
               </button>
               
-              {filterOpen && (
-                <div className="absolute top-full left-0 mt-2 w-40 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50">
-                  {states.map(state => (
-                    <div
-                      key={state}
-                      className="px-4 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer first:rounded-t-lg last:rounded-b-lg"
-                      onClick={() => {
-                        setSelectedState(state);
-                        setFilterOpen(false);
-                      }}
-                    >
+              {filterOpen && <div className="absolute top-full left-0 mt-2 w-40 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50">
+                  {states.map(state => <div key={state} className="px-4 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer first:rounded-t-lg last:rounded-b-lg" onClick={() => {
+                setSelectedState(state);
+                setFilterOpen(false);
+              }}>
                       {state}
-                    </div>
-                  ))}
-                </div>
-              )}
+                    </div>)}
+                </div>}
             </div>
 
             {/* Add New Video Button */}
-            <GlowButton
-              glowColor="red"
-              leftIcon={<Plus className="w-4 h-4" />}
-              className="bg-red-600 hover:bg-red-700 rounded-lg px-6 h-10"
-              onClick={handleAddNewVideo}
-            >
+            <GlowButton glowColor="red" leftIcon={<Plus className="w-4 h-4" />} className="bg-red-600 hover:bg-red-700 rounded-lg px-6 h-10" onClick={handleAddNewVideo}>
               Add New Video
             </GlowButton>
           </div>
@@ -217,19 +175,10 @@ const PlanSchedulePage: React.FC = () => {
 
         {/* Projects List */}
         <div className="space-y-2">
-          {filteredProjects.map((project) => {
-            const mockStats = getMockStats(project.state);
-            return (
-              <div
-                key={project.id}
-                onClick={() => handleProjectClick(project.id)}
-                className="cursor-pointer"
-              >
-                <GlowCard
-                  glowColor="red"
-                  customSize={true}
-                  className="w-full bg-gray-900/50 border border-gray-800 hover:border-red-500/50 transition-all duration-200 p-4"
-                >
+          {filteredProjects.map(project => {
+          const mockStats = getMockStats(project.state);
+          return <div key={project.id} onClick={() => handleProjectClick(project.id)} className="cursor-pointer">
+                <GlowCard glowColor="red" customSize={true} className="w-full bg-gray-900/50 border border-gray-800 hover:border-red-500/50 transition-all duration-200 p-4">
                   <div className="flex items-center space-x-4">
                     {/* Video Thumbnail Placeholder */}
                     <div className="relative flex-shrink-0">
@@ -284,66 +233,43 @@ const PlanSchedulePage: React.FC = () => {
                             <Badge className={`${getStateColor(project.state)} border text-xs`}>
                               {project.state}
                             </Badge>
-                            <button
-                              onClick={(e) => handleDeleteProject(project.id, e)}
-                              className="p-1 text-gray-400 hover:text-red-400 transition-colors"
-                              title="Delete project"
-                            >
+                            <button onClick={e => handleDeleteProject(project.id, e)} className="p-1 text-gray-400 hover:text-red-400 transition-colors" title="Delete project">
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
-                          {project.state === 'Scheduled' && project.scheduledDate && (
-                            <div className="text-xs text-gray-400">
+                          {project.state === 'Scheduled' && project.scheduledDate && <div className="text-xs text-gray-400">
                               {new Date(project.scheduledDate).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })}
-                            </div>
-                          )}
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                            </div>}
                         </div>
                       </div>
                     </div>
                   </div>
                 </GlowCard>
-              </div>
-            );
-          })}
+              </div>;
+        })}
         </div>
 
         {/* Empty State */}
-        {filteredProjects.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20">
+        {filteredProjects.length === 0 && <div className="flex flex-col items-center justify-center py-20">
             <div className="text-gray-400 text-center">
               <div className="text-6xl mb-4">📹</div>
               <h3 className="text-xl font-semibold mb-2">No videos found</h3>
               <p className="text-sm">
-                {searchQuery 
-                  ? `No videos match your search "${searchQuery}"`
-                  : selectedState === 'All' 
-                    ? 'Create your first video to get started'
-                    : `No videos in ${selectedState} state`
-                }
+                {searchQuery ? `No videos match your search "${searchQuery}"` : selectedState === 'All' ? 'Create your first video to get started' : `No videos in ${selectedState} state`}
               </p>
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Click outside to close dropdown */}
-        {filterOpen && (
-          <div 
-            className="fixed inset-0 z-40" 
-            onClick={() => setFilterOpen(false)}
-          />
-        )}
+        {filterOpen && <div className="fixed inset-0 z-40" onClick={() => setFilterOpen(false)} />}
 
         {/* Add New Video Modal */}
-        <AddNewVideoModal
-          isOpen={showAddVideoModal}
-          onClose={handleCloseModal}
-          projectId={editingProjectId}
-        />
+        <AddNewVideoModal isOpen={showAddVideoModal} onClose={handleCloseModal} projectId={editingProjectId} />
 
         {/* Delete Confirmation Dialog */}
         <AlertDialog open={!!deleteProjectId} onOpenChange={() => setDeleteProjectId(null)}>
@@ -355,25 +281,16 @@ const PlanSchedulePage: React.FC = () => {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel 
-                onClick={cancelDeleteProject}
-                className="bg-gray-700 text-white hover:bg-gray-600 border-gray-600"
-              >
+              <AlertDialogCancel onClick={cancelDeleteProject} className="bg-gray-700 text-white hover:bg-gray-600 border-gray-600">
                 Cancel
               </AlertDialogCancel>
-              <AlertDialogAction 
-                onClick={confirmDeleteProject}
-                className="bg-red-600 text-white hover:bg-red-700"
-              >
+              <AlertDialogAction onClick={confirmDeleteProject} className="bg-red-600 text-white hover:bg-red-700">
                 Delete
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </DashboardLayout>
-  );
+    </DashboardLayout>;
 };
-
 export default PlanSchedulePage;
-
