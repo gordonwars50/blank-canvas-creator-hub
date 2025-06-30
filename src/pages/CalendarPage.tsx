@@ -345,14 +345,6 @@ const CalendarPage: React.FC = () => {
                       <p className="text-sm text-gray-500 mb-6">
                         Schedule your first video for {format(selectedDate, 'MMMM d')}
                       </p>
-                      <GlowButton
-                        glowColor="red"
-                        leftIcon={<Plus className="w-4 h-4" />}
-                        className="bg-red-600 hover:bg-red-700 rounded-lg px-4 h-9 text-sm"
-                        onClick={() => setShowAddVideoModal(true)}
-                      >
-                        Schedule Video
-                      </GlowButton>
                     </div>
                   )}
                 </div>
