@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewAppSidebar from '@/components/dashboard/NewAppSidebar';
@@ -194,12 +195,12 @@ const CalendarPage: React.FC = () => {
                   classNames={{
                     months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
                     month: "space-y-4 w-full",
-                    caption: "flex justify-center pt-1 relative items-center text-white",
-                    caption_label: "text-sm font-medium text-white",
-                    nav: "space-x-1 flex items-center",
-                    nav_button: "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 text-white hover:bg-gray-800 rounded",
-                    nav_button_previous: "absolute left-1",
-                    nav_button_next: "absolute right-1",
+                    caption: "hidden", // Hide the duplicate month/year and navigation
+                    caption_label: "hidden",
+                    nav: "hidden", // Hide the duplicate navigation arrows
+                    nav_button: "hidden",
+                    nav_button_previous: "hidden",
+                    nav_button_next: "hidden",
                     table: "w-full border-collapse space-y-1",
                     head_row: "flex",
                     head_cell: "text-gray-400 rounded-md w-full font-normal text-[0.8rem] flex-1 text-center",
