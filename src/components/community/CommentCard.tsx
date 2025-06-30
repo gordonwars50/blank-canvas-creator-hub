@@ -65,21 +65,13 @@ const CommentCard: React.FC<CommentCardProps> = ({
       className="w-full p-6 mb-4"
     >
       <div className="flex gap-4">
-        {/* Profile Picture with Spotlight Glow */}
-        <GlowCard 
-          glowColor={comment.isOwnComment ? "green" : comment.isRead ? "blue" : "orange"} 
-          customSize 
-          width={48} 
-          height={48} 
-          className="flex-shrink-0 p-0 overflow-hidden"
-        >
-          <Avatar className="w-12 h-12">
-            <AvatarImage src={comment.authorProfileImageUrl} alt={comment.authorName} />
-            <AvatarFallback className="bg-gray-700 text-white">
-              {comment.authorName.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-        </GlowCard>
+        {/* Profile Picture */}
+        <Avatar className="w-12 h-12 flex-shrink-0">
+          <AvatarImage src={comment.authorProfileImageUrl} alt={comment.authorName} />
+          <AvatarFallback className="bg-gray-700 text-white">
+            {comment.authorName.charAt(0).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
 
         {/* Comment Content */}
         <div className="flex-1 min-w-0">

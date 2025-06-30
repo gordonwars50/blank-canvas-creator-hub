@@ -95,14 +95,12 @@ const ReplySection: React.FC<ReplySectionProps> = ({
               {replies.map((reply) => (
                 <GlowCard key={reply.id} glowColor="green" customSize className="w-full p-4">
                   <div className="flex gap-3">
-                    <GlowCard glowColor="green" customSize width={32} height={32} className="flex-shrink-0 p-0 overflow-hidden">
-                      <Avatar className="w-8 h-8">
-                        <AvatarImage src={reply.authorProfileImageUrl} alt={reply.authorName} />
-                        <AvatarFallback className="bg-gray-700 text-white text-xs">
-                          {reply.authorName.charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                    </GlowCard>
+                    <Avatar className="w-8 h-8 flex-shrink-0">
+                      <AvatarImage src={reply.authorProfileImageUrl} alt={reply.authorName} />
+                      <AvatarFallback className="bg-gray-700 text-white text-xs">
+                        {reply.authorName.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
                     
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">

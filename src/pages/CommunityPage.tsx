@@ -73,25 +73,25 @@ const CommunityPage: React.FC = () => {
       <div className="space-y-6">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <GlowCard glowColor="blue" customSize className="p-6 text-center">
+          <div className="p-6 text-center bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg">
             <div className="text-3xl font-bold text-blue-300 mb-2">{stats.totalComments}</div>
             <div className="text-gray-400 text-sm font-medium">Total Comments</div>
-          </GlowCard>
+          </div>
           
-          <GlowCard glowColor="green" customSize className="p-6 text-center">
+          <div className="p-6 text-center bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg">
             <div className="text-3xl font-bold text-green-300 mb-2">{stats.unreadComments}</div>
             <div className="text-gray-400 text-sm font-medium">Unread Comments</div>
-          </GlowCard>
+          </div>
           
-          <GlowCard glowColor="orange" customSize className="p-6 text-center">
+          <div className="p-6 text-center bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg">
             <div className="text-3xl font-bold text-orange-300 mb-2">{stats.readComments}</div>
             <div className="text-gray-400 text-sm font-medium">Previously Read</div>
-          </GlowCard>
+          </div>
           
-          <GlowCard glowColor="purple" customSize className="p-6 text-center">
+          <div className="p-6 text-center bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg">
             <div className="text-3xl font-bold text-purple-300 mb-2">{stats.totalReplies}</div>
             <div className="text-gray-400 text-sm font-medium">Total Replies</div>
-          </GlowCard>
+          </div>
         </div>
 
         {/* Search and Filters */}
