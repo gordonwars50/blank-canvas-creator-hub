@@ -11,9 +11,15 @@ interface TopBarProps {
   title: string;
   onMenuClick: () => void;
   showMobileMenu?: boolean;
+  hideQuickActions?: boolean;
 }
 
-const TopBar: React.FC<TopBarProps> = ({ title, onMenuClick, showMobileMenu = false }) => {
+const TopBar: React.FC<TopBarProps> = ({ 
+  title, 
+  onMenuClick, 
+  showMobileMenu = false,
+  hideQuickActions = false
+}) => {
   const [searchValue, setSearchValue] = useState('');
   const [notificationPanelOpen, setNotificationPanelOpen] = useState(false);
   const { unreadCount } = useNotifications();
@@ -53,58 +59,66 @@ const TopBar: React.FC<TopBarProps> = ({ title, onMenuClick, showMobileMenu = fa
         </div>
       </div>
 
-      {/* Center - Search */}
-      <div className="hidden md:flex flex-1 max-w-md mx-8">
-        <GlowInput
-          glowColor="red"
-          placeholder="Search videos, comments..."
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          leftIcon={<Search className="w-4 h-4" />}
-          className="h-10"
-        />
-      </div>
+      {/* Center - Search (hidden when hideQuickActions is true) */}
+      {!hideQuickActions && (
+        <div className="hidden md:flex flex-1 max-w-md mx-8">
+          <GlowInput
+            glowColor="red"
+            placeholder="Search videos, comments..."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            leftIcon={<Search className="w-4 h-4" />}
+            className="h-10"
+          />
+        </div>
+      )}
 
       {/* Right side */}
       <div className="flex items-center space-x-3">
-        {/* Mobile search */}
-        <GlowCard 
-          glowColor="red" 
-          customSize={true}
-          className="md:hidden w-auto h-auto aspect-auto grid-rows-none gap-0 p-0 bg-transparent border-0 shadow-none backdrop-blur-none"
-        >
-          <button className="p-2 rounded-lg hover:bg-gray-800 text-gray-400">
-            <Search className="w-5 h-5" />
-          </button>
-        </GlowCard>
+        {/* Mobile search (hidden when hideQuickActions is true) */}
+        {!hideQuickActions && (
+          <GlowCard 
+            glowColor="red" 
+            customSize={true}
+            className="md:hidden w-auto h-auto aspect-auto grid-rows-none gap-0 p-0 bg-transparent border-0 shadow-none backdrop-blur-none"
+          >
+            <button className="p-2 rounded-lg hover:bg-gray-800 text-gray-400">
+              <Search className="w-5 h-5" />
+            </button>
+          </GlowCard>
+        )}
 
-        {/* Quick Actions */}
-        <div className="hidden sm:flex items-center space-x-3">
-          {quickActions.map((action) => (
-            <GlowButton
-              key={action.id}
-              glowColor="red"
-              leftIcon={<action.icon className="w-4 h-4" />}
-              className={`${action.color} rounded-full h-10`}
-            >
-              <span className="hidden lg:block">{action.label}</span>
-            </GlowButton>
-          ))}
-        </div>
+        {/* Quick Actions (hidden when hideQuickActions is true) */}
+        {!hideQuickActions && (
+          <>
+            <div className="hidden sm:flex items-center space-x-3">
+              {quickActions.map((action) => (
+                <GlowButton
+                  key={action.id}
+                  glowColor="red"
+                  leftIcon={<action.icon className="w-4 h-4" />}
+                  className={`${action.color} rounded-full h-10`}
+                >
+                  <span className="hidden lg:block">{action.label}</span>
+                </GlowButton>
+              ))}
+            </div>
 
-        {/* Mobile Quick Actions - Icons only */}
-        <div className="sm:hidden flex items-center space-x-2">
-          {quickActions.map((action) => (
-            <GlowButton
-              key={action.id}
-              glowColor="red"
-              leftIcon={<action.icon className="w-4 h-4" />}
-              className={`${action.color} rounded-full p-2 h-10 w-10`}
-            >
-              <span className="sr-only">{action.label}</span>
-            </GlowButton>
-          ))}
-        </div>
+            {/* Mobile Quick Actions - Icons only */}
+            <div className="sm:hidden flex items-center space-x-2">
+              {quickActions.map((action) => (
+                <GlowButton
+                  key={action.id}
+                  glowColor="red"
+                  leftIcon={<action.icon className="w-4 h-4" />}
+                  className={`${action.color} rounded-full p-2 h-10 w-10`}
+                >
+                  <span className="sr-only">{action.label}</span>
+                </GlowButton>
+              ))}
+            </div>
+          </>
+        )}
 
         {/* Notifications */}
         <div className="relative">

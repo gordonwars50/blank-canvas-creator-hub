@@ -69,29 +69,53 @@ const CommunityPage: React.FC = () => {
   };
 
   return (
-    <DashboardLayout title="Community Management">
+    <DashboardLayout title="Community Management" hideTopBarActions={true}>
       <div className="space-y-6">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-6 text-center bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg">
-            <div className="text-3xl font-bold text-blue-300 mb-2">{stats.totalComments}</div>
-            <div className="text-gray-400 text-sm font-medium">Total Comments</div>
-          </div>
+          <GlowCard 
+            glowColor="blue" 
+            customSize={true}
+            className="w-full h-auto aspect-auto grid-rows-none gap-0 p-4"
+          >
+            <div className="text-center">
+              <div className="text-3xl font-bold text-blue-300 mb-2">{stats.totalComments}</div>
+              <div className="text-gray-400 text-sm font-medium">Total Comments</div>
+            </div>
+          </GlowCard>
           
-          <div className="p-6 text-center bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg">
-            <div className="text-3xl font-bold text-green-300 mb-2">{stats.unreadComments}</div>
-            <div className="text-gray-400 text-sm font-medium">Unread Comments</div>
-          </div>
+          <GlowCard 
+            glowColor="green" 
+            customSize={true}
+            className="w-full h-auto aspect-auto grid-rows-none gap-0 p-4"
+          >
+            <div className="text-center">
+              <div className="text-3xl font-bold text-green-300 mb-2">{stats.unreadComments}</div>
+              <div className="text-gray-400 text-sm font-medium">Unread Comments</div>
+            </div>
+          </GlowCard>
           
-          <div className="p-6 text-center bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg">
-            <div className="text-3xl font-bold text-orange-300 mb-2">{stats.readComments}</div>
-            <div className="text-gray-400 text-sm font-medium">Previously Read</div>
-          </div>
+          <GlowCard 
+            glowColor="orange" 
+            customSize={true}
+            className="w-full h-auto aspect-auto grid-rows-none gap-0 p-4"
+          >
+            <div className="text-center">
+              <div className="text-3xl font-bold text-orange-300 mb-2">{stats.readComments}</div>
+              <div className="text-gray-400 text-sm font-medium">Previously Read</div>
+            </div>
+          </GlowCard>
           
-          <div className="p-6 text-center bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg">
-            <div className="text-3xl font-bold text-purple-300 mb-2">{stats.totalReplies}</div>
-            <div className="text-gray-400 text-sm font-medium">Total Replies</div>
-          </div>
+          <GlowCard 
+            glowColor="purple" 
+            customSize={true}
+            className="w-full h-auto aspect-auto grid-rows-none gap-0 p-4"
+          >
+            <div className="text-center">
+              <div className="text-3xl font-bold text-purple-300 mb-2">{stats.totalReplies}</div>
+              <div className="text-gray-400 text-sm font-medium">Total Replies</div>
+            </div>
+          </GlowCard>
         </div>
 
         {/* Search and Filters */}

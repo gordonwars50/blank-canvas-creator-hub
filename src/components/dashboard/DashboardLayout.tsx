@@ -7,9 +7,14 @@ import { NotificationProvider } from '@/contexts/NotificationContext';
 interface DashboardLayoutProps {
   children: React.ReactNode;
   title: string;
+  hideTopBarActions?: boolean;
 }
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, title }) => {
+const DashboardLayout: React.FC<DashboardLayoutProps> = ({ 
+  children, 
+  title, 
+  hideTopBarActions = false 
+}) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true); // Start collapsed
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -39,6 +44,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, title }) =>
               title={title} 
               onMenuClick={toggleMobileMenu}
               showMobileMenu={true}
+              hideQuickActions={hideTopBarActions}
             />
           </div>
           
